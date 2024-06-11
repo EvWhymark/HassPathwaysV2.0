@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
+//@ts-ignore
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
+//@ts-ignore
 import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { catalogList } from "@/public/data/staticData";
@@ -12,8 +14,9 @@ const CatalogDropdown = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Find the displaying text for catalog
-  const catalogText: string =
-    catalogList.filter((cat) => cat.value === catalog_year)[0]?.text ?? "";
+  const catalogText:string = useMemo(() => {
+    return catalogList.find((cat) => cat.value === catalog_year)?.text ?? "";
+  }, [catalog_year]);
 
   useEffect(() => {
     if (!dropdownOpen) return;
