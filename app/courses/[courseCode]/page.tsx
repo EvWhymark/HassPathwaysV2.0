@@ -116,7 +116,6 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         <header>
           <h3>Semester Offered</h3>
         </header>
-        <SemesterTable term={term} />
       </section>
     </Fragment>
   );
