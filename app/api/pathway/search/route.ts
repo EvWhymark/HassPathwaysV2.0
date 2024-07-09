@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { IPathwaySchema } from "@/public/data/dataInterface";
+
 import * as fs from "fs";
 import cors from "cors";
 import path from "path";
@@ -32,6 +33,7 @@ export async function GET(request: NextRequest) {
       };
     });
   });
+  
   //   blob = blob.map((c) => c["pathways"]).flat();
 
   for (var [k, c] of Object.entries(flatten)) {

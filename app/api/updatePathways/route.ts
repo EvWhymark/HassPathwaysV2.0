@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import { getPathways } from '@/lib/mongo/test';
+import { updatePathways } from '@/lib/mongo/test';
 
 export async function GET() {
     try {
-        const result = await getPathways();
+        const result = await updatePathways("2023");
 
         if ('error' in result) {
             throw new Error(result.error);
