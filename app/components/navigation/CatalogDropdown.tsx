@@ -17,7 +17,7 @@ const CatalogDropdown = () => {
     catalogList.filter((cat) => cat.text === catalog_year)[0]?.text ?? "";
 
   useEffect(()=> {
-    const temp = catalogList.filter((cat) => cat.value === catalog_year)[0]?.text ?? "";
+    const temp = catalogList.filter((cat) => cat.text === catalog_year)[0]?.text ?? "";
     setCatalogText(temp);
   });
 
