@@ -53,9 +53,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = ({ params }) => {
     }, [resultPathways, pathwayName]);
 
     const pathwayData: IPathwayDescriptionSchema = pathwayTempData;
-
-    console.log(JSON.stringify(resultPathways));
-
+  
     return (
       <>
         <header className="mb-4 md:mb-8">
