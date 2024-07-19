@@ -8,20 +8,31 @@ export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
 
   const catalogYear = params.get("catalogYear");
-  const pathways = JSON.parse(
-    fs.readFileSync(
-      path.join(process.cwd(), "json") + `/${catalogYear}` + "/pathways.json",
-      "utf8"
-    )
-  );
+  
+  const response = await window.fetch('http://localhost:3000', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json;charset=UTF-8',
+    },
+    body: JSON.stringify({
+      year: catalogYear
+    })
+  });
 
-  let blob = pathways;
+  const {data, errors } = await response.json();
+
+  if (!response.ok) {
+    console.log("Something went wrong");
+  }
+
+  let blob = data.data;
 
   const departmentString = params.get("department");
   if (departmentString) {
     const departments = departmentString.split(",");
     blob = blob.filter((c) => departments.includes(c["department"]));
   }
+
   let flatten = blob.flatMap((dep) => {
     return dep.pathways.map((path) => {
       return {
