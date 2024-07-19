@@ -1,21 +1,14 @@
 "use client";
+import React, { FC, useState, useEffect } from "react";
 import CourseCard from "@/app/components/course/CourseCard";
 import BreadCrumb from "@/app/components/navigation/Breadcrumb";
-import React, { FC, MouseEventHandler, useState } from "react";
-import {
-  ICourseClusterSchema,
-  ICourseSchema,
-  IPathwayDescriptionSchema,
-} from "@/public/data/dataInterface";
+import { ICourseClusterSchema, ICourseSchema, IPathwayDescriptionSchema } from "@/public/data/dataInterface";
+import useFetchPathways from "@/app/fetchPathways";
+import {notFound} from "next/navigation";
+import {result} from "lodash";
 
 const pathwayTempData: IPathwayDescriptionSchema = {
-  description: `This course embraces the science of psychology. The aim is for
-  students to learn how using the scientific method provides important
-  insights about mind, brain, and behavior. This course integrates
-  research on neuroscience throughout all the standard topics in an
-  introductory course in psychology. The course presents advances across
-  all subfields of psychology. In addition to standard exams, there are
-  online assignments for each chapter and online laboratory experiences.`,
+  description: `This course embraces the science of psychology...`,
   compatibleMinor: ["1234", "123435", "52", "General Psychological Minor"],
   courses: [
     {
@@ -31,116 +24,83 @@ const pathwayTempData: IPathwayDescriptionSchema = {
   ],
 };
 
-// const pathwayTempData: IPathwayDescriptionSchema = {
-//   description: `This course embraces the science of psychology. The aim is for
-//   students to learn how using the scientific method provides important
-//   insights about mind, brain, and behavior. This course integrates
-//   research on neuroscience throughout all the standard topics in an
-//   introductory course in psychology. The course presents advances across
-//   all subfields of psychology. In addition to standard exams, there are
-//   online assignments for each chapter and online laboratory experiences.`,
-//   compatibleMinor: ["1234", "123435", "52", "General Psychological Minor"],
-//   courses: [
-//     {
-//       name: "Art1",
-//       description: "this is art",
-//       courses: [
-//         {
-//           title: "art",
-//           courseCode: "arts-4937",
-//           tag: ["Fall"],
-//         },
-//         {
-//           title: "art",
-//           courseCode: "arts-1957",
-//           tag: ["Fall"],
-//         },
-//       ],
-//     },
-//     {
-//       name: "Elec",
-//       description: "this is art",
-//       courses: [
-//         {
-//           title: "ele",
-//           courseCode: "arts-8294",
-//           tag: ["Fall"],
-//         },
-//         {
-//           title: "ele2",
-//           courseCode: "arts-9854",
-//           tag: ["Fall"],
-//         },
-//       ],
-//     },
-//   ],
-// };
-
 type IPathwayID = {
   params: {
     id: string;
   };
 };
 
-const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
-  // Convert pathname to pathwayName
-  const pathwayName: string = data.params.id.replaceAll("%20", " ");
 
-  const pathwayData: IPathwayDescriptionSchema = pathwayTempData;
+//TODO: Add minor and Course requirement
+const PathwayDescriptionPage: FC<IPathwayID> = ({ params }) => {
+    const pathwayName: string = decodeURIComponent(params.id).replaceAll("%20", " ");
+    const [isLoading, setIsLoading] = useState(true);
+    //This fetch IS SLOW 
+    const resultPathways = useFetchPathways(pathwayName);
+    const [pathwayDescription, setPathwayDescription ] = useState("");
 
-  // TODO: check if pathway exists, or return something empty
+    useEffect(() => {
+        if (resultPathways.length > 0) {
+            setIsLoading(false);
+            const foundPathway = resultPathways.find(pathway => pathway.title === pathwayName);
+            if (!foundPathway) {
+                notFound();
+            }
+            setPathwayDescription(resultPathways[0].description);
+        } else if (!resultPathways.length) {
+            setIsLoading(false);
+        }
+    }, [resultPathways, pathwayName]);
 
-  return (
-    <>
-      <header className="mb-4 md:mb-8">
-        <BreadCrumb
-          path={[
-            {
-              display: "Pathways",
-              link: "/pathways/search",
-            },
-            {
-              display: pathwayName,
-              link: "",
-            },
-          ]}
-        />
-        <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold">
-          {pathwayName}
-        </h1>
-      </header>
-      <section className="description-section">
-        <header>
-          <h3>Pathway Description</h3>
+    const pathwayData: IPathwayDescriptionSchema = pathwayTempData;
+
+    console.log(JSON.stringify(resultPathways));
+
+    return (
+      <>
+        <header className="mb-4 md:mb-8">
+          <BreadCrumb
+              path={[
+                { display: "Pathways", link: "/pathways/search" },
+                { display: pathwayName, link: "" },
+              ]}
+          />
+          <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold">
+            {pathwayName}
+          </h1>
         </header>
-        <p>{pathwayData.description}</p>
-      </section>
-      <section className="description-section">
-        <header>
-          <h3>Compatible Minor</h3>
-        </header>
-        <ul>
-          {pathwayData.compatibleMinor.map((minor, i) => {
-            return <li key={i}>- {minor}</li>;
-          })}
-        </ul>
-      </section>
-      <section className="description-section">
-        <header>
-          <h3>Requirement</h3>
-        </header>
-        <p>
-          Students must choose a minimum of 12 credits as from the course list
-          below.
-        </p>
-      </section>
-      <section className="description-section">
-        <header>
-          <h3>Available Courses</h3>
-        </header>
-        <CourseSection courses={pathwayData.courses} />
-      </section>
-    </>
+        <section className="description-section">
+          <header>
+            <h3>Pathway Description</h3>
+          </header>
+          <p>{pathwayDescription}</p>
+        </section>
+        <section className="description-section">
+          <header>
+            <h3>Compatible Minor</h3>
+          </header>
+          <ul>
+            {pathwayData.compatibleMinor.map((minor, i) => (
+                <li key={i}>- {minor}</li>
+            ))}
+          </ul>
+        </section>
+        <section className="description-section">
+          <header>
+            <h3>Requirement</h3>
+          </header>
+          <p>
+            Students must choose a minimum of 12 credits as from the course list
+            below.
+          </p>
+        </section>
+        <section className="description-section">
+          <header>
+            <h3>Available Courses</h3>
+          </header>
+          <CourseSection courses={pathwayData.courses} />
+        </section>
+      </>
   );
 };
 
@@ -151,88 +111,68 @@ interface CourseSectionProps {
 const CourseSection: FC<CourseSectionProps> = ({ courses }) => {
   const [clusterIndex, setClusterIndex] = useState(0);
 
-  if (courses.length === 0) return <></>;
+  if (courses.length === 0) return null;
 
-  function instanceOfCluster(object: any): object is ICourseClusterSchema {
-    return "name" in object;
-  }
+  const isCluster = (obj: any): obj is ICourseClusterSchema => "name" in obj;
 
-  const haveCluster = instanceOfCluster(courses[0]);
-  const cluster: ICourseClusterSchema = courses[
-    clusterIndex
-  ] as ICourseClusterSchema;
+  const haveCluster = isCluster(courses[0]);
+  const cluster: ICourseClusterSchema = courses[clusterIndex] as ICourseClusterSchema;
 
   return (
-    <>
-      {haveCluster && (
-        <>
-          <ul
-            className="rounded-lg flex flex-col sm:flex-row gap-2 p-1 
-          bg-gray-50 border border-1 border-gray-200 list-none 
-          w-full sm:w-[500px] md:w-[723px] lg:w-full lg:max-w-[723px]"
-          >
-            {courses.map((cluster: any, i: number) => {
-              return (
-                <CourseClusterSelection
-                  key={cluster.name}
-                  title={cluster.name}
-                  tag={cluster.courses.length}
-                  selected={clusterIndex === i}
-                  onClickEvent={() => {
-                    setClusterIndex(i);
-                  }}
-                />
-              );
-            })}
-          </ul>
-          <div className="my-3 grid grid-flow-row gap-y-3">
-            <CourseList courses={cluster.courses} />
-          </div>
-        </>
-      )}
-      {!haveCluster && <CourseList courses={courses as Array<ICourseSchema>} />}
-    </>
+      <>
+        {haveCluster ? (
+            <>
+              <ul className="rounded-lg flex flex-col sm:flex-row gap-2 p-1 bg-gray-50 border border-1 border-gray-200 list-none w-full sm:w-[500px] md:w-[723px] lg:w-full lg:max-w-[723px]">
+                {courses.map((cluster: any, i: number) => (
+                    <CourseClusterSelection
+                        key={cluster.name}
+                        title={cluster.name}
+                        tag={cluster.courses.length}
+                        selected={clusterIndex === i}
+                        onClickEvent={() => setClusterIndex(i)}
+                    />
+                ))}
+              </ul>
+              <div className="my-3 grid grid-flow-row gap-y-3">
+                <CourseList courses={cluster.courses} />
+              </div>
+            </>
+        ) : (
+            <CourseList courses={courses as Array<ICourseSchema>} />
+        )}
+      </>
   );
 };
 
 interface CourseClusterProps {
   title: string;
   selected: boolean;
-  onClickEvent: MouseEventHandler;
+  onClickEvent: React.MouseEventHandler;
   tag: string | number;
 }
 
-const CourseClusterSelection: FC<CourseClusterProps> = ({
-  title,
-  selected,
-  onClickEvent,
-  tag,
-}) => {
-  return (
+const CourseClusterSelection: FC<CourseClusterProps> = ({ title, selected, onClickEvent, tag }) => (
     <li
-      className={`flex items-center text-xs md:text-sm cursor-pointer justify-center gap-x-2 px-3 py-[7px] rounded-[6px] font-semibold ${
-        selected ? "text-gray-700 bg-white ut-shadow-lg" : "text-gray-500"
-      }`}
-      onClick={onClickEvent}
+        className={`flex items-center text-xs md:text-sm cursor-pointer justify-center gap-x-2 px-3 py-[7px] rounded-[6px] font-semibold ${
+            selected ? "text-gray-700 bg-white ut-shadow-lg" : "text-gray-500"
+        }`}
+        onClick={onClickEvent}
     >
       {title}
       <p className="tag tag-gray">{tag}</p>
     </li>
-  );
-};
+);
 
 interface CourseListProps {
   courses: Array<ICourseSchema>;
 }
 
-const CourseList: FC<CourseListProps> = ({ courses }) => {
-  return (
+const CourseList: FC<CourseListProps> = ({ courses }) => (
     <div className="my-3 grid grid-flow-row gap-y-3">
-      {courses.map((course) => {
-        return <CourseCard key={course.courseCode} {...course} />;
-      })}
+      {courses.map((course) => (
+          <CourseCard key={course.courseCode} {...course} />
+      ))}
     </div>
-  );
-};
+);
 
 export default PathwayDescriptionPage;

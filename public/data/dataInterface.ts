@@ -8,6 +8,7 @@ export interface IPathwaySchema {
   title: string;
   department: string;
   courses: Array<ICourseSchema>;
+  description: string;
 }
 
 interface IPrereqSchema {

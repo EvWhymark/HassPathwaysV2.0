@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
         clusters: path.clusters,
         department: dep.department,
         required: path.required,
+        description: path.description,
       };
     });
   });
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest) {
       title: data.name,
       courses: data.courses,
       department: data.department,
+      description: data.description,
     };
   });
 
