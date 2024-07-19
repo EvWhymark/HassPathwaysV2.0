@@ -1,7 +1,6 @@
 import path from "path";
 import clientPromise from ".";
 import { Collection, Db, MongoClient } from "mongodb";
-import { forEach } from "lodash";
 
 import file20 from '../../json/2019-2020/pathways.json';
 import file21 from '../../json/2020-2021/pathways.json';
@@ -17,15 +16,10 @@ async function init() {
     try {
         client = await clientPromise;
         db = await client.db();
-        file = await db.collection('2020');
     } catch (error) {
         throw new Error('Failed to establish connection to database');
     }
 }
-
-(async () => {
-    await init();
-})();
 
 type Cluster = {
     name: string;
@@ -50,95 +44,94 @@ type MongoPathway = {
     pathways: PathwayDetails[];
 }
 
-export async function getPathways(year : string): Promise<{ status? : string; data?: Pathway[]; error?: string }> {
+export async function getPathways(year: string, department: string, query: string): Promise<{ status?: string; data?: Pathway[]; error?: string }> {
     try {
-        if (!file) await init();
+        if (!db) await init();
         
-        var pathways: MongoPathway[] = file20;
-        file = await db.collection('2019-2020');
+        let pathways: MongoPathway[];
         switch (year) {
             case "2020-2021":
                 pathways = file21;
-                file = await db.collection('2020-2021');
+                file = db.collection('2020-2021');
                 break;
             case "2021-2022":
                 pathways = file22;
-                file = await db.collection('2021-2022');
+                file = db.collection('2021-2022');
                 break;
             case "2022-2023":
                 pathways = file23;
-                file = await db.collection('2022-2023');
+                file = db.collection('2022-2023');
                 break;
             default:
+                pathways = file20;
+                file = db.collection('2019-2020');
                 break;
         }
         
-        const result = await file
-            .find({})
-            .limit(20)
-            .map((each: any) => ({
-                _id: each._id.toString(),
-                department: each.department,
-                pathways: each.pathways,
-            }))
-            .toArray();
+        const queryObj: any = {};
+        if (department) {
+            queryObj.department = { $in: department.split(",") };
+        }
+        if (query) {
+            queryObj["pathways.name"] = { $regex: query, $options: "i" };
+        }
 
-        console.log(result);
+        const result = await file.find(queryObj).limit(20).toArray();
+        const mappedResult = result.map((each: any) => ({
+            _id: each._id.toString(),
+            department: each.department,
+            pathways: each.pathways,
+        }));
 
-        return { 
-            status : "ok",
-            data: result };
+        return {
+            status: "ok",
+            data: mappedResult,
+        };
     } catch (error) {
-        return { 
-            status : "error",
-            error: "Failed to fetch pathways" };
+        return {
+            status: "error",
+            error: "Failed to fetch pathways",
+        };
     }
 }
 
 export async function updatePathways(year: string): Promise<{ status: string; data?: Pathway[]; error?: string }> {
     try {
-        if (!file) await init();
+        if (!db) await init();
         
-        var pathways: MongoPathway[] = file20;
-        file = await db.collection('2019-2020');
+        let pathways: MongoPathway[];
         switch (year) {
             case "2020-2021":
                 pathways = file21;
-                file = await db.collection('2020-2021');
+                file = db.collection('2020-2021');
                 break;
             case "2021-2022":
                 pathways = file22;
-                file = await db.collection('2021-2022');
+                file = db.collection('2021-2022');
                 break;
             case "2022-2023":
                 pathways = file23;
-                file = await db.collection('2022-2023');
+                file = db.collection('2022-2023');
                 break;
             default:
+                pathways = file20;
+                file = db.collection('2019-2020');
                 break;
         }
 
         // clear the collection
-        file.deleteMany({});
+        await file.deleteMany({});
 
-        pathways.forEach(async (path: MongoPathway) => {
-            const result = await file
-                .insertOne(path, { writeConcern: undefined });
-        });
+        await file.insertMany(pathways);
 
-        const result = await file
-            .find({})
-            .limit(100)
-            .map((each: any) => ({
-                _id: each._id.toString(),
-                department: each.department,
-                pathways: each.pathways,
-            }))
-            .toArray();
+        const result = await file.find({}).limit(100).toArray();
+        const mappedResult = result.map((each: any) => ({
+            _id: each._id.toString(),
+            department: each.department,
+            pathways: each.pathways,
+        }));
 
-        console.log(result);
-
-        return { status: "ok", data: result };
+        return { status: "ok", data: mappedResult };
 
     } catch (error) {
         return { status: "error", error: "Failed to fetch pathways" };

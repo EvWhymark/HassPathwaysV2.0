@@ -1,9 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { getPathways } from '@/lib/mongo/test';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        const result = await getPathways("2020-2021") || "2022-2023";
+        const params = request.nextUrl.searchParams;
+
+        const year: string = params.get("catalogYear") || "2022-2023";
+        const department: string = params.get("department") || "";
+        const query: string = params.get("searchString") || "";
+
+        const result = await getPathways(year, department, query);
 
         if ('error' in result) {
             throw new Error(result.error);
