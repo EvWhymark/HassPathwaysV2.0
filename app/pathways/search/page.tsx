@@ -83,7 +83,6 @@ const SearchCourse = () => {
       .then((data) => data.json())
       .then((data) => {
         setResultPathways(data);
-        console.log("Fetched data:", data);
       })
       .catch((err) => {
         if (err.name === "AbortError") return;

@@ -1,77 +1,59 @@
 import { NextResponse, NextRequest } from "next/server";
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import * as fs from "fs";
-import cors from "cors";
 import path from "path";
 
 export async function GET(request: NextRequest) {
-  const params = request.nextUrl.searchParams;
+  try {
+    const params = request.nextUrl.searchParams;
+    console.log(params.get("catalogYear") );
+    const catalogYear: string = params.get("catalogYear") || "2022-2023";
+    const department: string = params.get("department") || "";
+    const searchString: string = params.get("searchString") || "";
 
-  const catalogYear = params.get("catalogYear");
-  console.log(params);
+    const filePath = path.join(process.cwd(), "json", catalogYear, "pathways.json");
+    const pathways = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
-  console.log(1);
+    let filteredPathways = pathways;
 
-  const pathways = JSON.parse(
-    fs.readFileSync(
-      path.join(process.cwd(), "json") + `/${catalogYear}` + "/pathways.json",
-      "utf8"
-    )
-  );
+    if (department) {
+      const departments = department.split(",");
+      filteredPathways = filteredPathways.filter((c) => departments.includes(c["department"]));
+    }
 
-  console.log(2);
-  let blob = pathways;
-
-  const departmentString = params.get("department");
-  if (departmentString) {
-    const departments = departmentString.split(",");
-    blob = blob.filter((c) => departments.includes(c["department"]));
-  }
-  let flatten = blob.flatMap((dep) => {
-    return dep.pathways.map((path) => {
-      return {
+    let flattened = filteredPathways.flatMap((dep) => {
+      return dep.pathways.map((path) => ({
         name: path.name,
         clusters: path.clusters,
         department: dep.department,
         required: path.required,
-      };
+      }));
     });
-  });
-  //   blob = blob.map((c) => c["pathways"]).flat();
 
-  console.log(3);
-  for (var [k, c] of Object.entries(flatten)) {
-    c["courses"] = c["clusters"]
-      .map((b) => b["courses"])
-      .flat()
-      .concat(c["required"] != null ? c["required"] : []);
-  }
-  flatten = Object.fromEntries(
-    Object.entries(flatten).filter(([k, v]) => k != "clusters")
-  );
+    for (let c of flattened) {
+      c["courses"] = c["clusters"]
+        .map((b) => b["courses"])
+        .flat()
+        .concat(c["required"] || []);
+    }
 
-  const searchString = params.get("searchString");
-  if (searchString) {
-    flatten = Object.fromEntries(
-      Object.entries(flatten).filter(([k, v]) =>
-        v["name"].toLowerCase().includes(searchString.toLowerCase())
-      )
-    );
-  }
+    if (searchString) {
+      flattened = flattened.filter((v) => v.name.toLowerCase().includes(searchString.toLowerCase()));
+    }
 
-  console.log(8);
-  // Convert Blob to array
-  const output: Array<IPathwaySchema> = Object.entries(flatten).map((v) => {
-    const data = v[1];
-    return {
+    const output: Array<IPathwaySchema> = flattened.map((data) => ({
       title: data.name,
       courses: data.courses,
       department: data.department,
-    };
-  });
+    }));
 
-  console.log("return");
-  console.log(output);
-  
-  return NextResponse.json(output);
+    console.log("Searched for: " + catalogYear);
+    return NextResponse.json(output);
+  } catch (error) {
+    return NextResponse.json({ status: "error", error: error.message }, { status: 500 });
+  }
+}
+
+export function POST() {
+  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
 }
