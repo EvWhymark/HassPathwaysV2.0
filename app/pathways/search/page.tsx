@@ -59,10 +59,14 @@ const SearchCourse = () => {
 
   useEffect(() => {
     const apiController = new AbortController();
-    const validYear = validCatalogYear.includes(catalog_year);
+    let searchYear = "2022-2023";
+    if (validCatalogYear.includes(catalog_year)) {
+      searchYear = catalog_year;
+
+    } 
     const searchStr = deferSearchString;
     const searchDepart = getFilterList(pathwaysCategories, deferFilterState);
-    const searchYear = validYear ? "2022-2023" : catalog_year;
+
 
     setIsLoading(true);
 
