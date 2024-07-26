@@ -1,13 +1,27 @@
+// app/courses/page.tsx
 "use client";
-import { MouseEventHandler, useState } from "react";
-import CourseCard from "../components/course/CourseCard";
+import { MouseEventHandler, useState, useEffect } from "react";
+import CourseCard from "../../components/course/CourseCard";
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
 import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
-import { useAppContext } from "../contexts/appContext/AppProvider";
+import { useAppContext } from "../context/AppProvider";
+import { courseState as defaultCourseState, getCourseStateFromLocalStorage, setCourseStateToLocalStorage } from "@/public/data/CourseData";
 
 const MyCourses = () => {
   const [courseFilter, setCourseFilter] = useState(0);
+  const [courses, setCourses] = useState(defaultCourseState);
   const { courseState } = useAppContext();
+
+  // Load courses from local storage on mount
+  useEffect(() => {
+    const storedCourses = getCourseStateFromLocalStorage();
+    setCourses(storedCourses.length > 0 ? storedCourses : defaultCourseState);
+  }, []);
+
+  // Save courses to local storage when courses state changes
+  useEffect(() => {
+    setCourseStateToLocalStorage(courses);
+  }, [courses]);
 
   return (
     <>
@@ -40,7 +54,9 @@ const MyCourses = () => {
         </div>
       </section>
       <section className="my-4 grid grid-flow-row gap-y-3">
-        <CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" />
+        {courses.filter(course => courseFilter === 0 || course.value === courseFilter).map((course, i) => (
+          <CourseCard tag={["T"]} courseCode={`TEST-${course.value}`} title={`Test ${course.display}`} key={i} />
+        ))}
       </section>
     </>
   );
@@ -58,7 +74,6 @@ const ModeRadioButton = ({
   clickCallback: MouseEventHandler;
 }) => {
   const tagStyle = checked ? "tag-primary" : "tag-gray";
-
   const fontStyle = checked ? "text-primary-700" : "text-gray-500";
 
   return (
