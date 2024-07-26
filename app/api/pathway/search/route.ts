@@ -1,20 +1,22 @@
 import { NextResponse, NextRequest } from "next/server";
 import { IPathwaySchema } from "@/public/data/dataInterface";
-import * as fs from "fs";
-import path from "path";
 
 export async function GET(request: NextRequest) {
   try {
     const params = request.nextUrl.searchParams;
-    console.log(params.get("catalogYear") );
+    console.log(params.get("catalogYear"));
+
     const catalogYear: string = params.get("catalogYear") || "2022-2023";
     const department: string = params.get("department") || "";
     const searchString: string = params.get("searchString") || "";
 
-    const filePath = path.join(process.cwd(), "json", catalogYear, "pathways.json");
-    const pathways = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    const response = await fetch(`http://localhost:3000/api/getPathways?catalogYear=${catalogYear}&department=${department}&searchString=${searchString}`);
+    if (!response.ok) {
+      throw new Error("Server Reply Error");
+    }
 
-    let filteredPathways = pathways;
+    const responseData = await response.json();
+    let filteredPathways = responseData.files;
 
     if (department) {
       const departments = department.split(",");
@@ -49,7 +51,8 @@ export async function GET(request: NextRequest) {
 
     console.log("Searched for: " + catalogYear);
     return NextResponse.json(output);
-  } catch (error) {
+
+  } catch (error: any) {
     return NextResponse.json({ status: "error", error: error.message }, { status: 500 });
   }
 }
