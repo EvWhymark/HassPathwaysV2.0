@@ -1,7 +1,7 @@
 // app/courses/page.tsx
 "use client";
 import { MouseEventHandler, useState, useEffect } from "react";
-import CourseCard from "../../components/course/CourseCard";
+import CourseCard from "../components/course/CourseCard";
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
 import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
 import { useAppContext } from "../context/AppProvider";
