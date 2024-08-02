@@ -4,7 +4,7 @@ import { MouseEventHandler, useState, useEffect } from "react";
 import CourseCard from "../components/course/CourseCard";
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
 import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
-import { useAppContext } from "../context/AppProvider";
+import { useAppContext } from "../contexts/appContext/AppProvider";
 import { courseState as defaultCourseState, getCourseStateFromLocalStorage, setCourseStateToLocalStorage } from "@/public/data/CourseData";
 
 const MyCourses = () => {
