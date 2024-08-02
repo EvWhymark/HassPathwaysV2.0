@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { appReducer } from "./AppReducer";
-import { INITIAL_LOAD_DATA, SET_CATALOG } from "./actions";
+import { INITIAL_LOAD_DATA, SET_CATALOG } from "../actions";
 import {
   courseState,
   pathwaysCategories,
