@@ -8,10 +8,6 @@ export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
 
   const catalogYear = params.get("catalogYear");
-  console.log(params);
-
-  console.log(1);
-
   const pathways = JSON.parse(
     fs.readFileSync(
       path.join(process.cwd(), "json") + `/${catalogYear}` + "/pathways.json",
@@ -19,7 +15,6 @@ export async function GET(request: NextRequest) {
     )
   );
 
-  console.log(2);
   let blob = pathways;
 
   const departmentString = params.get("department");
@@ -34,12 +29,12 @@ export async function GET(request: NextRequest) {
         clusters: path.clusters,
         department: dep.department,
         required: path.required,
+        description: path.description,
       };
     });
   });
   //   blob = blob.map((c) => c["pathways"]).flat();
 
-  console.log(3);
   for (var [k, c] of Object.entries(flatten)) {
     c["courses"] = c["clusters"]
       .map((b) => b["courses"])
@@ -59,7 +54,6 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  console.log(8);
   // Convert Blob to array
   const output: Array<IPathwaySchema> = Object.entries(flatten).map((v) => {
     const data = v[1];
@@ -67,11 +61,9 @@ export async function GET(request: NextRequest) {
       title: data.name,
       courses: data.courses,
       department: data.department,
+      description: data.description,
     };
   });
 
-  console.log("return");
-  console.log(output);
-  
   return NextResponse.json(output);
 }
