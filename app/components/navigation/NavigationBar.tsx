@@ -72,6 +72,13 @@ const NavigationBar = ({ className }: { className?: string }) => {
           }`}
         >  
           <NavButton
+            link="/pathways/search"
+            text="Search Pathways"
+            Icon={<SearchIcon />}
+            keyword="pathways/search"
+          />
+
+          <NavButton
             link="/courses/search"
             text="Search Courses"
             Icon={<SearchIcon />}

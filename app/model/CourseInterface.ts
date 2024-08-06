@@ -1,15 +1,17 @@
+export type courseState = "Planned" | "In Progress" | "Interested" | "No Selection";
+
 export interface CourseCardProps {
   title: string;
   courseCode: string;
   tag: Array<string>;
+  status?: string; 
 }
 
 export interface IFilterState {
-  filter: Array<string>;
-  level: Array<string>;
-  prefix: Array<string>;
-  semester: Array<string>;
-  prereq: Array<string>;
+  title: string;
+  courseCode: string;
+  tag: Array<string>;
+  status?: string; 
 }
 
 export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq";
