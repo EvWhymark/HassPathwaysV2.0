@@ -6,15 +6,14 @@ import {
   ICourseDescriptionSchema,
   ISemesterData,
 } from "@/public/data/dataInterface";
-import { TemplateContext } from "next/dist/shared/lib/app-router-context";
-// import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url";
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 /**
- * Interface for course code
+ * Interface for course name and code
  */
-type ICourseCode = {
+type ICourseParams = {
   params: {
+    courseName: string;
     courseCode: string;
   };
 };
@@ -22,71 +21,62 @@ type ICourseCode = {
 // Empty course object template
 const emptyCourse: ICourseDescriptionSchema = {
   title: "course not found",
-  description: "des not found",
+  description: "description not found",
   prereqs: undefined,
   term: [{ year: "2023" }],
 };
 
 /**
  * React functional component for CoursePage.
- * Fetches and displays course information based on the courseCode from params.
+ * Fetches and displays course information based on the courseName from params.
  *
- * @param data - Object containing course code in params.
+ * @param data - Object containing course name and course code in params.
  */
 
-const CoursePage: React.FC<ICourseCode> = (data) => {
-  const { courseCode } = data.params;
+const CoursePage: React.FC<ICourseParams> = (data) => {
+  const { courseName, courseCode } = data.params;  // 现在从 params 中获取 courseName 和 courseCode
 
-  // Here I use use state state to fetch data and repace the template data:
   const [courseDescription, setCourseDescription] =
     useState<ICourseDescriptionSchema>(emptyCourse);
 
   // Testing new API:
   useEffect(() => {
     const apiController = new AbortController();
-
-    fetch(`http://localhost:3000/api/course/${courseCode}`, {
+  
+    fetch(`/api/course/${encodeURIComponent(courseName)}?year=2022-2023`, {
       signal: apiController.signal,
       cache: "no-store",
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        // Assuming the data structure is similar to your previous API
-        setCourseDescription((prev) => ({
-          ...prev,
-          title: data.name,
-          description: data.description,
-          prerequisite: data.prerequisites,
-          attributes: data.attributes,
-          semesterOffered: data.courseSemester,
-        }));
+        console.log("Fetched data:", data);  // 检查 data 的内容
+        if (!data.error) {
+          setCourseDescription({
+            ...emptyCourse,
+            title: data.name,
+            description: data.description,
+            prereqs: data.prerequisites,
+            term: data.offered,
+          });
+          console.log("Updated courseDescription:", courseDescription);  // 检查状态更新后的 courseDescription
+        }
       })
       .catch((error) => {
-        console.error("Error fetching data: ", error);
+        console.error("Error fetching data:", error);
       });
-
+  
     return () => {
       apiController.abort();
     };
-  }, [courseCode]);
-
-  // TODO: Still need the semester offered data being updated.
-  // braket slising
-  // TODO: Need to Parse Prereqs for better display (nested, and, or)
-  // Test the new route, see if it can fetch the new code:
-
-  useEffect(() => {
-    // console.log("Current courseDescription:", courseDescription);
-  }, [courseDescription]);
+  }, [courseName]);
+  
 
   const term = courseDescription?.term ?? "Unfound Terms";
-  const courseName = courseDescription?.title ?? "Unfound Course";
+  const displayCourseName = courseDescription?.title ?? "Unfound Course";
   const description = courseDescription?.description
     ? courseDescription.description
     : "No Description Found";
   const prereqs = courseDescription?.prereqs ?? "Unfound Prereqs";
-  // const thsemesterOffered = courseDescription?.semesterOffered ?? "Unfound Course SemesterOfferend"
 
   return (
     <Fragment>
@@ -94,11 +84,11 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         <BreadCrumb
           path={[
             { display: "Courses", link: "/courses/search" },
-            { display: courseCode, link: "" },
+            { display: courseCode, link: "" },  // 仍然使用 courseCode 显示路径
           ]}
         />
         <h1>
-          {courseDescription.title} ({courseCode})
+          {displayCourseName} ({courseCode})  {/* 这里的括号中保留 courseCode */}
         </h1>
       </header>
       <section className="description-section">
@@ -123,26 +113,4 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
   );
 };
 
-/**
- * TableData component to display instructor and available seats.
- *
- * @param data - Object containing instructor and seats data.
- */
-const TableData = ({ data }: { data?: ISemesterData }) => {
-  if (!data) return <div className="!text-gray-600">No Class</div>;
-
-  const { instructor, seats } = data;
-  return (
-    <div>
-      <div>
-        {instructor.reduce((acc, inst) => {
-          if (acc === "") return inst;
-          return acc + ", " + inst;
-        }, "")}
-      </div>
-      <div className="!text-gray-600">{seats}</div>
-    </div>
-  );
-};
-// Export the CoursePage component
 export default CoursePage;

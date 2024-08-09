@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import cors from "cors";
+//import cors from "cors";
 
 const tags_short_to_long = {
   HInq: "HASS Inquiry",
