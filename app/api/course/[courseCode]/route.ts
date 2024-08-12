@@ -1,65 +1,106 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
 // Define interfaces for your data structures
+interface Offered {
+  even: boolean;
+  fall: boolean;
+  odd: boolean;
+  spring: boolean;
+  summer: boolean;
+  text: string;
+  uia: boolean;
+}
+
+interface Section {
+  class: string;
+  days: string;
+  instructor: string;
+  location: string;
+  time: string;
+  type: string;
+}
+
+interface Properties {
+  CI: boolean;
+  HI: boolean;
+  major_restricted: boolean;
+}
+
 interface CourseData {
+  ID: string;
   subj: string;
-  crse: string;
   name: string;
   description: string;
-  source: string;
-  offered: any; // 添加 offered 字段以处理学期信息
-  prerequisites: string[]; // 添加 prerequisites 字段
+  cross_listed: string[];
+  offered: Offered;
+  prerequisites: string[];
+  professors: string[];
+  properties: Properties;
+  sections: { [key: string]: Section };
 }
 
 interface CourseDatabase {
   [key: string]: CourseData;
 }
 
-// Main GET function
-export async function GET(request: NextRequest) {
-  const pathParts = request.nextUrl.pathname.split("/");
-  const selectedCourseName = decodeURIComponent(pathParts[pathParts.length - 1]);
 
-  // Extract year from query params (e.g., ?year=2023-2024)
-  const searchParams = request.nextUrl.searchParams;
-  const selectedYear = searchParams.get("year") || "2022-2023"; // Default to 2022-2023 if no year is provided
+// Main GET function
+export function GET(request: Request) {
+  const pathParts = request.url.split("/");
+  const selectedCourseCode = decodeURIComponent(pathParts[pathParts.length - 1]);
+
+  // Extract year from query params
+  const url = new URL(request.url);
+  const selectedYear = url.searchParams.get("year") || "2022-2023";
 
   // Construct the file path based on the selected year
   const filePath = path.join(process.cwd(), "json", selectedYear, "courses.json");
 
-  try {
-    console.log("Attempting to read file from path:", filePath); // Debugging output to check file path
+  return fs.readFile(filePath, "utf-8")
+    .then((fileContents) => {
+      const courses: CourseDatabase = JSON.parse(fileContents);
 
-    const fileContents = await fs.readFile(filePath, "utf-8");
-    const courses: CourseDatabase = JSON.parse(fileContents);
+      // Extract subj and ID from courseCode
+      const [subj, ID] = selectedCourseCode.split("-");
 
-    console.log("Courses data:", courses);
-    console.log("Looking for course name:", selectedCourseName);
+      console.log("Searching for course with subj:", subj, "and ID:", ID);
 
-    const courseDescription = courses[selectedCourseName];
+      // Find the course by subj and ID
+      let courseDescription = null;
+      for (const [key, course] of Object.entries(courses)) {
+        if (course.subj === subj && course.ID === ID) {
+          courseDescription = course;
+          break;
+        }
+      }
 
-    if (!courseDescription) {
-      console.log("Course not found:", selectedCourseName);
-      return new NextResponse(JSON.stringify({ error: "Course data not found" }), {
-        status: 404,
+      // If course is not found, fall back to a specific key
+      if (!courseDescription) {
+        console.log("Course not found, falling back to '2D Experimental Animation'");
+        if (courses.hasOwnProperty("2D Experimental Animation")) {
+          courseDescription = courses["2D Experimental Animation"];
+        } else {
+          console.log("'2D Experimental Animation' not found in courses.");
+          return (new NextResponse(JSON.stringify({ error: "Course data not found, and fallback failed." }), {
+            status: 404,
+            headers: { "Content-Type": "application/json" },
+          }));
+        }
+      }
+
+      return new NextResponse(JSON.stringify(courseDescription), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    })
+    .catch((error) => {
+      console.error("Failed to read courses.json:", error);
+      return new NextResponse(JSON.stringify({ error: "Failed to read courses.json" }), {
+        status: 500,
         headers: { "Content-Type": "application/json" },
       });
-    }
-
-    return new NextResponse(JSON.stringify(courseDescription), {
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
-  } catch (error) {
-    console.error("Failed to read courses.json:", error);
-    return new NextResponse(JSON.stringify({ error: "Failed to read courses.json" }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
 }

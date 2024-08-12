@@ -4,16 +4,14 @@ import { SemesterTable } from "@/app/components/course/OfferTable";
 import BreadCrumb from "@/app/components/navigation/Breadcrumb";
 import {
   ICourseDescriptionSchema,
-  ISemesterData,
 } from "@/public/data/dataInterface";
 import React, { Fragment, useEffect, useState } from "react";
 
 /**
- * Interface for course name and code
+ * Interface for course code
  */
 type ICourseParams = {
   params: {
-    courseName: string;
     courseCode: string;
   };
 };
@@ -28,28 +26,29 @@ const emptyCourse: ICourseDescriptionSchema = {
 
 /**
  * React functional component for CoursePage.
- * Fetches and displays course information based on the courseName from params.
+ * Fetches and displays course information based on the courseCode from params.
  *
- * @param data - Object containing course name and course code in params.
+ * @param data - Object containing course code in params.
  */
-
 const CoursePage: React.FC<ICourseParams> = (data) => {
-  const { courseName, courseCode } = data.params;  // 现在从 params 中获取 courseName 和 courseCode
+  const { courseCode } = data.params;  // 仅从 params 中获取 courseCode
+  console.log("params:", data.params);  // 输出 params 的内容
 
   const [courseDescription, setCourseDescription] =
     useState<ICourseDescriptionSchema>(emptyCourse);
 
-  // Testing new API:
+  // 使用 courseCode 进行 API 请求
   useEffect(() => {
     const apiController = new AbortController();
   
-    fetch(`/api/course/${encodeURIComponent(courseName)}?year=2022-2023`, {
+    fetch(`/api/course/${encodeURIComponent(courseCode)}?year=2022-2023`, {
       signal: apiController.signal,
       cache: "no-store",
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched data:", data);  // 检查 data 的内容
+        console.log("Fetch course data from:", courseCode);  // 在这里输出 API 返回的完整数据
+        console.log("Fetched course data:", data);  // 在这里输出 API 返回的完整数据
         if (!data.error) {
           setCourseDescription({
             ...emptyCourse,
@@ -58,7 +57,6 @@ const CoursePage: React.FC<ICourseParams> = (data) => {
             prereqs: data.prerequisites,
             term: data.offered,
           });
-          console.log("Updated courseDescription:", courseDescription);  // 检查状态更新后的 courseDescription
         }
       })
       .catch((error) => {
@@ -68,8 +66,7 @@ const CoursePage: React.FC<ICourseParams> = (data) => {
     return () => {
       apiController.abort();
     };
-  }, [courseName]);
-  
+  }, [courseCode]);
 
   const term = courseDescription?.term ?? "Unfound Terms";
   const displayCourseName = courseDescription?.title ?? "Unfound Course";
@@ -84,11 +81,11 @@ const CoursePage: React.FC<ICourseParams> = (data) => {
         <BreadCrumb
           path={[
             { display: "Courses", link: "/courses/search" },
-            { display: courseCode, link: "" },  // 仍然使用 courseCode 显示路径
+            { display: courseCode, link: "" },
           ]}
         />
         <h1>
-          {displayCourseName} ({courseCode})  {/* 这里的括号中保留 courseCode */}
+          {displayCourseName} ({courseCode})
         </h1>
       </header>
       <section className="description-section">
