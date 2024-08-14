@@ -63,14 +63,21 @@ export function GET(request: Request) {
       const courses: CourseDatabase = JSON.parse(fileContents);
 
       // Extract subj and ID from courseCode
-      const [subj, ID] = selectedCourseCode.split("-");
-
+      const [subj, IDWithParams] = selectedCourseCode.split("-");
+      const ID = IDWithParams.slice(0, 4);
       console.log("Searching for course with subj:", subj, "and ID:", ID);
 
+
+      // Find the course by subj and ID
       // Find the course by subj and ID
       let courseDescription = null;
       for (const [key, course] of Object.entries(courses)) {
-        if (course.subj === subj && course.ID === ID) {
+        console.log("Checking course:", key);
+        console.log("Comparing subj:", course.subj.trim().toUpperCase(), "with", subj.trim().toUpperCase());
+        console.log("Comparing ID:", course.ID.trim(), "with", ID.trim());
+
+        if (course.subj.trim().toUpperCase() === subj.trim().toUpperCase() &&
+            course.ID.trim() === ID.trim()) {
           courseDescription = course;
           break;
         }
