@@ -10,18 +10,22 @@ const TableData: FC<{ data?: ISemesterData }> = ({ data }) => {
   if (!data) return <div className="!text-gray-600">No Class</div>;
 
   const { instructor, seats } = data;
+
+  const instructorList = Array.isArray(instructor)
+    ? instructor.reduce((acc, inst) => {
+        if (acc === "") return inst;
+        return acc + ", " + inst;
+      }, "")
+    : instructor;
+
   return (
     <div>
-      <div>
-        {instructor.reduce((acc, inst) => {
-          if (acc === "") return inst;
-          return acc + ", " + inst;
-        }, "")}
-      </div>
+      <div>{instructorList}</div>
       <div className="!text-gray-600">{seats}</div>
     </div>
   );
 };
+
 
 type ISemesterTableData = {
   term: ITerm[];

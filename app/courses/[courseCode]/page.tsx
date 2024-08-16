@@ -4,6 +4,7 @@ import { SemesterTable } from "@/app/components/course/OfferTable";
 import BreadCrumb from "@/app/components/navigation/Breadcrumb";
 import {
   ICourseDescriptionSchema,
+  ITerm,
 } from "@/public/data/dataInterface";
 import React, { Fragment, useEffect, useState } from "react";
 
@@ -21,7 +22,7 @@ const emptyCourse: ICourseDescriptionSchema = {
   title: "course not found",
   description: "description not found",
   prereqs: undefined,
-  term: [{ year: "2023" }],
+  term: [],
 };
 
 /**
@@ -31,44 +32,57 @@ const emptyCourse: ICourseDescriptionSchema = {
  * @param data - Object containing course code in params.
  */
 const CoursePage: React.FC<ICourseParams> = (data) => {
-  const { courseCode } = data.params;  // 仅从 params 中获取 courseCode
-  console.log("params:", data.params);  // 输出 params 的内容
+  const { courseCode } = data.params;
 
   const [courseDescription, setCourseDescription] =
     useState<ICourseDescriptionSchema>(emptyCourse);
 
-  // 使用 courseCode 进行 API 请求
   useEffect(() => {
     const apiController = new AbortController();
-  
+
     fetch(`/api/course/${encodeURIComponent(courseCode)}?year=2022-2023`, {
       signal: apiController.signal,
       cache: "no-store",
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetch course data from:", courseCode);  // 在这里输出 API 返回的完整数据
-        console.log("Fetched course data:", data);  // 在这里输出 API 返回的完整数据
         if (!data.error) {
+          // Convert the `offered` data to the `term` array
+          const term: ITerm[] = [];
+
+          // 判断学期信息并填充 term 数组
+          const year = data.offered.even && !data.offered.odd
+            ? "even years"
+            : !data.offered.even && data.offered.odd
+            ? "odd years"
+            : "all years";
+
+          term.push({
+            year: year,
+            spring: data.offered.spring ? { instructor: data.professors[0], seats: 30 } : null,
+            summer: data.offered.summer ? { instructor: data.professors[0], seats: 25 } : null,
+            fall: data.offered.fall ? { instructor: data.professors[0], seats: 20 } : null,
+          });
+
           setCourseDescription({
             ...emptyCourse,
             title: data.name,
             description: data.description,
             prereqs: data.prerequisites,
-            term: data.offered,
+            term: term,  // 使用转换后的 term 数据
           });
         }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  
+
     return () => {
       apiController.abort();
     };
   }, [courseCode]);
 
-  const term = courseDescription?.term ?? "Unfound Terms";
+  const term = courseDescription?.term ?? [];
   const displayCourseName = courseDescription?.title ?? "Unfound Course";
   const description = courseDescription?.description
     ? courseDescription.description
