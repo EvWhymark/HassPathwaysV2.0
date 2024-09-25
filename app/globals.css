@@ -124,6 +124,19 @@
     --success--900: 7, 77, 49;
     --success--950: 5, 51, 33;
 
+    --blue-light--25: 245, 251, 255;
+    --blue-light--50: 240, 249, 255;
+    --blue-light--100: 224, 242, 254;
+    --blue-light--200: 185, 230, 254;
+    --blue-light--300: 124, 212, 253;
+    --blue-light--400: 54, 191, 250;
+    --blue-light--500: 11, 165, 236;
+    --blue-light--600: 0, 134, 201;
+    --blue-light--700: 2, 106, 162;
+    --blue-light--800: 6, 89, 134;
+    --blue-light--900: 11, 74, 111;
+    --blue-light--950: 6, 44, 65;
+
     /* Light Mode Color */
 
     /* Background Color */
@@ -340,6 +353,14 @@
     --utility-warning-500: var(--warning--500);
     --utility-warning-600: var(--warning--600);
     --utility-warning-700: var(--warning--700);
+    --utility-blue-light-50: var(--blue-light--50);
+    --utility-blue-light-100: var(--blue-light--100);
+    --utility-blue-light-200: var(--blue-light--200);
+    --utility-blue-light-300: var(--blue-light--300);
+    --utility-blue-light-400: var(--blue-light--400);
+    --utility-blue-light-500: var(--blue-light--500);
+    --utility-blue-light-600: var(--blue-light--600);
+    --utility-blue-light-700: var(--blue-light--700);
 
     --icon-modern-border: var(--gray-light-mode--200);
 
@@ -552,6 +573,14 @@
     --utility-warning-500: var(--warning--500);
     --utility-warning-600: var(--warning--400);
     --utility-warning-700: var(--warning--300);
+    --utility-blue-light-50: var(--blue-light--950);
+    --utility-blue-light-100: var(--blue-light--900);
+    --utility-blue-light-200: var(--blue-light--800);
+    --utility-blue-light-300: var(--blue-light--700);
+    --utility-blue-light-400: var(--blue-light--600);
+    --utility-blue-light-500: var(--blue-light--500);
+    --utility-blue-light-600: var(--blue-light--400);
+    --utility-blue-light-700: var(--blue-light--300);
 
     --icon-modern-border: var(--gray-dark-mode--700);
     --featured-icon-light-fg-brand: var(--brand--200);
@@ -600,15 +629,15 @@
   }
 
   .path-primary-600 path {
-    @apply stroke-primary-600;
+    @apply stroke-utility-brand-600;
   }
 
   .path-gray-700 path {
-    @apply stroke-gray-700;
+    @apply stroke-utility-gray-700;
   }
 
   .path-gray-900 path {
-    @apply stroke-gray-900;
+    @apply stroke-utility-gray-900;
   }
 
   .main-container {
@@ -651,20 +680,20 @@
     @apply my-1 py-0.5 px-2;
     @apply rounded-2xl;
     @apply text-xs font-medium;
-    @apply text-blue-light-700 bg-blue-light-50;
-    @apply border border-solid border-blue-light-200;
+    @apply text-utility-blue-light-700 bg-utility-blue-light-50;
+    @apply border border-solid border-utility-blue-light-200;
   }
 
   .tag-primary {
-    @apply bg-primary-50 text-primary-700 border-primary-200;
+    @apply bg-utility-brand-50 text-utility-brand-700 border-utility-brand-200;
   }
 
   .tag-gray {
-    @apply bg-gray-50 text-gray-700 border-gray-200;
+    @apply bg-utility-gray-50 text-utility-gray-700 border-utility-gray-200;
   }
 
   .nav-button--selected > path {
-    @apply stroke-primary-800;
+    @apply stroke-utility-brand-800;
   }
 
   .dropdown {
@@ -680,15 +709,15 @@
     right: 0;
     bottom: 0;
     translate: 0 calc(100% + 0.5rem);
-    @apply rounded-lg border border-gray-200 border-solid bg-white;
+    @apply rounded-lg border border-utility-gray-200 border-solid bg-bg-primary;
   }
 
   .dropdown-choices > .dropdown-choice {
     padding: 10px 14px;
     border-bottom: 1px solid;
-    @apply border-gray-200;
+    @apply border-utility-gray-200;
     @apply cursor-pointer;
-    @apply hover:bg-gray-100;
+    @apply hover:bg-utility-gray-100;
   }
 
   .home-button {
@@ -704,7 +733,7 @@
   }
 
   .button-group > * {
-    @apply border-gray-300 border;
+    @apply border-utility-gray-300 border;
     @apply py-2.5 px-4;
     @apply text-sm font-semibold;
   }
@@ -726,13 +755,13 @@
   }
 
   .button-group .checkbox-group {
-    @apply bg-white;
-    @apply border-none border-gray-300 border md:border-solid;
-    @apply hover:bg-gray-50;
+    @apply bg-bg-primary;
+    @apply border-none border-utility-gray-300 border md:border-solid;
+    @apply hover:bg-utility-gray-50;
   }
 
   .button-group .checkbox-group.checked {
-    @apply text-primary-700;
+    @apply text-text-primary;
   }
 
   .course-button-group > * {
@@ -750,9 +779,9 @@
 
   .pathway-card {
     @apply w-[280px] md:w-[475px];
-    @apply bg-white;
+    @apply bg-bg-primary;
     @apply rounded-[5px];
-    @apply border border-solid border-gray-300;
+    @apply border border-solid border-utility-gray-300;
     @apply p-6;
     @apply flex gap-5 flex-col;
   }
@@ -778,7 +807,7 @@
   .course-card {
     @apply w-full sm:w-[500px] md:w-[723px] lg:w-full lg:max-w-[723px];
     @apply rounded-[4px];
-    @apply border border-solid border-gray-200;
+    @apply border border-solid border-utility-gray-200;
     @apply p-3;
     @apply flex flex-col gap-1 items-stretch;
   }
@@ -788,7 +817,7 @@
   }
 
   .input-wrapper:has(input:focus) {
-    @apply outline outline-2 outline-gray-500;
+    @apply outline outline-2 outline-utility-gray-500;
   }
 
   .description-header {
@@ -819,15 +848,15 @@
   .description-section > section.grid.grid-table > * {
     @apply max-w-[240px] min-h-[72px];
     @apply py-4 px-6 m-0;
-    @apply text-sm text-gray-900;
+    @apply text-sm text-utility-gray-900;
     @apply flex flex-col justify-center;
-    @apply border-b border-solid border-gray-200;
+    @apply border-b border-solid border-utility-gray-200;
   }
 
   .description-section > section.grid.grid-table > .table-header {
     @apply h-11;
     @apply py-3;
-    @apply text-xs font-medium text-gray-600;
-    @apply bg-gray-50;
+    @apply text-xs font-medium text-utility-gray-600;
+    @apply bg-utility-gray-50;
   }
 }

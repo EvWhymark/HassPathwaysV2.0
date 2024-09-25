@@ -317,6 +317,16 @@ module.exports = {
           "600": "rgba(var(--utility-warning-600), <alpha-value>)",
           "700": "rgba(var(--utility-warning-700), <alpha-value>)",
         },
+        "blue-light": {
+          "50": "rgba(var(--utility-blue-light-50), <alpha-value>)",
+          "100": "rgba(var(--utility-blue-light-100), <alpha-value>)",
+          "200": "rgba(var(--utility-blue-light-200), <alpha-value>)",
+          "300": "rgba(var(--utility-blue-light-300), <alpha-value>)",
+          "400": "rgba(var(--utility-blue-light-400), <alpha-value>)",
+          "500": "rgba(var(--utility-blue-light-500), <alpha-value>)",
+          "600": "rgba(var(--utility-blue-light-600), <alpha-value>)",
+          "700": "rgba(var(--utility-blue-light-700), <alpha-value>)",
+        },
       },
       featured: {
         icon: {
