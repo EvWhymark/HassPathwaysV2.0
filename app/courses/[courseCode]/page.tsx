@@ -56,7 +56,7 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
   useEffect(() => {
     const apiController = new AbortController();
 
-    fetch(`http://localhost:3000/api/course/${courseCode}`, {
+    let ret = fetch(`http://localhost:3000/api/course/${courseCode}`, {
       signal: apiController.signal,
       cache: "no-store",
       next:{
@@ -72,35 +72,24 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
           description: data.description,
           prereqs: data.prereqs,
           attributes: data.attributes,
-          term: data.courseSemester,
+          term: data.term,
         }));
       })
       .catch((error) => {
-        console.error("Error fetching data: ", error);
+        console.error("WARNING: ", error);
       });
+      console.log(courseDescription)
+      return () => apiController.abort();
+  }, []);
 
-    return () => {
-      apiController.abort();
-    };
-  }, [courseCode]);
-
-  // TODO: Still need the semester offered data being updated.
-  // braket slising
-  // TODO: Need to Parse Prereqs for better display (nested, and, or)
-  // Test the new route, see if it can fetch the new code:
-
-  useEffect(() => {
-    // console.log("Current courseDescription:", courseDescription);
-  }, [courseDescription]);
-
-  const term = courseDescription?.term ?? "Unfound Terms";
+  const term = courseDescription?.term ?? "Unfound Course Semester Offered";  
+  
   const courseName = courseDescription?.title ?? "Unfound Course";
   const description = courseDescription?.description
     ? courseDescription.description
     : "No Description Found";
   const prereqs = courseDescription?.prereqs ?? "Unfound Prereqs";
   // const thsemesterOffered = courseDescription?.semesterOffered ?? "Unfound Course SemesterOfferend"
-
   return (
     <Fragment>
       <header className="description-header">
@@ -130,7 +119,9 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         <header>
           <h3>Semester Offered</h3>
         </header>
-        {/*<SemesterTable term={term} />*/}
+        {
+          term == "Unfound Course Semester Offered" ? <p>No Semester Data</p> : <SemesterTable {...term} />
+        }
       </section>
     </Fragment>
   );
