@@ -3,8 +3,7 @@
 import { SemesterTable } from "@/app/components/course/OfferTable";
 import BreadCrumb from "@/app/components/navigation/Breadcrumb";
 import {
-  ICourseDescriptionSchema,
-  ISemesterData,
+  ICourseSchema,
 } from "@/public/data/dataInterface";
 import { TemplateContext } from "next/dist/shared/lib/app-router-context";
 // import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url";
@@ -20,12 +19,20 @@ type ICourseCode = {
 };
 
 // Empty course object template
-const emptyCourse: ICourseDescriptionSchema = {
+const emptyCourse: ICourseSchema = {
   title: "course not found",
   description: "des not found",
   prereqs: undefined,
   term: undefined,
-  attributes: undefined,
+  attributes: {
+    CI: false,
+    HI: false,
+    major_restricted: false,
+  },
+  subject: "not found",
+  courseCode: "not found",
+  filter: "",
+  status: "No Selection",
 };
 
 /**
@@ -37,16 +44,19 @@ const emptyCourse: ICourseDescriptionSchema = {
 
 const CoursePage: React.FC<ICourseCode> = (data) => {
   const { courseCode } = data.params;
-
+  const courseSubject = courseCode.split("-")[0];
+  const courseID = courseCode.split("-")[1];
+  emptyCourse.courseCode = courseID;
+  emptyCourse.subject = courseSubject;
   // Here I use use state state to fetch data and repace the template data:
   const [courseDescription, setCourseDescription] =
-    useState<ICourseDescriptionSchema>(emptyCourse);
+  useState<ICourseSchema>(emptyCourse);
 
   // Testing new API:
   useEffect(() => {
     const apiController = new AbortController();
 
-    fetch(`http://localhost:3000/api/course/${courseCode}`, {
+    let ret = fetch(`http://localhost:3000/api/course/${courseCode}`, {
       signal: apiController.signal,
       cache: "no-store",
       next:{
@@ -60,37 +70,26 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
           ...prev,
           title: data.title,
           description: data.description,
-          prerequisite: data.prereqs,
+          prereqs: data.prereqs,
           attributes: data.attributes,
-          semesterOffered: data.courseSemester,
+          term: data.term,
         }));
       })
       .catch((error) => {
-        console.error("Error fetching data: ", error);
+        console.error("WARNING: ", error);
       });
+      console.log(courseDescription)
+      return () => apiController.abort();
+  }, []);
 
-    return () => {
-      apiController.abort();
-    };
-  }, [courseCode]);
-
-  // TODO: Still need the semester offered data being updated.
-  // braket slising
-  // TODO: Need to Parse Prereqs for better display (nested, and, or)
-  // Test the new route, see if it can fetch the new code:
-
-  useEffect(() => {
-    // console.log("Current courseDescription:", courseDescription);
-  }, [courseDescription]);
-
-  const term = courseDescription?.term ?? "Unfound Terms";
+  const term = courseDescription?.term ?? "Unfound Course Semester Offered";  
+  
   const courseName = courseDescription?.title ?? "Unfound Course";
   const description = courseDescription?.description
     ? courseDescription.description
     : "No Description Found";
   const prereqs = courseDescription?.prereqs ?? "Unfound Prereqs";
   // const thsemesterOffered = courseDescription?.semesterOffered ?? "Unfound Course SemesterOfferend"
-
   return (
     <Fragment>
       <header className="description-header">
@@ -120,32 +119,13 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         <header>
           <h3>Semester Offered</h3>
         </header>
-        {/*<SemesterTable term={term} />*/}
+        {
+          term == "Unfound Course Semester Offered" ? <p>No Semester Data</p> : <SemesterTable {...term} />
+        }
       </section>
     </Fragment>
   );
 };
 
-/**
- * TableData component to display instructor and available seats.
- *
- * @param data - Object containing instructor and seats data.
- */
-const TableData = ({ data }: { data?: ISemesterData }) => {
-  if (!data) return <div className="!text-gray-600">No Class</div>;
-
-  const { instructor, seats } = data;
-  return (
-    <div>
-      <div>
-        {instructor.reduce((acc, inst) => {
-          if (acc === "") return inst;
-          return acc + ", " + inst;
-        }, "")}
-      </div>
-      <div className="!text-gray-600">{seats}</div>
-    </div>
-  );
-};
 // Export the CoursePage component
 export default CoursePage;
