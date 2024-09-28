@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       status: "No Selection",
       prereqs: {
         courses: prereq_array,
-        raw_precoreqs: courses[course]["rawprecoreqs"] || "No Prerequisites",
+        raw_precoreqs: courses[course]["rawprecoreq"],
       },
       term: {
         years: [yearToInsert],

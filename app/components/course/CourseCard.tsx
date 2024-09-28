@@ -65,12 +65,8 @@ const CourseCard = ({
           {prereqs && prereqs.courses.length > 0 && (
             <div className="mt-2">
               <h4 className="text-sm font-semibold">Prerequisites:</h4>
-              <ul className="list-disc ml-4">
-                {prereqs.courses.map((prereq) => (
-                  <li key={prereq} className="text-sm text-gray-600">
-                    {prereq}
-                  </li>
-                ))}
+              <ul className="text-sm text-gray-600">
+                {prereqs.raw_precoreqs}
               </ul>
             </div>
           )}
