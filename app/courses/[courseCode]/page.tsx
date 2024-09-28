@@ -78,7 +78,6 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
       .catch((error) => {
         console.error("WARNING: ", error);
       });
-      console.log(courseDescription)
       return () => apiController.abort();
   }, []);
 
