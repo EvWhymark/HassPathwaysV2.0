@@ -1,23 +1,14 @@
 "use client";
 
 import { MouseEventHandler, useEffect, useState, useReducer } from "react";
-import CourseCard from "../components/course/CourseCard";
 import Link from "next/link";
-import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
-import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
 import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
-import { ICourseSchema } from "../../public/data/dataInterface";
-import { CourseCardProps } from "@/app/model/CourseInterface";
-import { MyCourseFilterSection, MyCourseDesktopFilterSection, FilterAction, filterReducer, filterInitializers } from "@/app/components/course/SearchComponent";
-import { IFilterDispatch, IFilterState } from "@/app/model/CourseInterface";
-import { filter } from "lodash";
+import { MyCourseFilterSection, MyCourseDesktopFilterSection } from "@/app/components/course/filterSection";
+import {filterReducer,filterInitializers,filterAction} from "@/app/components/course/FilterReducer";
 
 const MyCourses = () => {
-  const [courseFilter, setCourseFilter] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
   const { courses, fetchCourses, courseState } = useAppContext();
-  const [filteredCourses, setFilteredCourses] = useState();
   const allInitializer = {
     ...filterInitializers,
     status: courseState.map((state) => state.display),
@@ -48,7 +39,7 @@ const MyCourses = () => {
               clickCallback={() => {
                 if (filterState.status.length === 3) return;
                 let clickPayload = {
-                  type: FilterAction.SET,
+                  type: filterAction.SET,
                   payload: { group: "status", value: statuses },
                 }
                 filterDispatch(clickPayload);
@@ -63,7 +54,7 @@ const MyCourses = () => {
                   key={state.display}
                   clickCallback={() => {
                     let clickPayload = {
-                      type: FilterAction.SET,
+                      type: filterAction.SET,
                       payload: { group: "status", value: [state.display] },
                     }
                     filterDispatch(clickPayload);

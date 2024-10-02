@@ -1,16 +1,15 @@
 "use client";
 
 import React, { useState, useReducer } from "react";
+import {FilterSection} from "@/app/components/course/MobileFilter";
+import {DesktopFilterSection} from "@/app/components/course/DesktopFilter";
 import {
-  FilterSection,
-  DesktopFilterSection,
-  FilterAction,
-  filterReducer, 
-  filterInitializers,
-} from "@/app/components/course/SearchComponent";
+    filterReducer,
+    filterInitializers,
+} from "@/app/components/course/FilterReducer";
+
 import Link from "next/link";
 import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
-import { IFilterDispatch, IFilterState } from "@/app/model/CourseInterface";
 
 const SearchCourse = () => {
   const [filterState, filterDispatch] = useReducer(filterReducer, filterInitializers);
