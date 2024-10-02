@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import { useAppContext } from "../../contexts/appContext/AppProvider";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
-import { ICourseSchema } from "@/public/data/dataInterface";
+import { ICourseSchema, IOfferedSchema } from "@/public/data/dataInterface";
+
+const offeredSemestersChecker = ( term: IOfferedSchema | undefined) => {
+  if (!term) return [];
+  const offeredSemesters = [];
+  if (term.years[term.years.length - 1].fall) offeredSemesters.push("Fall");
+  if (term.years[term.years.length - 1].spring) offeredSemesters.push("Spring");
+  if (term.years[term.years.length - 1].summer) offeredSemesters.push("Summer");
+  return offeredSemesters;
+};
 
 const CourseCard = ({
   title,
@@ -20,11 +29,7 @@ const CourseCard = ({
   const [state, setState] = useState(status);
   const {courses, updateCourseState} = useAppContext();
   status = courses.find(course => course.title === title)?.status || "No Selection";
-  const offeredSemesters = [];
-  if (term && term.years[term.years.length - 1].fall) offeredSemesters.push("Fall");
-  if (term && term.years[term.years.length - 1].spring) offeredSemesters.push("Spring");
-  if (term && term.years[term.years.length - 1].summer) offeredSemesters.push("Summer");
-
+  const offeredSemesters = offeredSemestersChecker(term);
   return (
     <section className="course-card">
       <div className="flex flex-col fold:flex-row justify-between items-start">
