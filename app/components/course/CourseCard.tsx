@@ -30,7 +30,6 @@ const CourseCard = ({
   const {courses, updateCourseState} = useAppContext();
   status = courses.find(course => course.title === title)?.status || "No Selection";
   const offeredSemesters = offeredSemestersChecker(term);
-
   return (
     <section className="course-card">
       <div className="flex flex-col fold:flex-row justify-between items-start">
