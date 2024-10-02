@@ -721,9 +721,6 @@
   }
 
   .home-button {
-    @apply rounded-lg;
-    @apply border border-solid;
-    @apply py-3 px-5;
     @apply text-sm md:text-md font-semibold;
     @apply text-center;
     @apply flex-1 md:grow-0 md:basis-[200px] lg:basis-[280px];

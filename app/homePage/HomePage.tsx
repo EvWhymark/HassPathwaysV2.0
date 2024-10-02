@@ -8,25 +8,21 @@ function HomeContent() {
         <div className="mb-5">
           <h1 className="title">Welcome to HASS Pathways!</h1>
           <h3 className="text-sm sm:text-md md:text-lg">
-            Here you can explore the different pathways RPI has to offer. To
-            get started choose from on of the options below and start
-            exploring your options!
+            Here you can explore the different pathways RPI has to offer. To get
+            started choose from on of the options below and start exploring your
+            options!
           </h3>
         </div>
         <div className="flex gap-x-9">
           <Link
             href="/pathways/search"
-            className="home-button
-              text-white border-primary-600 bg-primary-600
-              hover:border-primary-700 hover:bg-primary-700"
+            className="home-button btn btn-secondary-color btn-lg"
           >
             Explore Pathways
           </Link>
           <Link
             href="/courses/search"
-            className="home-button
-            text-primary-700 border-primary-200 bg-primary-50
-            hover:bg-primary-100 hover:text-primary-800"
+            className="home-button btn btn-primary btn-lg"
           >
             Course Search
           </Link>
@@ -45,4 +41,3 @@ function HomeContent() {
 }
 
 export default HomeContent;
-

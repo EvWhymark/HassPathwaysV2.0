@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./components.css";
 import { Inter } from "next/font/google";
 import AppContextProvider from "./contexts/appContext/AppProvider";
 import { ReactNode } from "react";

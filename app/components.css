@@ -1,0 +1,70 @@
+@tailwind components;
+@tailwind utilities;
+
+/* Button Classes */
+@layer utilities {
+  .solid-border {
+    @apply border border-solid;
+  }
+
+  .btn {
+    @apply font-semibold rounded-lg cursor-pointer;
+    @apply text-center;
+  }
+
+  .btn-primary {
+    @apply bg-button-primary-bg hover:bg-button-primary-bg_hover;
+    @apply border-button-primary-border hover:border-button-primary-border_hover;
+    @apply solid-border;
+    @apply text-button-primary-fg hover:text-button-primary-fg_hover;
+  }
+
+  .btn-secondary-gray {
+    @apply bg-button-secondary-bg hover:bg-button-secondary-bg_hover;
+    @apply border-button-secondary-border hover:border-button-secondary-border_hover;
+    @apply solid-border;
+    @apply text-button-secondary-fg hover:text-button-secondary-fg_hover;
+  }
+
+  .btn-secondary-color {
+    @apply bg-button-secondary-color-bg hover:bg-button-secondary-color-bg_hover;
+    @apply border-button-secondary-color-border hover:border-button-secondary-color-border_hover;
+    @apply solid-border;
+    @apply text-button-secondary-color-fg hover:text-button-secondary-color-fg_hover;
+  }
+
+  .btn-tertiary-gray {
+    @apply text-button-tertiary-fg hover:text-button-tertiary-fg_hover;
+  }
+
+  .btn-tertiary-color {
+    @apply text-button-tertiary-color-fg hover:text-button-tertiary-color-fg_hover;
+  }
+
+  .btn-sm {
+    @apply text-sm py-2 px-3;
+  }
+
+  .btn-md {
+    @apply text-sm py-2.5 px-3.5;
+  }
+
+  .btn-lg {
+    @apply text-md py-2.5 px-4;
+  }
+
+  .btn-xl {
+    @apply text-md py-3 px-[18px];
+  }
+
+  .btn-2xl {
+    @apply text-lg py-4 px-5;
+  }
+
+  .btn-link {
+    @apply p-0;
+  }
+}
+
+@layer components {
+}
