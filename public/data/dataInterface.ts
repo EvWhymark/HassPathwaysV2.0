@@ -56,13 +56,15 @@ export interface ITerm {
 export interface ICourseClusterSchema {
   name: string;
   description: string;
-  courses: Array<ICourseSchema>;
+  numCourses: number;
+  courses: Array<string>;
 }
 
 export interface IPathwayDescriptionSchema {
   description: string;
   compatibleMinor: Array<string>;
-  courses: Array<ICourseSchema> | Array<ICourseClusterSchema>;
+  courses: Array<string>
+  clusters: Array<ICourseClusterSchema>;
 }
 
 export type IFAQ = {
