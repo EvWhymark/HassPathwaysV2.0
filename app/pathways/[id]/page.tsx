@@ -104,7 +104,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
 
   useEffect(() => {
     if (data.params.id) {
-      const name = data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/");
+      const name = data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/").replaceAll("%3A", ":");
       setPathwayName(name);
     }
   }, [data.params.id]);
@@ -223,7 +223,7 @@ const CourseSection: FC<CourseSectionProps> = ({ clusters }) => {
                 </ul>
                 <div className="my-3 grid grid-flow-row gap-y-3">
                   <CourseList courses={
-                    courses.filter((course) => cluster.courses.includes(course.subject + "-" + course.courseCode)
+                    courses.filter((course) => cluster.courses.includes(course.title)
                   )} />
                 </div>
               </div>
@@ -269,7 +269,7 @@ const CourseList: FC<CourseListProps> = ({ courses }) => {
   return (
     <div className="my-3 grid grid-flow-row gap-y-3">
       {courses.map((course) => {
-        return <CourseCard key={course.courseCode} {...course} />;
+        return <CourseCard key={course.subject + "-" + course.courseCode} {...course} />;
       })}
     </div>
   );

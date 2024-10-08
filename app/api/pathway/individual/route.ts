@@ -59,13 +59,8 @@ export async function GET(request: NextRequest) {
         else{
             let temp_courses: Array<string> = [];
             for (let course_name of Object.keys(pathways[pathwayName][key])){
-                let full_code: string = pathways[pathwayName][key][course_name];
-                let formatted_code: string = full_code.replace(" ", "-");
-                if (full_code.length == 8){
-                    formatted_code = full_code.substring(0, 4) + "-" + full_code.substring(4);
-                }
-                temp_courses.push(formatted_code);
-                allCourses.push(formatted_code);
+                temp_courses.push(course_name);
+                allCourses.push(course_name);
             }
             let temp_description: string = "";
             let temp_name: string = key;
