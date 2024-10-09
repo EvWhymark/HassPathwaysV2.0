@@ -100,7 +100,6 @@ const CatalogDropdown = () => {
                 key={choice.text}
                 data-value={choice.text}
                 onClick={() => {
-                  location.href = '/pathways/search';
                   setCatalog(choice.text);
                 }}
                 style={{ paddingLeft: '10px', paddingRight: '10px' }}
