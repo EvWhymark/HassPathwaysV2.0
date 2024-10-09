@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { ICourseSchema, IPrereqSchema, ISingleYearOfferedSchema } from "@/public/data/dataInterface";
+import { catalogList } from "@/public/data/staticData";
 import path from "path";
 import fs from "fs";
 
@@ -61,17 +62,18 @@ export async function GET(request: NextRequest) {
   // return NextResponse.json(combinedData);
 
   // Fetch local course JSON
-  let catalogYear: string = "";
-  if (!params.has("catalogYear")) {
-    return NextResponse.error();
-  }else{
-    catalogYear = params.get("catalogYear");
-  }
-  const courseData = path.join(process.cwd(), "json") + `/${catalogYear}` + "/courses.json"
-  const courses = JSON.parse(fs.readFileSync(courseData, "utf8"));
   const transformedData: ICourseSchema[] = [];
-  for (let course of Object.keys(courses)) {
-    transformedData.push(courseConstructor(courses, course, catalogYear));
+  const coursesAdded: Set<string> = new Set<string>();
+
+  for (let year of catalogList) {
+    const jsonYear = path.join(process.cwd(), "json") + `/${year.text}` + "/courses.json";
+    let yearData = JSON.parse(fs.readFileSync(jsonYear, "utf8"));
+    for (let course of Object.keys(yearData)) {
+      if (!coursesAdded.has(course)) {
+        transformedData.push(courseConstructor(yearData, course, year.text));
+      }
+      coursesAdded.add(course);
+    }
   }
 
   return NextResponse.json(transformedData);

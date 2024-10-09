@@ -71,7 +71,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
           />
           </div>
         </ul>
-        <CatalogDropdown />
+        
       </div>
     </nav>
   );

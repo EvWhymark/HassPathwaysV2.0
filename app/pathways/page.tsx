@@ -10,6 +10,7 @@ import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
 import { noBookmarkedText, noMatchedText } from "@/public/data/staticData";
 import { IPathwaySchema } from "@/public/data/dataInterface";
+import CatalogDropdown from "../components/navigation/CatalogDropdown";
 
 // !! Temporary Data, Remove Later
 const pathwayList = [
@@ -110,6 +111,7 @@ const MyPathways = () => {
               Explore Pathways <ChevronRight />
             </span>
           </Link>
+          <CatalogDropdown />
         </div>
         <section className="flex flex-col lg:flex-row gap-4">
           <div className="flex button-group">
