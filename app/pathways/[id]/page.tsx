@@ -97,7 +97,6 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
   // Convert pathname to pathwayName
   const [pathwayName, setPathwayName] = useState(data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/"));
   const {catalog_year} = useAppContext()
-  const [state, setState] = useState("state");
 
   const [pathwayData, setPathwayData] =
   useState<IPathwayDescriptionSchema>(emptyPathway);
@@ -109,10 +108,11 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
     }
   }, [data.params.id]);
 
-  const loadDataOnlyOnce = useCallback(async () => {
+  const loadDataOnlyOnce = async () => {
     const apiController = new AbortController();
     let res: IPathwayDescriptionSchema = emptyPathway;
     try {
+      if (catalog_year === "") return res;
       const response = await fetch(`http://localhost:3000/api/pathway/individual?${new URLSearchParams({
         pathwayName: pathwayName,
         catalogYear: catalog_year
@@ -134,7 +134,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
       console.error("WARNING: ", error);
     }
     return res;
-  }, [state]);
+  };
   
 
   // TODO: check if pathway exists, or return something empty
@@ -144,8 +144,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
       setPathwayData(res);
     };
     fetchData();
-    setState("");
-  }, [loadDataOnlyOnce]);
+  }, [catalog_year]);
 
   if (pathwayData === emptyPathway) {
     return <div>Loading...</div>;
