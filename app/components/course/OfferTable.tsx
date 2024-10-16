@@ -7,12 +7,12 @@ import ArrowLeft from "@/public/assets/svg/arrow-left.svg?svgr";
 import ArrowRight from "@/public/assets/svg/arrow-right.svg?svgr";
 
 const TableData = ({ data }) => {
-  if (!data) return <div className="!text-gray-600">Unavailable</div>;
+  if (!data) return <div className="!text-gray-600">✘</div>;
 
   return (
     <div>
       <div>
-        Available
+        ✔
       </div>
     </div>
   );
