@@ -61,11 +61,35 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
     console.log(courses);
   }
   */
+  //Heroicons
+  const checkmark = () => {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 fill-status-bar-active">
+        <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clipRule="evenodd" />
+      </svg>
+    );
+  }
+
+  const inProgCircle = () => {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 fill-status-bar-in-progress">
+        <path fillRule="evenodd" d="M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm8 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm-3-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm7 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+      </svg>
+    );
+  }
+
+  const plannedCircle = () => {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 fill-status-bar-inactive">
+        <path fillRule="evenodd" d="M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm5-2.25A.75.75 0 0 1 7.75 7h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.5Z" clipRule="evenodd" />
+      </svg>
+    );
+  }
   
   const completed = inPathway.filter((course) => course.status === "Completed");
   const completedItems = completed.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-green-500">✔</p>
+      {checkmark()}
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
@@ -73,7 +97,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   const inProgress = inPathway.filter((course) => course.status === "In Progress");
   const inProgressItems = inProgress.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-yellow-500">⏺</p>
+      {inProgCircle()}
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
@@ -81,7 +105,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   const planned = inPathway.filter((course) => course.status === "Planned");
   const plannedItems = planned.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-gray-500">⏺</p>
+      {plannedCircle()}
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
