@@ -8,6 +8,7 @@ import {
 import { TemplateContext } from "next/dist/shared/lib/app-router-context";
 // import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url";
 import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import CourseCardDropDown from "@/app/components/course/CourseDropDownButton";
 
 /**
  * Interface for course code
@@ -98,9 +99,12 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
             { display: courseCode, link: "" },
           ]}
         />
-        <h1>
-          {courseDescription.title} ({courseCode})
-        </h1>
+        <div className="flex items-center mt-5">
+          <h1 className="flex-1">
+            {courseDescription.title} ({courseCode})
+          </h1>
+          <CourseCardDropDown {...courseDescription} />
+        </div>
       </header>
       <section className="description-section">
         <header>
