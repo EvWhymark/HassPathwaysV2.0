@@ -144,7 +144,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
       setPathwayData(res);
     };
     fetchData();
-  }, [catalog_year]);
+  }, [catalog_year, pathwayName]);
 
   if (pathwayData === emptyPathway) {
     return <div>Loading...</div>;
