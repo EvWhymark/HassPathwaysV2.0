@@ -25,10 +25,7 @@ export async function GET(request: NextRequest) {
     for (var [k, c] of Object.entries(v)) {
       if (typeof c === "object" && k != "minor") {
         for (var [title, code] of Object.entries(c)) {
-          if (code.length == 8){
-            code = [code.slice(0, 4), "-", code.slice(4)].join('');
-          }
-          coursesIn.push(code.replace(" ", "-"));
+          coursesIn.push(title);
         }
       }
     }
