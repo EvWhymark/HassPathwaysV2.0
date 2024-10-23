@@ -10,6 +10,10 @@ module.exports = {
     extend: {
       screens: {
         fold: "300px",
+        '1.5xl': '1500px',
+        '2.5xl': '1900px',
+        '3xl': '2500px',
+        '4xl': '3000px',
       },
     },
     fontSize: {
