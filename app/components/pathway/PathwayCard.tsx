@@ -105,9 +105,9 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   ));
 
   const progressBar = () => {
-    const green = completed.map((course) => (<div className="indicator bg-status-bar-active"></div>));
-    const yellow = inProgress.map((course) => (<div className="indicator bg-status-bar-in-progress"></div>));
-    const gray = planned.map((course) => (<div className="indicator bg-status-bar-inactive"></div>));
+    const green = completed.map(() => (<div className="indicator bg-status-bar-active"></div>));
+    const yellow = inProgress.map(() => (<div className="indicator bg-status-bar-in-progress"></div>));
+    const gray = planned.map(() => (<div className="indicator bg-status-bar-inactive"></div>));
     const rest = max_size - (green.length + yellow.length + gray.length);
     const white = [];
     for (let i = 0; i < rest; i++) {
