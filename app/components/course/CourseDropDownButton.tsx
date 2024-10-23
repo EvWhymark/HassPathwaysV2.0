@@ -38,7 +38,90 @@ const CourseCardDropDown = ({
     }
   }, [dropDownText]);
   */
-  
+
+
+  const dropdownProcess = () => {
+    const removeItem = (
+      <li className="py-2 px-4 bg-primary-200 hover:bg-primary-300 cursor-pointer flex items-center" onClick={() => handleOption("No Selection")}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+          <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+        </svg>
+        <div className="flex-1 text-center">
+          Remove
+        </div>
+      </li>
+    );
+
+    const plusIcon = (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+        <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+      </svg>
+    );
+
+    const plannedItem = (
+      <li className="py-2 px-4 bg-gray-200 hover:bg-gray-300 cursor-pointer flex items-center" onClick={() => handleOption("Planned")}>
+        {plusIcon}
+        <div className="flex-1 text-center">
+          Planned
+        </div>
+      </li>
+    );
+
+    const inProgressItem = (
+      <li className="py-2 px-4 bg-warning-200 hover:bg-warning-300 cursor-pointer flex items-center" onClick={() => handleOption("In Progress")}>
+        {plusIcon}
+        <div className="flex-1 text-center">
+          In Progress
+        </div>
+      </li>
+    );
+
+    const completedItem = (
+      <li className="py-2 px-4 bg-success-200 hover:bg-success-300 cursor-pointer flex items-center" onClick={() => handleOption("Completed")}>
+        {plusIcon}
+        <div className="flex-1 text-center">
+          Completed
+        </div>
+      </li>
+    );
+    
+    switch (dropDownText) {
+      case "No Selection":
+        return (
+          <>
+            {plannedItem}
+            {inProgressItem}
+            {completedItem}
+          </>
+        );
+      case "Planned":
+        return (
+          <>
+            {inProgressItem}
+            {completedItem}
+            {removeItem}
+          </>
+        );
+      case "In Progress":
+        return (
+          <>
+            {plannedItem}
+            {completedItem}
+            {removeItem}
+          </>
+        );
+      case "Completed":
+        return (
+          <>
+            {plannedItem}
+            {inProgressItem}
+            {removeItem}
+          </>
+        );
+      default:
+        return removeItem;
+    }  
+  }
 
   return (
     <div
@@ -55,20 +138,13 @@ const CourseCardDropDown = ({
       {isOpen && (
         <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10 right-px">
           <ul>
-            {dropDownText === "No Selection" &&  selections.map((selection) => (
-                <li key={selection} className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption(selection)}>
-                  {selection}
-                </li>
-            ))}
-            {dropDownText !== "No Selection" && (
-                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("No Selection")}>
-                  Remove
-                </li>
-          )}
-        </ul>
-      </div>
-    )}
-  </div>
+              {
+                dropdownProcess()
+              }
+          </ul>
+        </div>
+      )}
+    </div>
   );
 };
 
