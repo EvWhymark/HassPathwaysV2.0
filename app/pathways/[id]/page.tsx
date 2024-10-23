@@ -172,7 +172,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
     };
     fetchData();
     getBookmarks();
-  }, [catalog_year]);
+  }, [catalog_year, pathwayName]);
 
   if (pathwayData === emptyPathway) {
     return <div>Loading...</div>;
