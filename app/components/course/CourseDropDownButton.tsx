@@ -10,6 +10,8 @@ const colorMap = {
   "Planned": "bg-gray-500 text-white", 
 };
 
+const selections = ["Planned", "In Progress", "Completed"];
+
 const CourseCardDropDown = ({
   title,
   courseCode,
@@ -53,8 +55,6 @@ const CourseCardDropDown = ({
       {isOpen && (
         <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10 right-px">
           <ul>
-            {dropDownText === "No Selection" && (
-              <>
             {dropDownText === "No Selection" &&  selections.map((selection) => (
                 <li key={selection} className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption(selection)}>
                   {selection}
@@ -62,8 +62,8 @@ const CourseCardDropDown = ({
             ))}
             {dropDownText !== "No Selection" && (
                 <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("No Selection")}>
-              Remove
-            </li>
+                  Remove
+                </li>
           )}
         </ul>
       </div>
