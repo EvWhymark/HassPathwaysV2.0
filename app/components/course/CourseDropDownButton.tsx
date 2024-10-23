@@ -10,6 +10,8 @@ const colorMap = {
   "Planned": "bg-gray-500 text-white", 
 };
 
+const selections = ["Planned", "In Progress", "Completed"];
+
 const CourseCardDropDown = ({
   title,
   courseCode,
@@ -51,22 +53,22 @@ const CourseCardDropDown = ({
         {dropDownText}
       </div>
       {isOpen && (
-        <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10">
+        <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10 right-px">
           <ul>
-            {dropDownText === "No Selection" && (
-              <>
-                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("Planned")}>Planned</li>
-                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("In Progress")}>In Progress</li>
-                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("Completed")}>Completed</li>
-              </>
-            )}
+            {dropDownText === "No Selection" &&  selections.map((selection) => (
+                <li key={selection} className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption(selection)}>
+                  {selection}
+                </li>
+            ))}
             {dropDownText !== "No Selection" && (
-              <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("No Selection")}>Remove</li>
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
+                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("No Selection")}>
+                  Remove
+                </li>
+          )}
+        </ul>
+      </div>
+    )}
+  </div>
   );
 };
 
