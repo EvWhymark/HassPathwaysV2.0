@@ -55,19 +55,13 @@ const CourseCardDropDown = ({
           <ul>
             {dropDownText === "No Selection" && (
               <>
-              <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("Planned")}>
-                Planned
-              </li>
-              <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("In Progress")}>
-                In Progress
-              </li>
-              <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("Completed")}>
-                Completed
-              </li>
-            </>
-          )}
-          {dropDownText !== "No Selection" && (
-            <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("No Selection")}>
+            {dropDownText === "No Selection" &&  selections.map((selection) => (
+                <li key={selection} className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption(selection)}>
+                  {selection}
+                </li>
+            ))}
+            {dropDownText !== "No Selection" && (
+                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("No Selection")}>
               Remove
             </li>
           )}
