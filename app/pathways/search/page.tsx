@@ -20,6 +20,7 @@ import { debounce } from "lodash";
 import { validCatalogYear } from "@/public/data/staticData";
 import Link from "next/link";
 import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
+import CatalogDropdown from "@/app/components/navigation/CatalogDropdown";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
@@ -65,7 +66,7 @@ const SearchCourse = () => {
     const validYear = validCatalogYear.includes(catalog_year);
     const searchStr = deferSearchString;
     const searchDepart = getFilterList(pathwaysCategories, deferFilterState);
-    const searchYear = validYear ? "2022-2023" : catalog_year;
+    const searchYear = validYear ? catalog_year : "2024-2025";
 
     setIsLoading(true);
 
@@ -111,6 +112,7 @@ const SearchCourse = () => {
               My Pathways <ChevronRight />
             </span>
           </Link>
+          <CatalogDropdown />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
           <div className="w-full fold:w-[320px]">
@@ -146,7 +148,7 @@ const SearchCourse = () => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <section className="py-8 flex flex-wrap gap-x-10 gap-y-4 justify-around md:justify-start">
+        <section className="py-8 grid sm:grid-cols-1 lg:grid-cols-2 1.5xl:grid-cols-3 2.5xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6 gap-4">
           {resultPathways.map((pathway, i) => (
             <PathwayCard {...pathway} key={i} />
           ))}

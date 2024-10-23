@@ -20,8 +20,9 @@ const CatalogDropdown = () => {
 
   //Update the pathway data
   useEffect(() => {
+    if (catalog_year === "") return;
     const apiController = new AbortController();
-
+    
     fetch(
         `http://localhost:3000/api/pathway/search?${new URLSearchParams({
           searchString: "",

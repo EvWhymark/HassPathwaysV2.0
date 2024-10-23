@@ -16,6 +16,10 @@ module.exports = {
         lg: "1200px",
         xl: "1280px",
         "2xl": "1400px",
+        '1.5xl': '1500px',
+        '2.5xl': '1900px',
+        '3xl': '2500px',
+        '4xl': '3000px',
       },
     },
     fontSize: {

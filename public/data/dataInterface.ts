@@ -1,21 +1,14 @@
-export type courseState = "Planned" | "In Progress" | "Interested" | "No Selection";
-
-
-export interface ICourseSchemaSaved {
-  title: string;
-  courseCode: string;
-  tag: Array<string>;
-  state: courseState;
-}
 
 export interface ICourseSchema {
   title: string;
   courseCode: string;
   filter: string;
   description: string;
-  prereqs: any;
-  tag: Array<string>;
-  state?: courseState;
+  subject: string;
+  status: string;
+  prereqs?: IPrereqSchema;
+  term?: IOfferedSchema;
+  attributes: IPropertiesSchema;
 }
 
 export interface IPathwaySchema {
@@ -25,9 +18,8 @@ export interface IPathwaySchema {
 }
 
 export interface IPrereqSchema {
-  type: "course" | "and" | "or";
-  nested?: Array<IPrereqSchema>;
-  course?: string;
+  raw_precoreqs: string;
+  courses: Array<string>;
 }
 
 export interface IPropertiesSchema {
@@ -61,24 +53,18 @@ export interface ITerm {
   summer?: ISemesterData;
 }
 
-export interface ICourseDescriptionSchema {
-  title: string;
-  description: string;
-  prereqs?: IPrereqSchema;
-  term?: IOfferedSchema;
-  attributes?: IPropertiesSchema;
-}
-
 export interface ICourseClusterSchema {
   name: string;
   description: string;
-  courses: Array<ICourseSchema>;
+  numCourses: number;
+  courses: Array<string>;
 }
 
 export interface IPathwayDescriptionSchema {
   description: string;
   compatibleMinor: Array<string>;
-  courses: Array<ICourseSchema> | Array<ICourseClusterSchema>;
+  courses: Array<string>
+  clusters: Array<ICourseClusterSchema>;
 }
 
 export type IFAQ = {

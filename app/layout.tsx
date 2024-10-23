@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import { clsx } from "clsx";
 import { cn } from "./lib/utils";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -25,3 +26,4 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     </html>
   );
 }
+ 

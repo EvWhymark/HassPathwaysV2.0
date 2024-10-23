@@ -1,12 +1,19 @@
 "use client";
 import CourseCard from "@/app/components/course/CourseCard";
 import BreadCrumb from "@/app/components/navigation/Breadcrumb";
-import React, { FC, MouseEventHandler, useState } from "react";
+import React, { FC, MouseEventHandler, useCallback, useContext, useEffect, useState } from "react";
+import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import {
   ICourseClusterSchema,
   ICourseSchema,
   IPathwayDescriptionSchema,
+  IPathwaySchema,
 } from "@/public/data/dataInterface";
+import { useSearchParams } from "next/navigation";
+import { set } from "lodash";
+import { Bookmark, BookmarkChecked } from "@/app/components/utils/Icon";
+import path from "path";
+import { pathwayDepartment } from "@/public/data/staticData";
 
 const pathwayTempData: IPathwayDescriptionSchema = {
   description: `This course embraces the science of psychology. The aim is for
@@ -76,20 +83,101 @@ const pathwayTempData: IPathwayDescriptionSchema = {
 //   ],
 // };
 
+const emptyPathway: IPathwayDescriptionSchema = {
+  description: "",
+  compatibleMinor: [],
+  courses: [],
+  clusters: [],
+};
+
 type IPathwayID = {
   params: {
     id: string;
+    year: string;
   };
 };
 
 const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
   // Convert pathname to pathwayName
-  const pathwayName: string = data.params.id.replaceAll("%20", " ");
+  const [pathwayName, setPathwayName] = useState(data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/"));
+  const {catalog_year} = useAppContext()
+  const [bookmark, setBookmark] = useState(false);
+  const [pathwayData, setPathwayData] =
+  useState<IPathwayDescriptionSchema>(emptyPathway);
 
-  const pathwayData: IPathwayDescriptionSchema = pathwayTempData;
+  const getBookmarks = () => {
+    var bmks = localStorage.getItem("bookmarks")
+    if (bmks == null) {
+      localStorage.setItem("bookmarks", "[]");
+    }
+    else {
+      setBookmark(JSON.parse(bmks).find(x => x.title === pathwayName) != undefined);
+    }
+  }
+
+  
+  const toggleBookmark = () => {
+    let current: IPathwaySchema[] = JSON.parse(localStorage.getItem("bookmarks"));
+    if (bookmark)
+      current = current.filter(i => i.title != pathwayName);
+    else if (current.find(x => x.title === pathwayName) == undefined) {
+      let pathwayDept = pathwayDepartment.find(x => x.pathway === pathwayName);
+      current.push({ title: pathwayName, department: pathwayDept ? pathwayDept.department : "None", coursesIn: pathwayData.courses });
+    }
+    localStorage.setItem("bookmarks", JSON.stringify(current));
+    setBookmark(!bookmark);
+  }
+
+  useEffect(() => {
+    if (data.params.id) {
+      const name = data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/").replaceAll("%3A", ":");
+      setPathwayName(name);
+    }
+  }, [data.params.id]);
+
+  const loadDataOnlyOnce = async () => {
+    const apiController = new AbortController();
+    let res: IPathwayDescriptionSchema = emptyPathway;
+    try {
+      if (catalog_year === "") return res;
+      const response = await fetch(`http://localhost:3000/api/pathway/individual?${new URLSearchParams({
+        pathwayName: pathwayName,
+        catalogYear: catalog_year
+      })}`, {
+        signal: apiController.signal,
+        cache: "no-store",
+        next: {
+          revalidate: 0
+        }
+      });
+      const data = await response.json();
+      res = {
+        description: data.description,
+        compatibleMinor: data.compatibleMinor,
+        courses: data.courses,
+        clusters: data.clusters,
+      };
+    } catch (error) {
+      console.error("WARNING: ", error);
+    }
+    return res;
+  };
+  
 
   // TODO: check if pathway exists, or return something empty
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await loadDataOnlyOnce();
+      setPathwayData(res);
+    };
+    fetchData();
+    getBookmarks();
+  }, [catalog_year, pathwayName]);
 
+  if (pathwayData === emptyPathway) {
+    return <div>Loading...</div>;
+  }
+  
   return (
     <>
       <header className="mb-4 md:mb-8">
@@ -105,9 +193,19 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
             },
           ]}
         />
-        <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold">
-          {pathwayName}
-        </h1>
+        <div className="flex items-center">
+          <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold flex-1">
+            {pathwayName}
+          </h1>
+          <button className="border-2 border-black rounded-full bg-gray-200 flex items-center p-4" onClick={toggleBookmark}>
+            <h1 className="font-semibold">
+              {bookmark ? "Remove from My Pathways" : "Add to My Pathways"}
+            </h1>
+            <div onClick={toggleBookmark} className="pl-2">
+              {bookmark ? <BookmarkChecked /> : <Bookmark />}
+            </div>
+          </button>
+        </div>
       </header>
       <section className="description-section">
         <header>
@@ -115,85 +213,64 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
         </header>
         <p>{pathwayData.description}</p>
       </section>
+      {
+      pathwayData.compatibleMinor.length !== 0 &&
+        <section className="description-section">
+          <header>
+            <h3>Compatible Minor</h3>
+          </header>
+          <ul>
+            {pathwayData.compatibleMinor.map((minor, i) => {
+              return <li key={i}>- {minor}</li>;
+            })}
+          </ul>
+        </section>
+      }
       <section className="description-section">
-        <header>
-          <h3>Compatible Minor</h3>
-        </header>
-        <ul>
-          {pathwayData.compatibleMinor.map((minor, i) => {
-            return <li key={i}>- {minor}</li>;
-          })}
-        </ul>
-      </section>
-      <section className="description-section">
-        <header>
-          <h3>Requirement</h3>
-        </header>
-        <p>
-          Students must choose a minimum of 12 credits as from the course list
-          below.
-        </p>
-      </section>
-      <section className="description-section">
-        <header>
-          <h3>Available Courses</h3>
-        </header>
-        <CourseSection courses={pathwayData.courses} />
+        <CourseSection clusters={pathwayData.clusters} />
       </section>
     </>
   );
 };
 
+//
+
 interface CourseSectionProps {
-  courses: Array<ICourseSchema> | Array<ICourseClusterSchema>;
+  clusters: ICourseClusterSchema[];
 }
 
-const CourseSection: FC<CourseSectionProps> = ({ courses }) => {
-  const [clusterIndex, setClusterIndex] = useState(0);
+const CourseSection: FC<CourseSectionProps> = ({ clusters }) => {
+  const { courses } = useAppContext();
 
   if (courses.length === 0) return <></>;
 
-  function instanceOfCluster(object: any): object is ICourseClusterSchema {
-    return "name" in object;
-  }
-
-  const haveCluster = instanceOfCluster(courses[0]);
-  const cluster: ICourseClusterSchema = courses[
-    clusterIndex
-  ] as ICourseClusterSchema;
-
   return (
     <>
-      {haveCluster && (
+      {clusters.length !== 0 && (
         <>
-          <ul
-            className="rounded-lg flex flex-col sm:flex-row gap-2 p-1 
-          bg-gray-50 border border-1 border-gray-200 list-none 
-          w-full sm:w-[500px] md:w-[723px] lg:w-full lg:max-w-[723px]"
-          >
-            {courses.map((cluster: any, i: number) => {
-              return (
-                <CourseClusterSelection
-                  key={cluster.name}
-                  title={cluster.name}
-                  tag={cluster.courses.length}
-                  selected={clusterIndex === i}
-                  onClickEvent={() => {
-                    setClusterIndex(i);
-                  }}
-                />
-              );
-            })}
-          </ul>
-          <div className="my-3 grid grid-flow-row gap-y-3">
-            <CourseList courses={cluster.courses} />
-          </div>
+            {clusters.map((cluster) => (
+              <div key={cluster.name + cluster.courses.map((course) => (
+                course
+              ))}>
+                <header>
+                  <h3>{cluster.name}</h3>
+                </header>
+                <ul>
+                  <li>{cluster.description}</li>
+                </ul>
+                <div className="my-3 grid grid-flow-row gap-y-3">
+                  <CourseList courses={
+                    courses.filter((course) => cluster.courses.includes(course.title)
+                  )} />
+                </div>
+              </div>
+            ))}
         </>
       )}
-      {!haveCluster && <CourseList courses={courses as Array<ICourseSchema>} />}
     </>
   );
 };
+
 
 interface CourseClusterProps {
   title: string;
@@ -229,7 +306,7 @@ const CourseList: FC<CourseListProps> = ({ courses }) => {
   return (
     <div className="my-3 grid grid-flow-row gap-y-3">
       {courses.map((course) => {
-        return <CourseCard key={course.courseCode} {...course} />;
+        return <CourseCard key={course.subject + "-" + course.courseCode} {...course} />;
       })}
     </div>
   );

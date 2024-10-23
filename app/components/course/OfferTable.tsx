@@ -7,18 +7,18 @@ import ArrowLeft from "@/public/assets/svg/arrow-left.svg?svgr";
 import ArrowRight from "@/public/assets/svg/arrow-right.svg?svgr";
 
 const TableData = ({ data }) => {
-  if (!data) return <div className="!text-gray-600">Unavailable</div>;
+  if (!data) return <div className="!text-gray-600">✘</div>;
 
   return (
     <div>
       <div>
-        Available
+        ✔
       </div>
     </div>
   );
 };
 
-export const SemesterTable: FC<IOfferedSchema> = ({years}) => {
+export const SemesterTable: FC<IOfferedSchema> = (term) => {
   return (
     <Fragment>
       {!isMobileOnly && (
@@ -28,7 +28,7 @@ export const SemesterTable: FC<IOfferedSchema> = ({years}) => {
           <div className="table-header">Summer</div>
           <div className="table-header">Fall</div>
           {
-          years.map((year) => {
+          term.years.map((year) => {
             return (
               <Fragment key={year.year}>
                 <header className="font-medium">{year.year}</header>

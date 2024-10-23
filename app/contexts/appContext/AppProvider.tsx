@@ -5,13 +5,13 @@ import {appReducer} from "./AppReducer";
 import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_PATHWAYS} from "../actions";
 import {APPLICATION_STATE_KEY, courseState, pathwaysCategories,} from "@/public/data/staticData";
 import {ApplicationContext} from "@/app/model/AppContextInterface";
-import {ICourseSchema} from "@/app/model/CourseInterface";
+import {ICourseSchema, IPathwaySchema} from "@/public/data/dataInterface";
 
 
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
-  catalog_year: "2024-2025",
+  catalog_year: "",
   courses: [],
   pathwayData: "",
   setCourses: () => {},
@@ -28,10 +28,30 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(appReducer, defaultInitialState);
 
   useEffect(() => {
+    const fetchInitialData = async (catalogYear: string) => {
+      try {
+        const response = await     fetch(
+            `http://localhost:3000/api/pathway/search?${new URLSearchParams({
+              searchString: "",
+              department: "",
+              catalogYear: catalogYear,
+            })}`);
+        const initialData = await response.json();
+        dispatch({
+          type: SET_PATHWAYS,
+          payload: initialData,
+        });
+      } catch (error) {
+        console.error("Failed to fetch initial data:", error);
+      }
+    };
     const localStorageString = localStorage.getItem(APPLICATION_STATE_KEY);
     const initialState = localStorageString
       ? JSON.parse(localStorageString)
       : defaultInitialState;
+    if (initialState.catalog_year === "") {
+      initialState.catalog_year = "2024-2025";
+    }
 
     dispatch({
       type: INITIAL_LOAD_DATA,
@@ -40,12 +60,14 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
     //Set the localStorage with the new initial state
     localStorage.setItem(APPLICATION_STATE_KEY,JSON.stringify(initialState));
+    let catalogYear = initialState.catalog_year;
+    fetchInitialData(catalogYear);
+    fetchCourses();
   }, []);
 
 
   const setCatalog = (catalog_year: string) => {
     dispatch({ type: SET_CATALOG, payload: catalog_year });
-
     //Check if local stoarage value exists and if it does update with the new catalog year
     const storedStateString = localStorage.getItem(APPLICATION_STATE_KEY);
     if (storedStateString) {
@@ -60,9 +82,9 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
   const updateCourseState = (name: string, status: string) => {
     const courses = state.courses;
-    const updatedCourses = courses.map(course =>
-      course.name === name
-        ? { ...course, status: status }
+    const updatedCourses: ICourseSchema[] = courses.map(course =>
+      course.title === name
+        ? { ...course, status: status}
         : course);
     setCourses(updatedCourses);
   };
@@ -70,7 +92,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const setCourses = (courses: ICourseSchema[]) => {
     console.log("SETTING COURSES");
     dispatch({ type: SET_COURSES, payload: courses });
-
     //Get the localStorage value and if it exists update the course
     const storedStateString = localStorage.getItem(APPLICATION_STATE_KEY);
     if (storedStateString) {
@@ -91,7 +112,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     if (localStorageCourses) {
       console.log("Courses already fetched, returning existing courses...");
       console.log("Courses fetched from local storage...");
-      const courses = JSON.parse(localStorageCourses);
+      const courses: ICourseSchema = JSON.parse(localStorageCourses);
 
       dispatch({ type: SET_COURSES, payload: courses });
       return courses;
@@ -100,21 +121,13 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       console.log("Courses not fetched yet, fetching now...");
       const apiController = new AbortController();
       const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
-        catalogYear: state.catalog_year,
+        catalogYear: "2024-2025",
       })}`;
       try {
         const response = await fetch(fetchUrl, {
-          signal: apiController.signal,
-          cache: "force-cache",
-        });
+          signal: apiController.signal});
         if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-
-        const transformedData = Object.keys(data).map((courseName) => ({
-          ...data[courseName],
-          name: courseName,
-          status: "No Selection",
-        }));
+        const transformedData = await response.json();
 
         setCourses(transformedData);
 
@@ -126,31 +139,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       }
     } 
   };
-
-  //Associated logic with pathway data
-
-  //Initialization for pathway data.
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const response = await     fetch(
-            `http://localhost:3000/api/pathway/search?${new URLSearchParams({
-              searchString: "",
-              department: "",
-              catalogYear: "2022-2023",
-            })}`);
-        const initialData = await response.json();
-        dispatch({
-          type: SET_PATHWAYS,
-          payload: initialData,
-        });
-      } catch (error) {
-        console.error("Failed to fetch initial data:", error);
-      }
-    };
-
-    fetchInitialData();
-  }, []);
 
   const setPathways = (pathwayData: IPathwaySchema) => {
     dispatch({type: SET_PATHWAYS, payload: pathwayData})

@@ -822,7 +822,7 @@
   }
 
   .description-header h1 {
-    @apply mt-5 text-display-xs md:text-display-sm font-semibold;
+    @apply text-display-xs md:text-display-sm font-semibold;
   }
 
   .description-section {
