@@ -7,9 +7,13 @@ import {
   ICourseClusterSchema,
   ICourseSchema,
   IPathwayDescriptionSchema,
+  IPathwaySchema,
 } from "@/public/data/dataInterface";
 import { useSearchParams } from "next/navigation";
 import { set } from "lodash";
+import { Bookmark, BookmarkChecked } from "@/app/components/utils/Icon";
+import path from "path";
+import { pathwayDepartment } from "@/public/data/staticData";
 
 const pathwayTempData: IPathwayDescriptionSchema = {
   description: `This course embraces the science of psychology. The aim is for
@@ -97,9 +101,32 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
   // Convert pathname to pathwayName
   const [pathwayName, setPathwayName] = useState(data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/"));
   const {catalog_year} = useAppContext()
-
+  const [bookmark, setBookmark] = useState(false);
   const [pathwayData, setPathwayData] =
   useState<IPathwayDescriptionSchema>(emptyPathway);
+
+  const getBookmarks = () => {
+    var bmks = localStorage.getItem("bookmarks")
+    if (bmks == null) {
+      localStorage.setItem("bookmarks", "[]");
+    }
+    else {
+      setBookmark(JSON.parse(bmks).find(x => x.title === pathwayName) != undefined);
+    }
+  }
+
+  
+  const toggleBookmark = () => {
+    let current: IPathwaySchema[] = JSON.parse(localStorage.getItem("bookmarks"));
+    if (bookmark)
+      current = current.filter(i => i.title != pathwayName);
+    else if (current.find(x => x.title === pathwayName) == undefined) {
+      let pathwayDept = pathwayDepartment.find(x => x.pathway === pathwayName);
+      current.push({ title: pathwayName, department: pathwayDept ? pathwayDept.department : "None", coursesIn: pathwayData.courses });
+    }
+    localStorage.setItem("bookmarks", JSON.stringify(current));
+    setBookmark(!bookmark);
+  }
 
   useEffect(() => {
     if (data.params.id) {
@@ -144,6 +171,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
       setPathwayData(res);
     };
     fetchData();
+    getBookmarks();
   }, [catalog_year, pathwayName]);
 
   if (pathwayData === emptyPathway) {
@@ -165,9 +193,19 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
             },
           ]}
         />
-        <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold">
-          {pathwayName}
-        </h1>
+        <div className="flex items-center">
+          <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold flex-1">
+            {pathwayName}
+          </h1>
+          <button className="border-2 border-black rounded-full bg-gray-200 flex items-center p-4" onClick={toggleBookmark}>
+            <h1 className="font-semibold">
+              {bookmark ? "Remove from My Pathways" : "Add to My Pathways"}
+            </h1>
+            <div onClick={toggleBookmark} className="pl-2">
+              {bookmark ? <BookmarkChecked /> : <Bookmark />}
+            </div>
+          </button>
+        </div>
       </header>
       <section className="description-section">
         <header>
