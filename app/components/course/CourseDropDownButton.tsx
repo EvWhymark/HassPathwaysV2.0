@@ -10,6 +10,8 @@ const colorMap = {
   "Planned": "bg-gray-500 text-white", 
 };
 
+const selections = ["Planned", "In Progress", "Completed"];
+
 const CourseCardDropDown = ({
   title,
   courseCode,
@@ -134,7 +136,7 @@ const CourseCardDropDown = ({
         {dropDownText}
       </div>
       {isOpen && (
-        <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10">
+        <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10 right-px">
           <ul>
               {
                 dropdownProcess()

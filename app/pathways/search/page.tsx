@@ -148,7 +148,7 @@ const SearchCourse = () => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <section className="py-8 flex flex-wrap gap-x-10 gap-y-4 justify-around md:justify-start">
+        <section className="py-8 grid sm:grid-cols-1 lg:grid-cols-2 1.5xl:grid-cols-3 2.5xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6 gap-4">
           {resultPathways.map((pathway, i) => (
             <PathwayCard {...pathway} key={i} />
           ))}
