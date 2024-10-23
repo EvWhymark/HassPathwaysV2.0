@@ -14,9 +14,6 @@ module.exports = {
         '2.5xl': '1900px',
         '3xl': '2500px',
         '4xl': '3000px',
-        '5xl': '3500px',
-        '6xl': '4000px',
-        '7xl': '4500px',
       },
     },
     fontSize: {
