@@ -23,7 +23,7 @@ const NavButton = ({
     <Link href={link}>
       <div
         className={`flex items-center py-2 px-3 gap-2 rounded-md hover:bg-utility-gray-300 ${
-          selected && "text-primary-800 bg-gray-100"
+          selected && "text-utility-brand-800 bg-utility-gray-100"
         }`}
       >
         <Icon.type
@@ -32,7 +32,7 @@ const NavButton = ({
         />
         
         <span
-          className={`text-sm lg:text-md font-semibold ${
+          className={`text-sm lg:text-md font-semibold text-text-brand-primary ${
             !selected && "text-utility-gray-700"
           }`}
         >

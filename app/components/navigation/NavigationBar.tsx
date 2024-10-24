@@ -32,7 +32,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
       <div
         className={`absolute z-10 top-0 right-0 md:relative flex-col md:flex-row gap-y-3 gap-x-5 items-end md:items-center ${
           menuOpen
-            ? "block md:flex rounded-lg p-8 pt-16 md:p-0 border md:border-0 border-solid border-gray-300 bg-white"
+            ? "block md:flex rounded-lg p-8 pt-16 md:p-0 border md:border-0 border-solid border-utility-gray-300 bg-white"
             : "hidden md:flex"
         }`}
       >

@@ -84,30 +84,30 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   
   const completedItems = completed.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-green-500">✔</p>
+      <p className="text-sm text-utility-success-500">✔</p>
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
   ));
   const inProgressItems = inProgress.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-yellow-500">⏺</p>
+      <p className="text-sm text-utility-warning-500">⏺</p>
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
   ));
   const plannedItems = planned.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-gray-500">⏺</p>
+      <p className="text-sm text-utility-gray-500">⏺</p>
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
   ));
 
   const progressBar = () => {
-    const green = completed.map(() => (<div className="indicator bg-status-bar-active"></div>));
-    const yellow = inProgress.map(() => (<div className="indicator bg-status-bar-in-progress"></div>));
-    const gray = planned.map(() => (<div className="indicator bg-status-bar-inactive"></div>));
+    const green = completed.map(() => (<div className="indicator bg-utility-success-500"></div>));
+    const yellow = inProgress.map(() => (<div className="indicator bg-utility-warning-500"></div>));
+    const gray = planned.map(() => (<div className="indicator bg-utility-gray-500"></div>));
     const rest = max_size - (green.length + yellow.length + gray.length);
     const white = [];
     for (let i = 0; i < rest; i++) {
@@ -159,7 +159,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
 
 const StatusIndicator = (status: string) => {
   return (
-    <div className="w-4 h-4 basis-4 grow-0 shrink-0 rounded-lg bg-gray-100 border border-solid border-gray-300"></div>
+    <div className="w-4 h-4 basis-4 grow-0 shrink-0 rounded-lg bg-utility-gray-100 border border-solid border-utility-gray-300"></div>
   );
 };
 

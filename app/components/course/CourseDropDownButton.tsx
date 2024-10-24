@@ -4,10 +4,10 @@ import { useAppContext } from "../../contexts/appContext/AppProvider";
 import { clsx } from 'clsx';
 
 const colorMap = {
-  "No Selection": "bg-primary-700 text-white",
-  "In Progress": "bg-orange-500 text-white",
-  "Completed": "bg-green-500 text-white",
-  "Planned": "bg-gray-500 text-white", 
+  "No Selection": "bg-bg-error-secondary text-white",
+  "In Progress": "bg-bg-warning-secondary text-white",
+  "Completed": "bg-bg-success-secondary text-white",
+  "Planned": "bg-utility-gray-200 text-white", 
 };
 
 const selections = ["Planned", "In Progress", "Completed"];
@@ -21,7 +21,7 @@ const CourseCardDropDown = ({
   const {courses, updateCourseState} = useAppContext();
   //status = courses.find(course => course.name === title)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
-  const chipStyle = clsx("text-sm font-semibold px-2 py-2.5 border border-solid border-gray-300 rounded-lg cursor-pointer text-center", colorMap[dropDownText]);
+  const chipStyle = clsx("text-sm font-semibold px-2 py-2.5 border border-utility-gray-200 rounded-lg cursor-pointer text-center", colorMap[dropDownText]);
   useEffect(() => {
     setDropDownText(status);
   }, [status]);
@@ -37,12 +37,13 @@ const CourseCardDropDown = ({
       setIsOpen(true);
     }
   }, [dropDownText]);
+  
   */
 
 
   const dropdownProcess = () => {
     const removeItem = (
-      <li className="py-2 px-4 bg-primary-200 hover:bg-primary-300 cursor-pointer flex items-center" onClick={() => handleOption("No Selection")}>
+      <li className="py-2 px-4 bg-bg-error-primary hover:bg-bg-error-secondary cursor-pointer flex items-center" onClick={() => handleOption("No Selection")}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
         </svg>
@@ -59,7 +60,7 @@ const CourseCardDropDown = ({
     );
 
     const plannedItem = (
-      <li className="py-2 px-4 bg-gray-200 hover:bg-gray-300 cursor-pointer flex items-center" onClick={() => handleOption("Planned")}>
+      <li className="py-2 px-4 bg-bg-primary hover:bg-utility-gray-200 cursor-pointer flex items-center" onClick={() => handleOption("Planned")}>
         {plusIcon}
         <div className="flex-1 text-center">
           Planned
@@ -68,7 +69,7 @@ const CourseCardDropDown = ({
     );
 
     const inProgressItem = (
-      <li className="py-2 px-4 bg-warning-200 hover:bg-warning-300 cursor-pointer flex items-center" onClick={() => handleOption("In Progress")}>
+      <li className="py-2 px-4 bg-bg-warning-primary hover:bg-bg-warning-secondary cursor-pointer flex items-center" onClick={() => handleOption("In Progress")}>
         {plusIcon}
         <div className="flex-1 text-center">
           In Progress
@@ -77,7 +78,7 @@ const CourseCardDropDown = ({
     );
 
     const completedItem = (
-      <li className="py-2 px-4 bg-success-200 hover:bg-success-300 cursor-pointer flex items-center" onClick={() => handleOption("Completed")}>
+      <li className="py-2 px-4 bg-bg-success-primary hover:bg-bg-success-secondary cursor-pointer flex items-center" onClick={() => handleOption("Completed")}>
         {plusIcon}
         <div className="flex-1 text-center">
           Completed
@@ -136,8 +137,8 @@ const CourseCardDropDown = ({
         {dropDownText}
       </div>
       {isOpen && (
-        <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10 right-px">
-          <ul>
+        <div className="absolute w-48 bg-text-white shadow-lg rounded-lg border border-utility-gray-300 z-10 right-px">
+          <ul >
               {
                 dropdownProcess()
               }

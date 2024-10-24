@@ -758,7 +758,7 @@
   }
 
   .button-group .checkbox-group.checked {
-    @apply text-text-primary;
+    @apply text-text-brand-primary;
   }
 
   .course-button-group > * {

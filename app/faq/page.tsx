@@ -93,10 +93,10 @@ const FAQ = () => {
                 </div>
 
                 <div>
-                  <header className="text-md md:text-xl font-semibold text-center text-gray-900 md-2">
+                  <header className="text-md md:text-xl font-semibold text-center text-utility-gray-900 md-2">
                     {question.question}
                   </header>
-                  <p className="text-center text-sm md:text-md text-gray-600">
+                  <p className="text-center text-sm md:text-md text-utility-gray-600">
                     {question.answer}
                   </p>
                 </div>
