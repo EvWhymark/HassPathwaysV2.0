@@ -33,7 +33,7 @@ const MyCourses = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-8">
           <h1 className="title mb-3">My Courses</h1>
           <Link href={"/courses/search"}>
-              <span className="flex text-primary-700 gap-2 text-sm font-semibold">
+              <span className="flex text-text-brand-primary gap-2 text-sm font-semibold">
                 Find Courses <ChevronRight />
               </span>
           </Link>
@@ -105,7 +105,7 @@ const ModeRadioButton = ({
   clickCallback: MouseEventHandler;
 }) => {
   const tagStyle = checked ? "tag-primary" : "tag-gray";
-  const fontStyle = checked ? "text-primary-700" : "text-gray-500";
+  const fontStyle = checked ? "text-text-brand-primary" : "text-utility-gray-500";
 
   return (
     <button

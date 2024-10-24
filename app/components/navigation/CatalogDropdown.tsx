@@ -77,7 +77,7 @@ const CatalogDropdown = () => {
 
   return (
     <div
-      className="dropdown cursor-pointer flex items-center justify-center gap-2 w-[200px] md:w-[180px] bg-white border-solid border border-gray-300 text-gray-500 py-[10px] px-[14px] rounded-lg prevent-select text-xs md:text-sm lg:text-md"
+      className="dropdown cursor-pointer flex items-center justify-center gap-2 w-[200px] md:w-[180px] bg-white border-solid border border-utility-gray-300 text-utility-gray-500 py-[10px] px-[14px] rounded-lg prevent-select text-xs md:text-sm lg:text-md"
       ref={dropdownRef}
       onClick={() => {
         setDropdownOpen((open) => !open);

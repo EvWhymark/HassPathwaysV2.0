@@ -14,10 +14,10 @@ export const SearchInput = ({
 }: SearchInputProps) => {
   return (
     <label htmlFor="course-input" className="basis-0 grow">
-      <div className="px-3.5 py-2.5 flex items-center gap-2 cursor-text border-gray-300 border border-solid rounded-lg input-wrapper">
+      <div className="px-3.5 py-2.5 flex items-center gap-2 cursor-text border-utility-gray-300 border border-solid rounded-lg input-wrapper">
         <SearchIcon />
         <input
-          className="outline-none text-gray-500 text-md w-full basis-0 grow "
+          className="outline-none text-utility-gray-500 text-md w-full basis-0 grow "
           type="text"
           name="course"
           id="course-input"
@@ -66,7 +66,7 @@ export const ModeRadioButton = ({
   return (
     <button
       className={`checkbox-group !border-solid ${
-        checked ? "checked !bg-primary-50" : ""
+        checked ? "checked !bg-bg-brand-secondary" : ""
       }`}
       onClick={clickCallback}
     >

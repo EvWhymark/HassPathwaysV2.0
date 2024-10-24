@@ -41,7 +41,7 @@ const CourseCard = ({
             >
               {title}
             </Link>
-            <p className="text-sm text-gray-600">{subject + '-' + courseCode}</p>
+            <p className="text-sm text-utility-gray-600">{subject + '-' + courseCode}</p>
           </header>
           <div className="flex gap-x-1 flex-wrap mt-2">
             {attributes && attributes.CI && (
@@ -60,7 +60,7 @@ const CourseCard = ({
               <h4 className="text-sm font-semibold">Offered:</h4>
               <ul className="list-disc ml-4">
                 {offeredSemesters.map((semester) => (
-                  <li key={semester} className="text-sm text-gray-600">
+                  <li key={semester} className="text-sm text-utility-gray-600">
                     {semester}
                   </li>
                 ))}
@@ -70,7 +70,7 @@ const CourseCard = ({
           {prereqs && prereqs.courses.length > 0 && (
             <div className="mt-2">
               <h4 className="text-sm font-semibold">Prerequisites:</h4>
-              <ul className="text-sm text-gray-600">
+              <ul className="text-sm text-utility-gray-600">
                 {prereqs.raw_precoreqs}
               </ul>
             </div>

@@ -197,7 +197,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
           <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold flex-1">
             {pathwayName}
           </h1>
-          <button className="border-2 border-black rounded-full bg-gray-200 flex items-center p-4" onClick={toggleBookmark}>
+          <button className="border-2 border-black rounded-full hover:bg-utility-gray-300 bg-utility-gray-200 flex items-center p-4" onClick={toggleBookmark}>
             <h1 className="font-semibold">
               {bookmark ? "Remove from My Pathways" : "Add to My Pathways"}
             </h1>
@@ -288,12 +288,12 @@ const CourseClusterSelection: FC<CourseClusterProps> = ({
   return (
     <li
       className={`flex items-center text-xs md:text-sm cursor-pointer justify-center gap-x-2 px-3 py-[7px] rounded-[6px] font-semibold ${
-        selected ? "text-gray-700 bg-white ut-shadow-lg" : "text-gray-500"
+        selected ? "text-utility-gray-700 bg-white ut-shadow-lg" : "text-utility-gray-500"
       }`}
       onClick={onClickEvent}
     >
       {title}
-      <p className="tag tag-gray">{tag}</p>
+      <p className="tag bg-utility-gray-200">{tag}</p>
     </li>
   );
 };

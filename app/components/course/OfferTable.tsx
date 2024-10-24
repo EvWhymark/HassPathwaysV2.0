@@ -7,7 +7,7 @@ import ArrowLeft from "@/public/assets/svg/arrow-left.svg?svgr";
 import ArrowRight from "@/public/assets/svg/arrow-right.svg?svgr";
 
 const TableData = ({ data }) => {
-  if (!data) return <div className="!text-gray-600">✘</div>;
+  if (!data) return <div className="!text-utility-gray-600">✘</div>;
 
   return (
     <div>
@@ -22,7 +22,7 @@ export const SemesterTable: FC<IOfferedSchema> = (term) => {
   return (
     <Fragment>
       {!isMobileOnly && (
-        <section className="hidden sm:grid grid-table grid-cols-4 max-w-[960px] overflow-clip rounded-xl border-solid border border-gray-200 bg-white ut-shadow-sm">
+        <section className="hidden sm:grid grid-table grid-cols-4 max-w-[960px] overflow-clip rounded-xl border-solid border border-utility-gray-200 bg-white ut-shadow-sm">
           <div className="table-header">Year</div>
           <div className="table-header">Spring</div>
           <div className="table-header">Summer</div>

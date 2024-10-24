@@ -174,10 +174,10 @@ export const MyCourseFilterSection = ({
 const SearchInput = ({ searchString, setSearchString }: SearchInputProps) => {
   return (
     <label htmlFor="course-input" className="basis-0 grow">
-      <div className="px-3.5 py-2.5 flex items-center gap-2 cursor-text border-gray-300 border border-solid rounded-lg input-wrapper">
+      <div className="px-3.5 py-2.5 flex items-center gap-2 cursor-text border-utility-gray-300 border border-solid rounded-lg input-wrapper">
         <SearchIcon />
         <input
-          className="outline-none text-gray-500 text-md w-full basis-0 grow "
+          className="outline-none text-utility-gray-500 text-md w-full basis-0 grow "
           type="text"
           name="course"
           id="course-input"
@@ -192,10 +192,10 @@ const SearchInput = ({ searchString, setSearchString }: SearchInputProps) => {
 
 const DesktopFilter = ({ filterState, filterDispatch }: FilterProps) => {
   return (
-    <div className="rounded-lg shadow-lg p-6 min-w-[290px] max-w-xs grid grid-flow-row gap-2 border border-solid border-gray-100">
+    <div className="rounded-lg shadow-lg p-6 min-w-[290px] max-w-xs grid grid-flow-row gap-2 border border-solid border-utility-gray-100">
       {courseFilters.map((section) => (
         <section key={section.apiName}>
-          <header className="text-md font-medium text-gray-900">
+          <header className="text-md font-medium text-utility-gray-900">
             {section.displayName}
           </header>
           <div className="flex flex-wrap">
@@ -237,7 +237,7 @@ const FilterDropdown = ({ filterState, filterDispatch }: FilterProps) => {
     <Fragment>
       <div className="dropdown z-20">
         <div
-          className={`w-11 h-11 flex justify-center items-center gap-2 cursor-pointer border-gray-300 border border-solid rounded-lg ${dropdownOpen && "bg-gray-100"}`}
+          className={`w-11 h-11 flex justify-center items-center gap-2 cursor-pointer border-utility-gray-300 border border-solid rounded-lg ${dropdownOpen && "bg-utility-gray-100"}`}
           onClick={() => setDropdownOpen((open) => !open)}
         >
           <Filter className={dropdownOpen ? "path-gray-700" : undefined} />
@@ -246,7 +246,7 @@ const FilterDropdown = ({ filterState, filterDispatch }: FilterProps) => {
           <div className="rounded-lg shadow-lg p-6 dropdown-choices w-screen translate-x-4 fold:translate-x-0 fold:w-max max-w-xs sm:max-w-sm md:max-w-md grid grid-flow-row gap-2">
             {courseFilters.map((section) => (
               <section key={section.apiName}>
-                <header className="text-md font-medium text-gray-900">
+                <header className="text-md font-medium text-utility-gray-900">
                   {section.displayName}
                 </header>
                 <div className="flex flex-wrap">

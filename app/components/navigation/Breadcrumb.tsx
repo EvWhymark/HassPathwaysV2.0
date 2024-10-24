@@ -25,7 +25,7 @@ const BreadCrumb = ({ path }: BreadcrumbProps) => {
               <Fragment key={index}>
                 <BreadcrumbChevron />
                 <Link href={link.link}>
-                  <span className="text-sm ml-3 text-gray-600 font-medium">
+                  <span className="text-sm ml-3 text-utility-gray-600 font-medium">
                     ...
                   </span>
                 </Link>
@@ -44,8 +44,8 @@ const BreadCrumb = ({ path }: BreadcrumbProps) => {
               <span
                 className={`text-sm ml-3 ${
                   index === path.length - 1
-                    ? "text-primary-700 font-semibold"
-                    : "text-gray-600 font-medium hidden fold:block"
+                    ? "text-text-brand-primary font-semibold"
+                    : "text-utility-gray-600 font-medium hidden fold:block"
                 }`}
               >
                 {link.display}
