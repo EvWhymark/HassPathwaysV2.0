@@ -17,7 +17,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
     >
       <Link href="/">
         <header className="text-md lg:text-xl font-semibold">
-          <span className="text-primary-900">HASS</span> Pathways
+          <span className="text-text-brand-primary">HASS</span> Pathways
         </header>
       </Link>
 
@@ -42,7 +42,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
           }`}
         >
 
-        <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
+        <div className="bg-bg-tertiary rounded-md flex gap-2" style={{ padding: '3px' }}>
           <NavButton
             link="/courses"
             text="My Courses"
@@ -56,7 +56,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
             keyword="courses/search"
           />
           </div>
-          <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
+          <div className="bg-bg-tertiary rounded-md flex gap-2" style={{ padding: '3px' }}>
           <NavButton
             link="/pathways"
             text="My Pathways"
