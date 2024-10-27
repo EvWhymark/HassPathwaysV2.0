@@ -4,10 +4,10 @@ import { useAppContext } from "../../contexts/appContext/AppProvider";
 import { clsx } from 'clsx';
 
 const colorMap = {
-  "No Selection": "bg-bg-error-secondary text-white",
-  "In Progress": "bg-bg-warning-secondary text-white",
-  "Completed": "bg-bg-success-secondary text-white",
-  "Planned": "bg-utility-gray-200 text-white", 
+  "No Selection": "bg-bg-primary text-text-quaternary",
+  "In Progress": "bg-bg-warning-secondary text-text-warning",
+  "Completed": "bg-bg-success-solid text-text-white",
+  "Planned": "bg-bg-tertiary text-text-tertiary", 
 };
 
 const selections = ["Planned", "In Progress", "Completed"];
