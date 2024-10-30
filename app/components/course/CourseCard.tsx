@@ -105,7 +105,7 @@ const CourseCard = ({
               </p>
             )}
           </div>
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap mt-1">
             {prereqs && prereqs.raw_precoreqs && (
               <div className="mt-1">
                 <h4 className="text-sm font-semibold">Prerequisites:</h4>
