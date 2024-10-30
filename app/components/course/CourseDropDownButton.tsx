@@ -39,7 +39,7 @@ const CourseCardDropDown = ({
 
   const dropdownProcess = () => {
     if(dropDownText==="No Selection"){
-      //If no selection remove as an option
+      //If no selection get rid of remove as an option
       options.pop();
     }
       return options
