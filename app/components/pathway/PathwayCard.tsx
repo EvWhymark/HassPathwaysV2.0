@@ -105,13 +105,13 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   ));
 
   const progressBar = () => {
-    const green = completed.map(() => (<div className="indicator bg-bg-success-solid"></div>));
-    const yellow = inProgress.map(() => (<div className="indicator bg-bg-warning-solid"></div>));
-    const gray = planned.map(() => (<div className="indicator bg-fg-disabled_subtle"></div>));
+    const green = completed.map(() => (<div key="Green" className="indicator bg-bg-success-solid"></div>));
+    const yellow = inProgress.map(() => (<div key="Yellow" className="indicator bg-bg-warning-solid"></div>));
+    const gray = planned.map(() => (<div key="Gray" className="indicator bg-fg-disabled_subtle"></div>));
     const rest = max_size - (green.length + yellow.length + gray.length);
     const white = [];
     for (let i = 0; i < rest; i++) {
-      white.push(<div className="indicator bg-white border border-solid border-gray-400"></div>);
+      white.push(<div key={"White"+i} className="indicator bg-white border border-solid border-gray-400"></div>);
     }
     return (
       <div className="flex gap-1">
