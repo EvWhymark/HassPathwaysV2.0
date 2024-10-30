@@ -107,7 +107,7 @@ const MyPathways = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-8">
           <h1 className="title mb-3">My Pathways</h1>
           <Link href={"/pathways/search"}>
-            <span className="flex text-primary-700 gap-2 text-sm font-semibold">
+            <span className="flex text-text-brand-primary gap-2 text-sm font-semibold">
               Explore Pathways <ChevronRight />
             </span>
           </Link>
@@ -168,21 +168,21 @@ const NothingToShow = ({ bookmarkedState }: { bookmarkedState: boolean }) => {
         <h3 className="text-xl md:text-display-sm font-bold md:font-semibold mb-2">
           No <span>{bookmarkedState ? "Bookmarked" : "Matching"}</span> Pathways
         </h3>
-        <p className="text-sm md:text-xl font-medium  text-gray-500">
+        <p className="text-sm md:text-xl font-medium  text-utility-gray-500">
           {bookmarkedState ? noBookmarkedText : noMatchedText}
         </p>
       </header>
       <div className="flex flex-col-reverse fold:flex-row items-center gap-8 text-sm md:text-md font-semibold">
         <Link
           href="/faq"
-          className="rounded-lg px-[18px] py-2.5 text-primary-700"
+          className="rounded-lg px-[18px] py-2.5 text-primary-brand-700"
         >
           Learn More
         </Link>
         {bookmarkedState && (
           <Link
             href="/pathways/search"
-            className="rounded-lg px-[18px] py-2.5 bg-primary-600 text-white"
+            className="rounded-lg px-[18px] py-2.5 bg-utility-brand-600 text-white"
           >
             Explore Pathways
           </Link>
@@ -190,7 +190,7 @@ const NothingToShow = ({ bookmarkedState }: { bookmarkedState: boolean }) => {
         {!bookmarkedState && (
           <Link
             href="/courses/search"
-            className="rounded-lg px-[18px] py-2.5 bg-primary-600 text-white"
+            className="rounded-lg px-[18px] py-2.5 bg-utility-brand-600 text-white"
           >
             Explore Courses
           </Link>

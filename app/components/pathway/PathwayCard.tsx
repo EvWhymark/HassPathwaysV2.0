@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bookmark, BookmarkChecked, HelpIcon } from "../utils/Icon";
+import { Bookmark, BookmarkChecked, HelpIcon, CheckBoxBaseSuccess, CheckBoxBaseInProgress, CheckBoxBasePlanned } from "../utils/Icon";
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { HelpBox } from "./helpBox";
@@ -84,30 +84,30 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   
   const completedItems = completed.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-green-500">✔</p>
-      <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
-      <p className="text-sm">{course.title}</p>
+      <CheckBoxBaseSuccess/>
+      <b className="text-md">{course.subject + "-" + course.courseCode}:</b>
+      <p className="text-md">{course.title}</p>
     </div>
   ));
   const inProgressItems = inProgress.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-yellow-500">⏺</p>
-      <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
-      <p className="text-sm">{course.title}</p>
+      <CheckBoxBaseInProgress/>
+      <b className="text-md">{course.subject + "-" + course.courseCode}:</b>
+      <p className="text-md">{course.title}</p>
     </div>
   ));
   const plannedItems = planned.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
-      <p className="text-sm text-gray-500">⏺</p>
-      <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
-      <p className="text-sm">{course.title}</p>
+      <CheckBoxBasePlanned/>
+      <b className="text-md">{course.subject + "-" + course.courseCode}:</b>
+      <p className="text-md">{course.title}</p>
     </div>
   ));
 
   const progressBar = () => {
-    const green = completed.map(() => (<div className="indicator bg-status-bar-active"></div>));
-    const yellow = inProgress.map(() => (<div className="indicator bg-status-bar-in-progress"></div>));
-    const gray = planned.map(() => (<div className="indicator bg-status-bar-inactive"></div>));
+    const green = completed.map(() => (<div className="indicator bg-bg-success-solid"></div>));
+    const yellow = inProgress.map(() => (<div className="indicator bg-bg-warning-solid"></div>));
+    const gray = planned.map(() => (<div className="indicator bg-fg-disabled_subtle"></div>));
     const rest = max_size - (green.length + yellow.length + gray.length);
     const white = [];
     for (let i = 0; i < rest; i++) {
@@ -159,7 +159,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
 
 const StatusIndicator = (status: string) => {
   return (
-    <div className="w-4 h-4 basis-4 grow-0 shrink-0 rounded-lg bg-gray-100 border border-solid border-gray-300"></div>
+    <div className="w-4 h-4 basis-4 grow-0 shrink-0 rounded-lg bg-utility-gray-100 border border-solid border-utility-gray-300"></div>
   );
 };
 

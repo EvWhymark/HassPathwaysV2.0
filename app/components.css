@@ -1,0 +1,167 @@
+@tailwind components;
+
+/* Button Classes */
+@layer components {
+  .solid-border {
+    @apply border border-solid;
+  }
+
+  .btn {
+    @apply font-semibold rounded-lg cursor-pointer;
+    @apply text-center;
+  }
+
+  .btn-primary {
+    @apply bg-button-primary-bg hover:bg-button-primary-bg_hover;
+    @apply border-button-primary-border hover:border-button-primary-border_hover;
+    @apply solid-border;
+    @apply text-button-primary-fg hover:text-button-primary-fg_hover;
+  }
+
+  .btn-secondary-gray {
+    @apply bg-button-secondary-bg hover:bg-button-secondary-bg_hover;
+    @apply border-button-secondary-border hover:border-button-secondary-border_hover;
+    @apply solid-border;
+    @apply text-button-secondary-fg hover:text-button-secondary-fg_hover;
+  }
+
+  .btn-secondary-color {
+    @apply bg-button-secondary-color-bg hover:bg-button-secondary-color-bg_hover;
+    @apply border-button-secondary-color-border hover:border-button-secondary-color-border_hover;
+    @apply solid-border;
+    @apply text-button-secondary-color-fg hover:text-button-secondary-color-fg_hover;
+  }
+
+  .btn-tertiary-gray {
+    @apply text-button-tertiary-fg hover:text-button-tertiary-fg_hover;
+  }
+
+  .btn-tertiary-color {
+    @apply text-button-tertiary-color-fg hover:text-button-tertiary-color-fg_hover;
+  }
+
+  .btn-sm {
+    @apply text-sm py-2 px-3;
+  }
+
+  .btn-md {
+    @apply text-sm py-2.5 px-3.5;
+  }
+
+  .btn-lg {
+    @apply text-md py-2.5 px-4;
+  }
+
+  .btn-xl {
+    @apply text-md py-3 px-[18px];
+  }
+
+  .btn-2xl {
+    @apply text-lg py-4 px-5;
+  }
+
+  .btn-link {
+    @apply p-0;
+  }
+
+  .badge,
+  .tag {
+    @apply my-1 py-0.5 px-2;
+    @apply rounded-2xl;
+    @apply text-xs font-medium;
+    @apply border border-solid;
+  }
+
+  .badge-blue-light,
+  .tag-blue-light {
+    @apply text-utility-blue-light-700 bg-utility-blue-light-50;
+    @apply border-utility-blue-light-200;
+  }
+
+  .badge-primary,
+  .tag-primary {
+    @apply bg-utility-brand-50 text-utility-brand-700 border-utility-brand-200;
+  }
+
+  .badge-gray,
+  .tag-gray {
+    @apply bg-utility-gray-50 text-utility-gray-700 border-utility-gray-200;
+  }
+
+  .badge-disabled,
+  .tag-disabled {
+    @apply bg-utility-gray-50 text-fg-disabled_subtle border-utility-gray-200;
+  }
+
+  .badge-group {
+    @apply flex flex-nowrap;
+  }
+
+  .badge-group .badge {
+    @apply rounded-none;
+  }
+
+  .badge-group .badge:first-child {
+    @apply rounded-l-2xl;
+  }
+
+  .badge-group .badge:last-child {
+    @apply rounded-r-2xl;
+  }
+
+  .status-dropdown {
+    @apply btn btn-md;
+  }
+
+  .status-dropdown.status-dropdown__completed {
+    @apply text-button-primary-fg hover:text-button-primary-fg_hover;
+    @apply bg-fg-success-primary;
+    @apply border-border-primary;
+  }
+
+  .status-dropdown.status-dropdown__in-progress {
+    @apply text-text-warning;
+    @apply bg-bg-warning-secondary;
+    @apply border-border-primary;
+  }
+
+  .status-dropdown.status-dropdown__planned {
+    @apply text-button-tertiary-fg hover:text-button-tertiary-fg_hover;
+    @apply bg-fg-white;
+    @apply border-border-primary;
+  }
+
+  .status-dropdown.status-dropdown__not-started {
+    @apply text-text-quaternary;
+    @apply bg-fg-white;
+    @apply border-border-primary;
+  }
+
+  .status-dropdown .status-option {
+    @apply text-sm font-medium;
+    @apply text-text-quaternary;
+  }
+
+  .status-bar {
+    @apply flex items-center gap-1;
+  }
+
+  .status-bar .status {
+    @apply h-1 basis-14;
+    @apply grow-0;
+    @apply rounded-md;
+  }
+
+  .status-bar .status.status__completed {
+    @apply bg-fg-success-primary;
+  }
+
+  .status-bar .status.status__in-progress {
+    @apply bg-bg-warning-secondary;
+  }
+
+  .status-bar .status.status__planned,
+  .status-bar .status.status__not-started {
+    @apply bg-fg-disabled_subtle;
+  }
+}

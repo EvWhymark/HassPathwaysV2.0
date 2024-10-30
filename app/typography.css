@@ -1,0 +1,46 @@
+@tailwind utilities;
+
+/* Typography Classes */
+@layer utilities {
+  .texta-sm {
+    @apply md:text-xs;
+    @apply text-sm;
+    @apply xl:text-md;
+  }
+
+  .texta-md {
+    @apply md:text-sm;
+    @apply text-md;
+    @apply xl:text-lg;
+  }
+
+  .texta-lg {
+    @apply md:text-md;
+    @apply text-lg;
+    @apply xl:text-xl;
+  }
+
+  .texta-xl {
+    @apply md:text-lg;
+    @apply text-xl;
+    @apply xl:text-display-xs;
+  }
+
+  .texta-display-xs {
+    @apply md:text-xl;
+    @apply text-display-xs;
+    @apply xl:text-display-sm;
+  }
+
+  .texta-display-sm {
+    @apply md:text-display-xs;
+    @apply text-display-sm;
+    @apply xl:text-display-md;
+  }
+
+  .texta-display-md {
+    @apply md:text-display-sm;
+    @apply text-display-md;
+    @apply xl:text-display-lg;
+  }
+}
