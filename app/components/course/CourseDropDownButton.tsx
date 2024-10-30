@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ICourseSchema } from '@/public/data/dataInterface';
 import { useAppContext } from "../../contexts/appContext/AppProvider";
 import { clsx } from 'clsx';
+import { ChevronDown, ChevronDownGray, ChevronDownWarning, ChevronDownWhite, ChevronUp, ChevronUpGray, ChevronUpWarning, ChevronUpWhite } from '../utils/Icon';
 
 const colorMap = {
   "No Selection": "bg-bg-primary text-text-quaternary",
@@ -21,7 +22,7 @@ const CourseCardDropDown = ({
   const {courses, updateCourseState} = useAppContext();
   //status = courses.find(course => course.name === title)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
-  const chipStyle = clsx("text-sm font-semibold px-2 py-2.5 border border-utility-gray-200 rounded-lg cursor-pointer text-center", colorMap[dropDownText]);
+  const chipStyle = clsx("text-sm font-semibold px-3 py-3 border border-utility-gray-200 rounded-lg cursor-pointer text-center flex gap-2", colorMap[dropDownText]);
   useEffect(() => {
     setDropDownText(status);
   }, [status]);
@@ -47,7 +48,7 @@ const CourseCardDropDown = ({
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
         </svg>
-        <div className="flex-1 text-center">
+        <div className="flex-1 text-right">
           Remove
         </div>
       </li>
@@ -62,7 +63,7 @@ const CourseCardDropDown = ({
     const plannedItem = (
       <li className="py-2 px-4 bg-bg-primary hover:bg-utility-gray-200 cursor-pointer flex items-center" onClick={() => handleOption("Planned")}>
         {plusIcon}
-        <div className="flex-1 text-center">
+        <div className="flex-1 text-right">
           Planned
         </div>
       </li>
@@ -71,7 +72,7 @@ const CourseCardDropDown = ({
     const inProgressItem = (
       <li className="py-2 px-4 bg-bg-warning-primary hover:bg-bg-warning-secondary cursor-pointer flex items-center" onClick={() => handleOption("In Progress")}>
         {plusIcon}
-        <div className="flex-1 text-center">
+        <div className="flex-1 text-right">
           In Progress
         </div>
       </li>
@@ -80,7 +81,7 @@ const CourseCardDropDown = ({
     const completedItem = (
       <li className="py-2 px-4 bg-bg-success-primary hover:bg-bg-success-secondary cursor-pointer flex items-center" onClick={() => handleOption("Completed")}>
         {plusIcon}
-        <div className="flex-1 text-center">
+        <div className="flex-1 text-right">
           Completed
         </div>
       </li>
@@ -124,6 +125,21 @@ const CourseCardDropDown = ({
     }  
   }
 
+  const chevronMap =  (dropDownText: string) => {
+    switch (dropDownText) {
+      case "No Selection":
+        return (isOpen ? <ChevronDown/> : <ChevronUp/>);
+      case "Planned":
+        return (isOpen ? <ChevronDownGray/> : <ChevronUpGray/>);
+      case "In Progress":
+        return (isOpen ? <ChevronDownWarning/> : <ChevronUpWarning/>);
+      case "Completed":
+        return (isOpen ? <ChevronDownWhite/> : <ChevronUpWhite/>);
+      default:
+        return (isOpen ? <ChevronDown/> : <ChevronUp/>);
+    }
+  }
+
   return (
     <div
       className="relative"
@@ -135,9 +151,10 @@ const CourseCardDropDown = ({
         className={chipStyle}
       >
         {dropDownText}
+        {chevronMap(dropDownText)}
       </div>
       {isOpen && (
-        <div className="absolute w-48 bg-text-white shadow-lg rounded-lg border border-utility-gray-300 z-10 right-px">
+        <div className="absolute w-40 bg-text-white shadow-lg rounded-lg border border-utility-gray-300 z-10 right-px">
           <ul >
               {
                 dropdownProcess()
