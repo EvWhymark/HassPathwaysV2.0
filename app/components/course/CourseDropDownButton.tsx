@@ -51,6 +51,7 @@ const CourseCardDropDown = ({
                 <div className="flex-1 text-center">{option.label}</div>
               </li>
           ));
+
   }
 
   return (
@@ -69,6 +70,7 @@ const CourseCardDropDown = ({
             <div className="absolute w-48 bg-text-white shadow-lg rounded-lg border border-utility-gray-300 z-10 right-px">
           <ul >
               {dropdownProcess()}
+
           </ul>
         </div>
       )}
