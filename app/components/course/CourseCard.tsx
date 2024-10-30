@@ -35,7 +35,7 @@ const CourseCard = ({
     <section className="course-card">
       <header className="course-title">
         <div className="flex flex-row items-center">
-          <div>
+          <div className="flex-1">
             <Link
               href={`/courses/${subject + '-' + courseCode}`}
               className="text-md font-semibold break-normal"
@@ -44,8 +44,7 @@ const CourseCard = ({
             </Link>
             <p className="text-sm text-utility-gray-600">{subject + '-' + courseCode}</p>
           </div>
-          <div className="flex-grow"></div>
-          <div className="flex-end">
+          <div>
             <CourseCardDropDown title={title} courseCode={courseCode} status={status} />
           </div>
         </div>
@@ -79,7 +78,7 @@ const CourseCard = ({
             )}
           </div>
           <div className="flex flex-wrap">
-            {prereqs && prereqs.raw_precoreqs != "" && (
+            {prereqs && prereqs.raw_precoreqs && (
               <div className="mt-2">
                 <h4 className="text-sm font-semibold">Prerequisites:</h4>
                 <ul className="text-sm text-utility-gray-600">
