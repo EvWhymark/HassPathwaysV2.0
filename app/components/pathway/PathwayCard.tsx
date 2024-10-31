@@ -13,7 +13,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   
   const [bookmark, setBookmark] = useState(false);
   const [isShown, setIsShown] = useState(false);
-  const { courses } = useAppContext();
+  const { courses, popupShown, setPopupShown, setPathwayPopup} = useAppContext();
   const getBookmarks = () => {
     var bmks = localStorage.getItem("bookmarks")
     if (bmks == null) {
@@ -122,10 +122,15 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
       </div>
     );
   }
+
+  const enablePathwayPopup = () => {
+    setPathwayPopup({ title: title, department: department, coursesIn: coursesIn});
+    setPopupShown(true);
+  }
   
   return (
     <section className="pathway-card">
-      <header className="flex justify-between w-full items-start">
+      <header className="flex justify-between w-full items-start flex-shrink">
         <div className="w-[367px] mb-2">
           <div className="flex flex-col md:flex-row gap-2 items-start py-1">
             <Link className="pathway-title flex-1" href={'/pathways/'+title.replace("/", "+")}>{title}</Link>
@@ -148,11 +153,14 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
           {bookmark ? <BookmarkChecked /> : <Bookmark />}
         </div>
       </header>
-      <div className="flex gap-3 flex-col">
+      <div className="flex gap-3 flex-col flex-1">
         {completedItems}
         {inProgressItems}
         {plannedItems}
       </div>
+      <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold" onClick={enablePathwayPopup}>
+        Manage Course Selection
+      </button>
     </section>
   );
 };

@@ -2,7 +2,7 @@ import {
   ApplicationContext,
   ApplicationDispatch,
 } from "@/app/model/AppContextInterface";
-import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED, SET_PATHWAYS } from "../actions";
+import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED, SET_PATHWAYS, SET_POPUP_SHOWN, SET_PATHWAY_POPUP } from "../actions";
 
 export const appReducer: (
   state: ApplicationContext,
@@ -32,6 +32,16 @@ export const appReducer: (
       return {
         ...state,
         pathwayData: action.payload
+      }
+    case SET_POPUP_SHOWN:
+      return {
+        ...state,
+        popupShown: action.payload
+      }
+    case SET_PATHWAY_POPUP:
+      return {
+        ...state,
+        pathwayPopup: action.payload
       }
     default:
       return state;
