@@ -74,8 +74,10 @@ const MyPathways = () => {
 
   useEffect(() => {
     if (!pathwayData) return;
-    bookmarkedState ? setMarked(JSON.parse(localStorage.getItem("bookmarks") ?? "[]")) : setMarked(matchFilter());
-  }, [catalog_year]);
+    let pathwayTitles = pathwayData.map((pathway: IPathwaySchema) => pathway.title);
+    let bookmarksInYear = JSON.parse(localStorage.getItem("bookmarks") ?? "[]").filter((pathway: IPathwaySchema) => pathwayTitles.includes(pathway.title));
+    bookmarkedState ? setMarked(bookmarksInYear) : setMarked(matchFilter());
+  }, [catalog_year, bookmarkedState, pathwayData]);
 
   return (
     <>
@@ -95,15 +97,14 @@ const MyPathways = () => {
               label="Bookmarked"
               checked={bookmarkedState}
               clickCallback={() => {
-                setbookmarkedState(true);
-                setMarked(JSON.parse(localStorage.getItem("bookmarks") ?? "[]"));
+                setbookmarkedState(true)
               }}
             />
             <ModeRadioButton
               label="Matched"
               checked={!bookmarkedState}
               clickCallback={() => {
-                matchFilter();
+                setbookmarkedState(false)
               }}
             />
           </div>
