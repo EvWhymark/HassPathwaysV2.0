@@ -170,7 +170,7 @@
   }
 
   .modal-frame {
-    @apply flex flex-col items-center justify-center isolate modal-size 3xl:h-[900px] shadow-[0px_20px_24px_-4px_rgba(16,24,40,0.08),0px_8px_8px_-4px_rgba(16,24,40,0.03)] flex-none order-1 grow-0 z-[1] p-0 rounded-xl;
+    @apply flex flex-col items-center justify-center isolate modal-size 3xl:h-[900px] flex-none order-1 grow-0 z-[1] p-0 rounded-xl;
   }
   
   .modal-header {

@@ -114,6 +114,7 @@ const PathwayPopup = () => {
       }
       if (selectedInCluster.length == 0){
         icon = <CheckBoxBaseEmpty />;
+        clusterPrint = 4*cluster.numCourses + " Credits in " + clusterItems.join(", ") + ", ...";
       }else{
         let selectedCaveat = "";
         if (selectedInCluster.length > cluster.numCourses){
@@ -122,12 +123,18 @@ const PathwayPopup = () => {
         let slicedInCluster = selectedInCluster.slice(0, cluster.numCourses);
         clusterPrint = slicedInCluster.map((course) => `${course.subject}-${course.courseCode}: ${course.title}`).join(", ") + selectedCaveat;
         if (selectedInCluster.length < cluster.numCourses){
-          clusterPrint += ", " + 4*(cluster.numCourses - selectedInCluster.length) + " Credits in " + clusterCourses.filter((course) => !selectedInCluster.includes(course)).map((course) => `${course.subject}-${course.courseCode}`).join(", ");
+          let shortClusterCourses = clusterCourses.filter((course) => !selectedInCluster.includes(course));
+          selectedCaveat = "";
+          if (shortClusterCourses.length > 3){
+            shortClusterCourses = shortClusterCourses.slice(0,3);
+            selectedCaveat = ", ...";
+          }
+          clusterPrint += ", " + 4*(cluster.numCourses - selectedInCluster.length) + " Credits in " + shortClusterCourses.map((course) => `${course.subject}-${course.courseCode}`).join(", ") + selectedCaveat;
         }
       }
 
       let clusterList = (
-        <div className="whitespace-nowrap mt-1">
+        <div className="mt-1">
           <p className="text-sm flex items-center">
             <span className="mr-2">{icon}</span>
             {clusterPrint}
@@ -146,10 +153,6 @@ const PathwayPopup = () => {
       };
       fetchData();
     }, [catalog_year, pathwayPopup]);
-    
-    useEffect(() => {
-      console.log(pathwayData);
-    }, [pathwayData]);
 
     return (
       <>
@@ -159,7 +162,7 @@ const PathwayPopup = () => {
           onClick={disablePathwayPopup}
         />
         <div className="fixed inset-0 flex items-center justify-center z-20">
-          <div className="modal-frame bg-white rounded-xl shadow-lg">
+          <div className="modal-frame bg-white rounded-xl">
             <div className="modal-header bg-bg-primary p-8 rounded-t-xl flex flex-col items-start overflow-hidden">
                 <div className="w-full flex-shrink flex justify-end">
                     <button className="">
