@@ -14,7 +14,7 @@ import CatalogDropdown from "../components/navigation/CatalogDropdown";
 
 
 const MyPathways = () => {
-  const { pathwaysCategories, pathwayData, courses } = useAppContext();
+  const { pathwaysCategories, pathwayData, courses, catalog_year } = useAppContext();
   // Determine the mode of pathway card
   const [bookmarkedState, setbookmarkedState] = useState(true);
   const [marked, setMarked] = useState<IPathwaySchema[]>([]);
@@ -42,12 +42,40 @@ const MyPathways = () => {
   const activeFilter = (state: number, index: number) =>
     (state & (1 << index)) !== 0;
 
+  const matchFilter = () => {
+    setbookmarkedState(false);
+    const matchedPathways:IPathwaySchema[] = [];
+    //Iterates over the pathway data and compares the courses in that pathway to the course data
+    for (const pathway of pathwayData) {
+      let hasMatchingCourse = false;
+      for (const course of pathway.coursesIn) {
+        for (const course2 of courses) {
+          if (course2.title === course && course2.status !== "No Selection") {
+            hasMatchingCourse = true;
+            break;
+          }
+        }
+        if (hasMatchingCourse) break;
+      }
+      if (hasMatchingCourse) {
+        matchedPathways.push(pathway);
+      }
+    }
+    setMarked(matchedPathways);
+    return matchedPathways;
+  };
+
   useEffect(() => {
     //Used for initial render. This will cause it so whenever you go back to the My Pathways it will default to the
     //bookmarked selection.
     //TODO: Make it so it remembers which selection (Either bookmarked or matched) on my pathways page
     setMarked(JSON.parse(localStorage.getItem("bookmarks") ?? "[]"));
   }, [])
+
+  useEffect(() => {
+    if (!pathwayData) return;
+    bookmarkedState ? setMarked(JSON.parse(localStorage.getItem("bookmarks") ?? "[]")) : setMarked(matchFilter());
+  }, [catalog_year]);
 
   return (
     <>
@@ -75,25 +103,7 @@ const MyPathways = () => {
               label="Matched"
               checked={!bookmarkedState}
               clickCallback={() => {
-                setbookmarkedState(false);
-                const matchedPathways:IPathwaySchema[] = [];
-                //Iterates over the pathway data and compares the courses in that pathway to the course data
-                for (const pathway of pathwayData) {
-                  let hasMatchingCourse = false;
-                  for (const course of pathway.coursesIn) {
-                    for (const course2 of courses) {
-                      if (course2.title === course && course2.status !== "No Selection") {
-                        hasMatchingCourse = true;
-                        break;
-                      }
-                    }
-                    if (hasMatchingCourse) break;
-                  }
-                  if (hasMatchingCourse) {
-                    matchedPathways.push(pathway);
-                  }
-                }
-                setMarked(matchedPathways);
+                matchFilter();
               }}
             />
           </div>
