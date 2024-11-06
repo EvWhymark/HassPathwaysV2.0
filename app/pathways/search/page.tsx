@@ -8,6 +8,7 @@ import React, {
   Suspense,
 } from "react";
 import PathwayCard from "@/app/components/pathway/PathwayCard";
+import PathwayPopup from "@/app/components/pathway/PathwayPopup";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import {
   SearchInput,
@@ -35,7 +36,7 @@ const getFilterList = (pathwayCategory, filterMask) => {
 };
 
 const SearchCourse = () => {
-  const { pathwaysCategories, catalog_year } = useAppContext();
+  const { pathwaysCategories, catalog_year, popupShown } = useAppContext();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -144,7 +145,9 @@ const SearchCourse = () => {
           </div>
         </div>
       </header>
-
+      {
+        popupShown && <PathwayPopup />
+      }
       {isLoading ? (
         <Spinner />
       ) : (
