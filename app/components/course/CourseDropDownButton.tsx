@@ -26,6 +26,7 @@ const CourseCardDropDown = ({
   }, [status]);
 
   const handleOption = (newStatus: string) => {
+    newStatus === "Remove" ? newStatus = "No Selection" : newStatus;
     updateCourseState(title, newStatus);
     setDropDownText(newStatus);
     setIsOpen(false);
