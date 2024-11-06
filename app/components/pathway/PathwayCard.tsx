@@ -105,21 +105,27 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   ));
 
   const progressBar = () => {
-    const green = completed.map(() => (<div className="indicator bg-bg-success-solid"></div>));
-    const yellow = inProgress.map(() => (<div className="indicator bg-bg-warning-solid"></div>));
-    const gray = planned.map(() => (<div className="indicator bg-fg-disabled_subtle"></div>));
+    const green = completed.map((_, index) => (
+        <div key={`Green-${index}`} className="indicator bg-bg-success-solid"></div>
+    ));
+    const yellow = inProgress.map((_, index) => (
+        <div key={`Yellow-${index}`} className="indicator bg-bg-warning-solid"></div>
+    ));
+    const gray = planned.map((_, index) => (
+        <div key={`Gray-${index}`} className="indicator bg-fg-disabled_subtle"></div>
+    ));
     const rest = max_size - (green.length + yellow.length + gray.length);
-    const white = [];
-    for (let i = 0; i < rest; i++) {
-      white.push(<div className="indicator bg-white border border-solid border-gray-400"></div>);
-    }
+    const white = Array.from({ length: rest }, (_, index) => (
+        <div key={`White-${index}`} className="indicator bg-white border border-solid border-gray-400"></div>
+    ));
+
     return (
-      <div className="flex gap-1">
-        {green}
-        {yellow}
-        {gray}
-        {white}
-      </div>
+        <div className="flex gap-1">
+          {green}
+          {yellow}
+          {gray}
+          {white}
+        </div>
     );
   }
 
