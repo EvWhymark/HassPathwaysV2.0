@@ -9,11 +9,15 @@ export interface ApplicationContext {
   pathwayData: any;
   pathwaysCategories: any; 
   courses: ICourseSchema[];
+  popupShown: boolean;
+  pathwayPopup: IPathwaySchema;
   setCourses: (courses: ICourseSchema[]) => void;
   updateCourseState: (name: string, status: string) => void;
   setCatalog: (catalog_year: string) => void;
   fetchCourses: () => JSON;
   setPathways: (pathwayData: IPathwaySchema) => void;
+  setPopupShown: (popupShown: boolean) => void;
+  setPathwayPopup: (pathwayPopup: IPathwaySchema) => void;
 }
 
 type ApplicationConstant = {

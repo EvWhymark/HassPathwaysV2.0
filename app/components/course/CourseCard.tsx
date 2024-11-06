@@ -10,8 +10,44 @@ const offeredSemestersChecker = ( term: IOfferedSchema | undefined) => {
   if (term.years[term.years.length - 1].fall) offeredSemesters.push("Fall");
   if (term.years[term.years.length - 1].spring) offeredSemesters.push("Spring");
   if (term.years[term.years.length - 1].summer) offeredSemesters.push("Summer");
+  if (term.uia) offeredSemesters.push("Upon Instructor Availability");
   return offeredSemesters;
 };
+
+const offeredSemestersTag = (offeredSemesters: string[]) => {
+  return (
+    <div className="flex">
+      <p className="badge-group text-xs">
+      {offeredSemesters.includes("Fall") ? 
+        <p className="badge badge-primary">
+          Fall
+        </p> : 
+        <p className="badge badge-disabled">
+          Fall
+        </p>
+      }
+      {offeredSemesters.includes("Spring") ?
+        <p className="badge badge-primary">
+          Spring
+        </p> :
+        <p className="badge badge-disabled">
+          Spring
+        </p>
+      }
+      {
+        offeredSemesters.includes("Summer") ?
+          <p className="badge badge-primary">
+            Summer
+          </p> :
+          <p className="badge badge-disabled">
+            Summer
+          </p>
+      }
+      </p>
+    </div>
+  );
+  
+}
 
 const CourseCard = ({
   title,
@@ -32,9 +68,9 @@ const CourseCard = ({
   const offeredSemesters = offeredSemestersChecker(term);
   return (
     <section className="course-card">
-      <div className="flex flex-col fold:flex-row justify-between items-start">
-        <div className="flex flex-col">
-          <header className="course-title">
+      <header className="course-title">
+        <div className="flex flex-row items-start">
+          <div className="flex-1">
             <Link
               href={`/courses/${subject + '-' + courseCode}`}
               className="text-md font-semibold break-normal"
@@ -42,41 +78,44 @@ const CourseCard = ({
               {title}
             </Link>
             <p className="text-sm text-utility-gray-600">{subject + '-' + courseCode}</p>
-          </header>
-          <div className="flex gap-x-1 flex-wrap mt-2">
+          </div>
+          <div>
+            <CourseCardDropDown title={title} courseCode={courseCode} status={status} />
+          </div>
+        </div>
+      </header>
+      <div className="flex flex-col fold:flex-row justify-between items-start">
+        <div className="flex flex-col">
+          <div className="flex gap-x-1 flex-wrap items-center">
+            {
+            offeredSemesters.length > 0 && (
+              <div className="">
+                {offeredSemestersTag(offeredSemesters)}
+              </div>
+            )
+            }
             {attributes && attributes.CI && (
               <p className="tag tag-primary">
-                Communication Intensive
+                CI
               </p>
             )}
             {attributes && attributes.HI && (
               <p className="tag tag-primary">
-                Hass Inquiry
+                HI
               </p>
             )}
           </div>
-          {offeredSemesters.length > 0 && (
-            <div className="mt-2">
-              <h4 className="text-sm font-semibold">Offered:</h4>
-              <ul className="list-disc ml-4">
-                {offeredSemesters.map((semester) => (
-                  <li key={semester} className="text-sm text-utility-gray-600">
-                    {semester}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {prereqs && prereqs.courses.length > 0 && (
-            <div className="mt-2">
-              <h4 className="text-sm font-semibold">Prerequisites:</h4>
-              <ul className="text-sm text-utility-gray-600">
-                {prereqs.raw_precoreqs}
-              </ul>
-            </div>
-          )}
+          <div className="flex flex-wrap mt-1">
+            {prereqs && prereqs.raw_precoreqs && (
+              <div className="mt-1">
+                <h4 className="text-sm font-semibold">Prerequisites:</h4>
+                <ul className="text-sm text-utility-gray-600">
+                  {prereqs.raw_precoreqs}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
-        <CourseCardDropDown title={title} courseCode={courseCode} status={status} />
       </div>
     </section>
   );

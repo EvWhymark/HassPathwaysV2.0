@@ -164,4 +164,25 @@
   .status-bar .status.status__not-started {
     @apply bg-fg-disabled_subtle;
   }
+
+  .modal-size {
+    @apply 2.5xl:w-[750px] 2xl:w-[450px] 1.5xl:w-[650px] sm:w-[450px];
+  }
+
+  .modal-frame {
+    @apply flex flex-col items-center justify-center isolate modal-size 3xl:h-[900px] flex-none order-1 grow-0 z-[1] p-0 rounded-xl;
+  }
+  
+  .modal-header {
+    @apply flex flex-col items-center justify-center isolate modal-size 3xl:h-[275px] sm:h-[250px] flex-none order-1 self-stretch grow-0 z-[1] p-0;
+  }
+  
+  .modal-body {
+    @apply flex flex-col items-center justify-center gap-3 modal-size 3xl:h-[650px] 2.5xl:h-[450px] 1.5xl:h-[300px] sm:h-[200px] flex-none order-2 grow-0 z-[2] p-6;
+  }
+
+  .modal-footer {
+    @apply flex flex-col items-center justify-center isolate modal-size h-[75px] 1.5xl:h-[75px] sm:h-[50px] flex-none order-3 self-stretch grow-0 z-[1] p-0;
+  }
+  
 }

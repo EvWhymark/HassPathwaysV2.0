@@ -98,6 +98,7 @@ export async function GET(request: NextRequest) {
     for (let cluster of schema){
         if (cluster.name == "Remaining"){
             schema.splice(schema.indexOf(cluster), 1);
+            cluster.numCourses = 3 - schema.length;
             schema.push(cluster);
             break;
         }

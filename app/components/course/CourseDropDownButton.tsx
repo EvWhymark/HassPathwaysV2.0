@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ICourseSchema } from '@/public/data/dataInterface';
 import { useAppContext } from "../../contexts/appContext/AppProvider";
 import { clsx } from 'clsx';
+import { ChevronDown, ChevronDownGray, ChevronDownWarning, ChevronDownWhite, ChevronUp, ChevronUpGray, ChevronUpWarning, ChevronUpWhite } from '../utils/Icon';
 
 const colorMap = {
   "No Selection": "bg-bg-primary text-text-quaternary",
@@ -19,7 +20,7 @@ const CourseCardDropDown = ({
   const {courses, updateCourseState} = useAppContext();
   //status = courses.find(course => course.name === title)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
-  const chipStyle = clsx("text-sm font-semibold px-2 py-2.5 border border-utility-gray-200 rounded-lg cursor-pointer text-center", colorMap[dropDownText]);
+  const chipStyle = clsx("text-sm font-semibold px-3 py-3 border border-utility-gray-200 rounded-lg cursor-pointer text-center flex gap-2", colorMap[dropDownText]);
   useEffect(() => {
     setDropDownText(status);
   }, [status]);
@@ -51,7 +52,21 @@ const CourseCardDropDown = ({
                 <div className="flex-1 text-center">{option.label}</div>
               </li>
           ));
+  }
 
+  const chevronMap =  (dropDownText: string) => {
+    switch (dropDownText) {
+      case "No Selection":
+        return (isOpen ? <ChevronDown/> : <ChevronUp/>);
+      case "Planned":
+        return (isOpen ? <ChevronDownGray/> : <ChevronUpGray/>);
+      case "In Progress":
+        return (isOpen ? <ChevronDownWarning/> : <ChevronUpWarning/>);
+      case "Completed":
+        return (isOpen ? <ChevronDownWhite/> : <ChevronUpWhite/>);
+      default:
+        return (isOpen ? <ChevronDown/> : <ChevronUp/>);
+    }
   }
 
   return (
@@ -60,14 +75,11 @@ const CourseCardDropDown = ({
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
       >
-        <div
-            id="fixed-size-div"
-            className={chipStyle}
-        >
-          {dropDownText}
-        </div>
-        {isOpen && (
-            <div className="absolute w-48 bg-text-white shadow-lg rounded-lg border border-utility-gray-300 z-10 right-px">
+        {dropDownText}
+        {chevronMap(dropDownText)}
+      </div>
+      {isOpen && (
+        <div className="absolute w-40 bg-text-white shadow-lg rounded-lg border border-utility-gray-300 z-10 right-px">
           <ul >
               {dropdownProcess()}
 

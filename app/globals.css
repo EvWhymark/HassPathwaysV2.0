@@ -781,6 +781,8 @@
     @apply border border-solid border-utility-gray-300;
     @apply p-6;
     @apply flex gap-5 flex-col;
+    @apply flex-col;
+    @apply items-start;
   }
 
   .pathway-card .pathway-title {

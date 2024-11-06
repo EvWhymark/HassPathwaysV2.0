@@ -2,7 +2,7 @@
 
 import {createContext, ReactNode, useContext, useEffect, useReducer,} from "react";
 import {appReducer} from "./AppReducer";
-import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_PATHWAYS} from "../actions";
+import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_PATHWAYS, SET_POPUP_SHOWN, SET_PATHWAY_POPUP} from "../actions";
 import {APPLICATION_STATE_KEY, courseState, pathwaysCategories,} from "@/public/data/staticData";
 import {ApplicationContext} from "@/app/model/AppContextInterface";
 import {ICourseSchema, IPathwaySchema} from "@/public/data/dataInterface";
@@ -14,11 +14,19 @@ const defaultInitialState: ApplicationContext = {
   catalog_year: "",
   courses: [],
   pathwayData: "",
+  popupShown: false,
+  pathwayPopup: {
+    title: "",
+    coursesIn: [],
+    department: "",
+  },
   setCourses: () => {},
   setCatalog: () => {},
   fetchCourses: () => {},
   setPathways: () => {},
   updateCourseState: () => {},
+  setPopupShown: () => {},
+  setPathwayPopup: () => {},
   ...constantApplicationValue,
 };
 
@@ -144,8 +152,16 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     dispatch({type: SET_PATHWAYS, payload: pathwayData})
   };
 
+  const setPopupShown = (newPopup: boolean) => {
+    dispatch({type: SET_POPUP_SHOWN, payload: newPopup});
+  }
+
+  const setPathwayPopup = (pathwayPopup: IPathwaySchema) => {
+    dispatch({type: SET_PATHWAY_POPUP, payload: pathwayPopup});
+  }
+
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses, setPathways}}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses, setPathways, setPopupShown, setPathwayPopup}}>
       {children}
     </AppContext.Provider>
   );
