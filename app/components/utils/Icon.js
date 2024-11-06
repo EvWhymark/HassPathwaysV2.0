@@ -24,6 +24,14 @@ import checkBoxBaseInProgress from "@/public/assets/svg/_Checkbox-base-warning.s
 import checkBoxBasePlanned from "@/public/assets/svg/_Checkbox-base-gray.svg?svgr";
 import checkBoxBaseEmpty from "@/public/assets/svg/_Checkbox-base-empty.svg?svgr";
 import xClose from "@/public/assets/svg/x-close.svg?svgr";
+import chevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
+import chevronDownGray from "@/public/assets/svg/chevron-down-gray.svg?svgr";
+import chevronDownWarning from "@/public/assets/svg/chevron-down-warning.svg?svgr";
+import chevronDownWhite from "@/public/assets/svg/chevron-down-white.svg?svgr";
+import chevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
+import chevronUpGray from "@/public/assets/svg/chevron-up-gray.svg?svgr";
+import chevronUpWarning from "@/public/assets/svg/chevron-up-warning.svg?svgr";
+import chevronUpWhite from "@/public/assets/svg/chevron-up-white.svg?svgr";
 
 export const Certificate = certificate01;
 export const SwitchHorizontal = switchhorizontal01;
@@ -51,3 +59,11 @@ export const CheckBoxBaseInProgress = checkBoxBaseInProgress;
 export const CheckBoxBasePlanned = checkBoxBasePlanned;
 export const XClose = xClose;
 export const CheckBoxBaseEmpty = checkBoxBaseEmpty;
+export const ChevronDown = chevronDown;
+export const ChevronDownGray = chevronDownGray;
+export const ChevronDownWarning = chevronDownWarning;
+export const ChevronDownWhite = chevronDownWhite;
+export const ChevronUp = chevronUp;
+export const ChevronUpGray = chevronUpGray;
+export const ChevronUpWarning = chevronUpWarning;
+export const ChevronUpWhite = chevronUpWhite;
