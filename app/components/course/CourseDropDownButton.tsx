@@ -70,11 +70,12 @@ const CourseCardDropDown = ({
   }
 
   return (
-      <div
-          className="relative"
-          onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => setIsOpen(false)}
-      >
+    <div
+        className="relative"
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+    >
+      <div className={chipStyle}>
         {dropDownText}
         {chevronMap(dropDownText)}
       </div>
@@ -82,7 +83,6 @@ const CourseCardDropDown = ({
         <div className="absolute w-40 bg-text-white shadow-lg rounded-lg border border-utility-gray-300 z-10 right-px">
           <ul >
               {dropdownProcess()}
-
           </ul>
         </div>
       )}
