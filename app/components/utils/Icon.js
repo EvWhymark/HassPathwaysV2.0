@@ -22,6 +22,7 @@ import filter from "@/public/assets/svg/filter-funnel-02.svg?svgr";
 import checkboxBaseSuccess from "@/public/assets/svg/_Checkbox-base-success.svg?svgr";
 import checkBoxBaseInProgress from "@/public/assets/svg/_Checkbox-base-warning.svg?svgr";
 import checkBoxBasePlanned from "@/public/assets/svg/_Checkbox-base-gray.svg?svgr";
+import checkBoxBaseEmpty from "@/public/assets/svg/_Checkbox-base-empty.svg?svgr";
 import xClose from "@/public/assets/svg/x-close.svg?svgr";
 
 export const Certificate = certificate01;
@@ -49,3 +50,4 @@ export const CheckBoxBaseSuccess = checkboxBaseSuccess;
 export const CheckBoxBaseInProgress = checkBoxBaseInProgress;
 export const CheckBoxBasePlanned = checkBoxBasePlanned;
 export const XClose = xClose;
+export const CheckBoxBaseEmpty = checkBoxBaseEmpty;

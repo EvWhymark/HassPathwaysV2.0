@@ -165,20 +165,24 @@
     @apply bg-fg-disabled_subtle;
   }
 
+  .modal-size {
+    @apply 2.5xl:w-[750px] 2xl:w-[450px] 1.5xl:w-[650px] sm:w-[450px];
+  }
+
   .modal-frame {
-    @apply flex flex-col items-center justify-center isolate w-[771px] h-[918px] shadow-[0px_20px_24px_-4px_rgba(16,24,40,0.08),0px_8px_8px_-4px_rgba(16,24,40,0.03)] flex-none order-1 grow-0 z-[1] p-0 rounded-xl;
+    @apply flex flex-col items-center justify-center isolate modal-size 3xl:h-[900px] shadow-[0px_20px_24px_-4px_rgba(16,24,40,0.08),0px_8px_8px_-4px_rgba(16,24,40,0.03)] flex-none order-1 grow-0 z-[1] p-0 rounded-xl;
   }
   
   .modal-header {
-    @apply flex flex-col items-center justify-center isolate w-[771px] h-[274px] flex-none order-1 self-stretch grow-0 z-[1] p-0;
+    @apply flex flex-col items-center justify-center isolate modal-size 3xl:h-[275px] sm:h-[250px] flex-none order-1 self-stretch grow-0 z-[1] p-0;
   }
   
   .modal-body {
-    @apply flex flex-col items-center justify-center gap-3 w-[771px] h-[644px] flex-none order-2 grow-0 z-[2] p-6;
+    @apply flex flex-col items-center justify-center gap-3 modal-size 3xl:h-[650px] 2.5xl:h-[450px] 1.5xl:h-[300px] sm:h-[200px] flex-none order-2 grow-0 z-[2] p-6;
   }
 
   .modal-footer {
-    @apply flex flex-col items-center justify-center isolate w-[771px] h-[75px] flex-none order-3 self-stretch grow-0 z-[1] p-0;
+    @apply flex flex-col items-center justify-center isolate modal-size h-[75px] 1.5xl:h-[75px] sm:h-[50px] flex-none order-3 self-stretch grow-0 z-[1] p-0;
   }
   
 }
