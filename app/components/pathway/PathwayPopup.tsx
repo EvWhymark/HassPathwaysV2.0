@@ -2,15 +2,17 @@ import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { XClose, CheckBoxBaseSuccess, CheckBoxBaseInProgress, CheckBoxBasePlanned, CheckBoxBaseEmpty } from "@/app/components/utils/Icon";
 import React, { FC, MouseEventHandler, useCallback, useContext, useEffect, useState } from "react";
 import CourseCard from "@/app/components/course/CourseCard";
-import { ICourseSchema, IPathwayDescriptionSchema } from "@/public/data/dataInterface";
+import { ICourseSchema, IPathwayDescriptionSchema, IPathwaySchema } from "@/public/data/dataInterface";
 import path from "path";
 import { isUndefined, set, slice } from "lodash";
 import cluster from "cluster";
 
-const emptyPathway: IPathwayDescriptionSchema = {
+const emptyPathway: IPathwaySchema = {
   description: "",
+  title: "",
+  department: "",
   compatibleMinor: [],
-  courses: [],
+  coursesIn: [],
   clusters: [],
 };
 
@@ -19,7 +21,7 @@ const PathwayPopup = () => {
     let inPathway: ICourseSchema[] = courses.filter((course) => pathwayPopup.coursesIn.includes(course.title));
     let selected: ICourseSchema[] = inPathway.filter((course) => course.status !== "No Selection");
     selected = selected.sort((a, b) => a.status.localeCompare(b.status));
-    const [pathwayData, setPathwayData] = useState<IPathwayDescriptionSchema>(emptyPathway);
+    
     const disablePathwayPopup = () => {
       setPopupShown(false);
     };
@@ -29,36 +31,8 @@ const PathwayPopup = () => {
       window.location.replace('/pathways/'+pathwayPopup.title.replace("/", "+"));
     }
 
-    const loadDataOnlyOnce = async () => {
-      const apiController = new AbortController();
-      let res: IPathwayDescriptionSchema = emptyPathway;
-      try {
-        if (catalog_year === "") return res;
-        const response = await fetch(`http://localhost:3000/api/pathway/individual?${new URLSearchParams({
-          pathwayName: pathwayPopup.title,
-          catalogYear: catalog_year
-        })}`, {
-          signal: apiController.signal,
-          cache: "no-store",
-          next: {
-            revalidate: 0
-          }
-        });
-        const data = await response.json();
-        res = {
-          description: data.description,
-          compatibleMinor: data.compatibleMinor,
-          courses: data.courses,
-          clusters: data.clusters,
-        };
-      } catch (error) {
-        console.error("WARNING: ", error);
-      }
-      return res;
-    };
-
     const clusterCreate = (index: number) => {
-      const clusters = pathwayData?.clusters;
+      const clusters = pathwayPopup?.clusters;
       if (!clusters || clusters.length == 0 || !clusters[index]) return null;
       let cluster = clusters[index];
       let clusterCourses = inPathway.filter((course) => cluster.courses.includes(course.title));
@@ -145,14 +119,11 @@ const PathwayPopup = () => {
       return clusterList;
     };
     
-
+    /*
     useEffect(() => {
-      const fetchData = async () => {
-       let res = await loadDataOnlyOnce();
-       setPathwayData(res);
-      };
-      fetchData();
-    }, [catalog_year, pathwayPopup]);
+      if (!pathwayData) return;
+      setCurrentPathway(pathwayData.find((pathway) => pathway.title === pathwayName) ?? emptyPathway);
+    }, [catalog_year, pathwayPopup]);*/
 
     return (
       <>
@@ -196,10 +167,6 @@ const PathwayPopup = () => {
       </>
     );
 };
-
-interface CourseListProps {
-  courses: Array<ICourseSchema>;
-}
 
 
 export default PathwayPopup;

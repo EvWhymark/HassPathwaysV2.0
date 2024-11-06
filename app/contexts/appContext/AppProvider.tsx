@@ -17,6 +17,9 @@ const defaultInitialState: ApplicationContext = {
   popupShown: false,
   pathwayPopup: {
     title: "",
+    description: "",
+    compatibleMinor: [],
+    clusters: [],
     coursesIn: [],
     department: "",
   },

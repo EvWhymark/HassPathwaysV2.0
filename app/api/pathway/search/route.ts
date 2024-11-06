@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
       description: description,
       title: pathwayName,
       department: department,
-      compatibleMinor: pathways[pathwayName]["minor"],
+      compatibleMinor: pathways[pathwayName]["minor"] ? pathways[pathwayName]["minor"] : [],
       coursesIn: allCourses,
       clusters: schema,
     }

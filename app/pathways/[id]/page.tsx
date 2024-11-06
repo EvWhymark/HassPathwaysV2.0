@@ -83,10 +83,12 @@ const pathwayTempData: IPathwayDescriptionSchema = {
 //   ],
 // };
 
-const emptyPathway: IPathwayDescriptionSchema = {
+const emptyPathway: IPathwaySchema = {
+  title: "",
+  department: "",
   description: "",
   compatibleMinor: [],
-  courses: [],
+  coursesIn: [],
   clusters: [],
 };
 
@@ -100,10 +102,10 @@ type IPathwayID = {
 const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
   // Convert pathname to pathwayName
   const [pathwayName, setPathwayName] = useState(data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/"));
-  const {catalog_year} = useAppContext()
+  const {catalog_year, pathwayData} = useAppContext()
   const [bookmark, setBookmark] = useState(false);
-  const [pathwayData, setPathwayData] =
-  useState<IPathwayDescriptionSchema>(emptyPathway);
+  const [currentPathway, setCurrentPathway] =
+  useState<IPathwaySchema>(emptyPathway);
 
   const getBookmarks = () => {
     var bmks = localStorage.getItem("bookmarks")
@@ -122,7 +124,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
       current = current.filter(i => i.title != pathwayName);
     else if (current.find(x => x.title === pathwayName) == undefined) {
       let pathwayDept = pathwayDepartment.find(x => x.pathway === pathwayName);
-      current.push({ title: pathwayName, department: pathwayDept ? pathwayDept.department : "None", coursesIn: pathwayData.courses });
+      current.push({ title: pathwayName, department: pathwayDept ? pathwayDept.department : "None", coursesIn: pathwayData.courses, description: pathwayData.description, compatibleMinor: pathwayData.compatibleMinor, clusters: pathwayData.clusters });
     }
     localStorage.setItem("bookmarks", JSON.stringify(current));
     setBookmark(!bookmark);
@@ -133,45 +135,24 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
       const name = data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/").replaceAll("%3A", ":");
       setPathwayName(name);
     }
-  }, [data.params.id]);
-
-  const loadDataOnlyOnce = async () => {
-    const apiController = new AbortController();
-    let res: IPathwayDescriptionSchema = emptyPathway;
-    try {
-      if (catalog_year === "") return res;
-      const response = await fetch(`http://localhost:3000/api/pathway/individual?${new URLSearchParams({
-        pathwayName: pathwayName,
-        catalogYear: catalog_year
-      })}`, {
-        signal: apiController.signal,
-        cache: "no-store",
-        next: {
-          revalidate: 0
-        }
-      });
-      const data = await response.json();
-      res = {
-        description: data.description,
-        compatibleMinor: data.compatibleMinor,
-        courses: data.courses,
-        clusters: data.clusters,
-      };
-    } catch (error) {
-      console.error("WARNING: ", error);
-    }
-    return res;
-  };
+  }, [data.params.id])
   
+  useEffect(() => {
+    if (!pathwayData) return;
+    setCurrentPathway(pathwayData.find((pathway) => pathway.title === pathwayName) ?? emptyPathway);
+  }, [pathwayData, pathwayName]);
 
   // TODO: check if pathway exists, or return something empty
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await loadDataOnlyOnce();
-      setPathwayData(res);
-    };
-    fetchData();
-    getBookmarks();
+    console.log(pathwayData);
+    console.log(pathwayName);
+    if (pathwayData == "") return;
+    for (let i = 0; i < pathwayData.length; i++) {
+      if (pathwayData[i].title === pathwayName) {
+        setCurrentPathway(pathwayData[i]);
+        break;
+      }
+    }
   }, [catalog_year, pathwayName]);
 
   if (pathwayData === emptyPathway) {
@@ -211,23 +192,23 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
         <header>
           <h3>Pathway Description</h3>
         </header>
-        <p>{pathwayData.description}</p>
+        <p>{currentPathway.description}</p>
       </section>
       {
-      pathwayData.compatibleMinor.length !== 0 &&
+      currentPathway.compatibleMinor.length !== 0 &&
         <section className="description-section">
           <header>
             <h3>Compatible Minor</h3>
           </header>
           <ul>
-            {pathwayData.compatibleMinor.map((minor, i) => {
+            {currentPathway.compatibleMinor.map((minor, i) => {
               return <li key={i}>- {minor}</li>;
             })}
           </ul>
         </section>
       }
       <section className="description-section">
-        <CourseSection clusters={pathwayData.clusters} />
+        <CourseSection clusters={currentPathway.clusters} />
       </section>
     </>
   );

@@ -17,7 +17,7 @@ const offeredSemestersChecker = ( term: IOfferedSchema | undefined) => {
 const offeredSemestersTag = (offeredSemesters: string[]) => {
   return (
     <div className="flex">
-      <p className="badge-group text-xs">
+      <div className="badge-group text-xs">
       {offeredSemesters.includes("Fall") ? 
         <p className="badge badge-primary">
           Fall
@@ -43,7 +43,7 @@ const offeredSemestersTag = (offeredSemesters: string[]) => {
             Summer
           </p>
       }
-      </p>
+      </div>
     </div>
   );
   
