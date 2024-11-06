@@ -12,56 +12,9 @@ import { noBookmarkedText, noMatchedText } from "@/public/data/staticData";
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import CatalogDropdown from "../components/navigation/CatalogDropdown";
 
-// !! Temporary Data, Remove Later
-const pathwayList = [
-  {
-    name: "Graphic and Interactive Media Design",
-    category: "Communication & Media",
-    coursesIn: [
-      {
-        title: "abc",
-        courseCode: "ARTS-1050",
-        tag: [],
-      },
-      {
-        title: "jir",
-        courseCode: "ARTS-1200",
-        tag: [],
-      },
-      {
-        title: "kri",
-        courseCode: "ARTS-2200",
-        tag: [],
-      },
-    ],
-  },
-  {
-    name: "Information Technology and Web Science",
-    category: "Inter",
-    coursesIn: [
-      {
-        title: "abc",
-        courseCode: "ARTS-1050",
-        tag: [],
-      },
-      {
-        title: "jir",
-        courseCode: "ARTS-1200",
-        tag: [],
-      },
-      {
-        title: "kri",
-        courseCode: "ARTS-2200",
-        tag: [],
-      },
-    ],
-  },
-];
-
-//const pathwayList: Array<IPathwaySchema> = [];
 
 const MyPathways = () => {
-  const { pathwaysCategories } = useAppContext();
+  const { pathwaysCategories, pathwayData, courses, catalog_year } = useAppContext();
   // Determine the mode of pathway card
   const [bookmarkedState, setbookmarkedState] = useState(true);
   const [marked, setMarked] = useState<IPathwaySchema[]>([]);
@@ -89,17 +42,42 @@ const MyPathways = () => {
   const activeFilter = (state: number, index: number) =>
     (state & (1 << index)) !== 0;
 
+  const matchFilter = () => {
+    setbookmarkedState(false);
+    const matchedPathways:IPathwaySchema[] = [];
+    //Iterates over the pathway data and compares the courses in that pathway to the course data
+    for (const pathway of pathwayData) {
+      let hasMatchingCourse = false;
+      for (const course of pathway.coursesIn) {
+        for (const course2 of courses) {
+          if (course2.title === course && course2.status !== "No Selection") {
+            hasMatchingCourse = true;
+            break;
+          }
+        }
+        if (hasMatchingCourse) break;
+      }
+      if (hasMatchingCourse) {
+        matchedPathways.push(pathway);
+      }
+    }
+    setMarked(matchedPathways);
+    return matchedPathways;
+  };
+
   useEffect(() => {
-    var bmks = localStorage.getItem("bookmarks")
-    if (bmks == null) {
-      localStorage.setItem("bookmarks", "[]");
-    }
-    else {
-      //TODO: investigate how to edit bookmarks
-      setMarked(JSON.parse(bmks));
-    }
-    
+    //Used for initial render. This will cause it so whenever you go back to the My Pathways it will default to the
+    //bookmarked selection.
+    //TODO: Make it so it remembers which selection (Either bookmarked or matched) on my pathways page
+    setMarked(JSON.parse(localStorage.getItem("bookmarks") ?? "[]"));
   }, [])
+
+  useEffect(() => {
+    if (!pathwayData) return;
+    let pathwayTitles = pathwayData.map((pathway: IPathwaySchema) => pathway.title);
+    let bookmarksInYear = JSON.parse(localStorage.getItem("bookmarks") ?? "[]").filter((pathway: IPathwaySchema) => pathwayTitles.includes(pathway.title));
+    bookmarkedState ? setMarked(bookmarksInYear) : setMarked(matchFilter());
+  }, [catalog_year, bookmarkedState, pathwayData]);
 
   return (
     <>
@@ -118,12 +96,16 @@ const MyPathways = () => {
             <ModeRadioButton
               label="Bookmarked"
               checked={bookmarkedState}
-              clickCallback={() => setbookmarkedState(true)}
+              clickCallback={() => {
+                setbookmarkedState(true)
+              }}
             />
             <ModeRadioButton
               label="Matched"
               checked={!bookmarkedState}
-              clickCallback={() => setbookmarkedState(false)}
+              clickCallback={() => {
+                setbookmarkedState(false)
+              }}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -148,15 +130,11 @@ const MyPathways = () => {
           </div>
         </section>
       </header>
-      {pathwayList.length === 0 ? (
-        <NothingToShow bookmarkedState={bookmarkedState} />
-      ) : (
         <section className="py-8 flex flex-wrap gap-x-10 gap-y-4 justify-around md:justify-start">
           {marked.map((pathway, i) => {
             return <PathwayCard {...pathway} key={i} />;
           })}
         </section>
-      )}
     </>
   );
 };
