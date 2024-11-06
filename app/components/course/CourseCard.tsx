@@ -14,6 +14,41 @@ const offeredSemestersChecker = ( term: IOfferedSchema | undefined) => {
   return offeredSemesters;
 };
 
+const offeredSemestersTag = (offeredSemesters: string[]) => {
+  return (
+    <div className="flex">
+      <p className="badge-group text-xs">
+      {offeredSemesters.includes("Fall") ? 
+        <p className="badge badge-primary">
+          Fall
+        </p> : 
+        <p className="badge badge-disabled">
+          Fall
+        </p>
+      }
+      {offeredSemesters.includes("Spring") ?
+        <p className="badge badge-primary">
+          Spring
+        </p> :
+        <p className="badge badge-disabled">
+          Spring
+        </p>
+      }
+      {
+        offeredSemesters.includes("Summer") ?
+          <p className="badge badge-primary">
+            Summer
+          </p> :
+          <p className="badge badge-disabled">
+            Summer
+          </p>
+      }
+      </p>
+    </div>
+  );
+  
+}
+
 const CourseCard = ({
   title,
   courseCode,
@@ -34,7 +69,7 @@ const CourseCard = ({
   return (
     <section className="course-card">
       <header className="course-title">
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-start">
           <div className="flex-1">
             <Link
               href={`/courses/${subject + '-' + courseCode}`}
@@ -51,35 +86,28 @@ const CourseCard = ({
       </header>
       <div className="flex flex-col fold:flex-row justify-between items-start">
         <div className="flex flex-col">
-          <div className="flex gap-x-1 flex-wrap">
+          <div className="flex gap-x-1 flex-wrap items-center">
+            {
+            offeredSemesters.length > 0 && (
+              <div className="">
+                {offeredSemestersTag(offeredSemesters)}
+              </div>
+            )
+            }
             {attributes && attributes.CI && (
               <p className="tag tag-primary">
-                Communication Intensive
+                CI
               </p>
             )}
             {attributes && attributes.HI && (
               <p className="tag tag-primary">
-                Hass Inquiry
+                HI
               </p>
             )}
           </div>
-          <div className="flex flex-wrap">
-            {offeredSemesters.length > 0 && (
-              <div className="mt-2">
-                <h4 className="text-sm font-semibold">Offered:</h4>
-                <ul className="list-disc ml-4">
-                  {offeredSemesters.map((semester) => (
-                    <li key={semester} className="text-sm text-utility-gray-600">
-                      {semester}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap mt-1">
             {prereqs && prereqs.raw_precoreqs && (
-              <div className="mt-2">
+              <div className="mt-1">
                 <h4 className="text-sm font-semibold">Prerequisites:</h4>
                 <ul className="text-sm text-utility-gray-600">
                   {prereqs.raw_precoreqs}
