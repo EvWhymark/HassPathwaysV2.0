@@ -144,8 +144,6 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
 
   // TODO: check if pathway exists, or return something empty
   useEffect(() => {
-    console.log(pathwayData);
-    console.log(pathwayName);
     if (pathwayData == "") return;
     for (let i = 0; i < pathwayData.length; i++) {
       if (pathwayData[i].title === pathwayName) {
