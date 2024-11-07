@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
 
   for (var [pathwayName, data] of Object.entries(pathways)) {
     let description: string = "";
-    let remainingHeader: string = "";
     let schema: Array<ICourseClusterSchema> = [];
     let allCourses: Array<string> = [];
     let department: string = "No Data";
@@ -35,9 +34,6 @@ export async function GET(request: NextRequest) {
     for (let key of Object.keys(pathways[pathwayName])) {
       if (key == "description"){
           description = pathways[pathwayName][key];
-      }
-      else if (key == "remaining_header"){
-          remainingHeader = pathways[pathwayName][key];
       }
       else if (key == "name" || key == "minor"){
           continue;
