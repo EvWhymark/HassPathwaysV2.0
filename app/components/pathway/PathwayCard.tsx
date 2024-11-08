@@ -6,7 +6,7 @@ import { HelpBox } from "./helpBox";
 import { courseState } from "@/public/data/staticData";
 import Link from "next/link";
 
-const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
+const PathwayCard = ({ title, department, coursesIn, description, clusters, compatibleMinor }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
   // TODO: change to bookmark state and update React Context
   // TODO: Compute tooltip
@@ -30,7 +30,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
     if (bookmark)
       current = current.filter(i => i.title != title);
     else if (current.find(x => x.title === title) == undefined) {
-      current.push({ title: title, department: department, coursesIn: coursesIn });
+      current.push({ title: title, department: department, coursesIn: coursesIn, description: description, clusters: clusters, compatibleMinor: compatibleMinor });
     }
     localStorage.setItem("bookmarks", JSON.stringify(current));
     setBookmark(!bookmark);
@@ -130,7 +130,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   }
 
   const enablePathwayPopup = () => {
-    setPathwayPopup({ title: title, department: department, coursesIn: coursesIn});
+    setPathwayPopup({ title: title, department: department, coursesIn: coursesIn, description: description, clusters: clusters, compatibleMinor: compatibleMinor });
     setPopupShown(true);
   }
   

@@ -13,8 +13,11 @@ export interface ICourseSchema {
 
 export interface IPathwaySchema {
   title: string;
+  description: string;
+  compatibleMinor: Array<string>;
   coursesIn: string[];
   department: string;
+  clusters: Array<ICourseClusterSchema>;
 }
 
 export interface IPrereqSchema {
