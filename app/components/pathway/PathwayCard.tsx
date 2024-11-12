@@ -3,6 +3,7 @@ import { Bookmark, BookmarkChecked, HelpIcon, CheckBoxBaseSuccess, CheckBoxBaseI
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { HelpBox } from "./helpBox";
+import PathwayPopup from "@/app/components/pathway/PathwayPopup";
 import { courseState } from "@/public/data/staticData";
 import Link from "next/link";
 
@@ -24,6 +25,12 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
     }
   }
 
+  let pathwayPopup: IPathwaySchema = { title: "", department: "", coursesIn: [], description: "", clusters: [], compatibleMinor: [] };
+  pathwayPopup.title = title;
+  pathwayPopup.department = department;
+  pathwayPopup.coursesIn = coursesIn;
+  pathwayPopup.description = description;
+  pathwayPopup.clusters = clusters;
   
   const toggleBookmark = () => {
     let current: IPathwaySchema[] = JSON.parse(localStorage.getItem("bookmarks"));
@@ -164,9 +171,7 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
         {inProgressItems}
         {plannedItems}
       </div>
-      <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold" onClick={enablePathwayPopup}>
-        Manage Course Selection
-      </button>
+      <PathwayPopup {...pathwayPopup}/>
     </section>
   );
 };

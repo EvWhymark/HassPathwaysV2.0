@@ -6,6 +6,17 @@ import { ICourseSchema, IPathwayDescriptionSchema, IPathwaySchema } from "@/publ
 import path from "path";
 import { isUndefined, set, slice } from "lodash";
 import cluster from "cluster";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 
 const emptyPathway: IPathwaySchema = {
   description: "",
@@ -16,14 +27,20 @@ const emptyPathway: IPathwaySchema = {
   clusters: [],
 };
 
-const PathwayPopup = () => {
-    const { popupShown, setPopupShown, pathwayPopup, courses, catalog_year } = useAppContext(); 
+const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
+    const { courses, catalog_year } = useAppContext();
+    const [currentPathway, setCurrentPathway] = useState(emptyPathway);
+    const [popupShown, setPopupShown] = useState(false);
     let inPathway: ICourseSchema[] = courses.filter((course) => pathwayPopup.coursesIn.includes(course.title));
     let selected: ICourseSchema[] = inPathway.filter((course) => course.status !== "No Selection");
     selected = selected.sort((a, b) => a.status.localeCompare(b.status));
     
     const disablePathwayPopup = () => {
       setPopupShown(false);
+    };
+
+    const enablePathwayPopup = () => {
+      setPopupShown(true);
     };
 
     const goToPathway = () => {
@@ -126,46 +143,39 @@ const PathwayPopup = () => {
     }, [catalog_year, pathwayPopup]);*/
 
     return (
-      <>
-        <div
-          className="fixed inset-0 bg-utility-gray-700 bg-opacity-75 transition-opacity backdrop-blur-sm flex items-center justify-center z-10"
-          aria-hidden="true"
-          onClick={disablePathwayPopup}
-        />
-        <div className="fixed inset-0 flex items-center justify-center z-20">
-          <div className="modal-frame bg-white rounded-xl">
-            <div className="modal-header bg-bg-primary p-8 rounded-t-xl flex flex-col items-start overflow-hidden">
-                <div className="w-full flex-shrink flex justify-end">
-                    <button className="">
-                        <XClose onClick={disablePathwayPopup}/>
-                    </button>
-                </div>
-                <div className="text-xl flex-1 mt-8">
-                  {pathwayPopup.title}
-                </div>
-                <div className="mt-4 flex-auto">
-                    <b className="text-sm text-text-tertiary">Requirements:</b>
-                    {clusterCreate(0)}
-                    {clusterCreate(1)}
-                    {clusterCreate(2)}
-                </div>
+      <Dialog> 
+        <DialogTrigger asChild>
+          <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold"> 
+            Manage Course Selection 
+          </button> 
+        </DialogTrigger>
+        
+        <DialogContent className="fixed left-4 right-4 flex flex-col items-center justify-center bg-bg-primary rounded-xl shadow-xl max-h-[918px] max-w-[771px] h-full m-4 mx-auto">
+          <DialogHeader className="bg-bg-primary p-6 rounded-t-xl flex flex-col items-start bg-opacity-100 w-full">
+            <div className="text-display-xs flex-1 mt-8">
+              {pathwayPopup.title}
             </div>
-            {selected.length != 0 && <div className="modal-body bg-white p-6 bg-bg-primary flex-grow">
-              <div className="flex flex-col flex-grow overflow-y-auto w-full">
-                {selected.map((course) => {
-                      return <CourseCard key={course.subject + "-" + course.courseCode} {...course}/>;
-                    })}
-              </div>
-            </div>}
-            <div className="modal-footer shadow-lg bg-bg-primary rounded-b-xl">
-              <button className="text-sm text-button-tertiary-color-fg hover:text-button-tertiary-fg_hover font-bold" onClick={goToPathway}>
-                View Pathway
-              </button>
+            <div className="mt-4 flex-auto">
+              <b className="text-sm text-text-tertiary">Requirements:</b>
+              {clusterCreate(0)}
+              {clusterCreate(1)}
+              {clusterCreate(2)}
             </div>
-          </div>
-        </div>
-      </>
+          </DialogHeader>
+          {selected.length !== 0 && (
+            <div className="flex flex-col bg-bg-primary p-6 flex-grow overflow-y-scroll w-full">
+              {selected.map((course) => (
+                <CourseCard key={course.subject + "-" + course.courseCode} {...course} />
+              ))}
+            </div>
+          )}
+          <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold" onClick={goToPathway}>
+            View Pathway
+          </button>
+        </DialogContent>
+      </Dialog>
     );
+    
 };
 
 
