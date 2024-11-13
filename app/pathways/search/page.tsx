@@ -36,7 +36,7 @@ const getFilterList = (pathwayCategory, filterMask) => {
 };
 
 const SearchCourse = () => {
-  const { pathwaysCategories, catalog_year, popupShown } = useAppContext();
+  const { pathwaysCategories, catalog_year } = useAppContext();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -145,9 +145,6 @@ const SearchCourse = () => {
           </div>
         </div>
       </header>
-      {
-        popupShown && <PathwayPopup />
-      }
       {isLoading ? (
         <Spinner />
       ) : (

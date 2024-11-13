@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       if (key == "description"){
           description = pathways[pathwayName][key];
       }
-      else if (key == "name" || key == "minor"){
+      else if (key == "name" || key == "minor" || key == "remaining_header"){
           continue;
       }
       else{

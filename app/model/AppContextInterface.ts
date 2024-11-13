@@ -16,8 +16,6 @@ export interface ApplicationContext {
   setCatalog: (catalog_year: string) => void;
   fetchCourses: () => JSON;
   setPathways: (pathwayData: IPathwaySchema) => void;
-  setPopupShown: (popupShown: boolean) => void;
-  setPathwayPopup: (pathwayPopup: IPathwaySchema) => void;
 }
 
 type ApplicationConstant = {

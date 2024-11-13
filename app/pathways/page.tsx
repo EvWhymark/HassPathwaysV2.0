@@ -15,7 +15,7 @@ import PathwayPopup from "../components/pathway/PathwayPopup";
 
 
 const MyPathways = () => {
-  const { pathwaysCategories, pathwayData, courses, catalog_year, popupShown } = useAppContext();
+  const { pathwaysCategories, pathwayData, courses, catalog_year } = useAppContext();
   // Determine the mode of pathway card
   const [bookmarkedState, setbookmarkedState] = useState(true);
   const [marked, setMarked] = useState<IPathwaySchema[]>([]);
@@ -131,14 +131,11 @@ const MyPathways = () => {
           </div>
         </section>
       </header>
-      {
-        popupShown && <PathwayPopup />
-      }
-        <section className="py-8 flex flex-wrap gap-x-10 gap-y-4 justify-around md:justify-start">
-          {marked.map((pathway, i) => {
-            return <PathwayCard {...pathway} key={i} />;
-          })}
-        </section>
+      <section className="py-8 flex flex-wrap gap-x-10 gap-y-4 justify-around md:justify-start">
+        {marked.map((pathway, i) => {
+          return <PathwayCard {...pathway} key={i} />;
+        })}
+      </section>
     </>
   );
 };
