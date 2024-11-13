@@ -140,6 +140,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
   useEffect(() => {
     if (!pathwayData) return;
     setCurrentPathway(pathwayData.find((pathway) => pathway.title === pathwayName) ?? emptyPathway);
+    getBookmarks();
   }, [pathwayData, pathwayName]);
 
   // TODO: check if pathway exists, or return something empty
