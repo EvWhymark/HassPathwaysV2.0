@@ -28,8 +28,6 @@ const defaultInitialState: ApplicationContext = {
   fetchCourses: () => {},
   setPathways: () => {},
   updateCourseState: () => {},
-  setPopupShown: () => {},
-  setPathwayPopup: () => {},
   ...constantApplicationValue,
 };
 
@@ -155,16 +153,8 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     dispatch({type: SET_PATHWAYS, payload: pathwayData})
   };
 
-  const setPopupShown = (newPopup: boolean) => {
-    dispatch({type: SET_POPUP_SHOWN, payload: newPopup});
-  }
-
-  const setPathwayPopup = (pathwayPopup: IPathwaySchema) => {
-    dispatch({type: SET_PATHWAY_POPUP, payload: pathwayPopup});
-  }
-
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses, setPathways, setPopupShown, setPathwayPopup}}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses, setPathways}}>
       {children}
     </AppContext.Provider>
   );

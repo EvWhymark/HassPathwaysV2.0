@@ -25,9 +25,7 @@ const emptyPathway: IPathwaySchema = {
 };
 
 const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
-  const { courses, catalog_year } = useAppContext();
-  const [currentPathway, setCurrentPathway] = useState(emptyPathway);
-  const [popupShown, setPopupShown] = useState(false);
+  const { courses } = useAppContext();
   let inPathway: ICourseSchema[] = courses.filter((course) =>
     pathwayPopup.coursesIn.includes(course.title)
   );
@@ -36,16 +34,7 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
   );
   selected = selected.sort((a, b) => a.status.localeCompare(b.status));
 
-  const disablePathwayPopup = () => {
-    setPopupShown(false);
-  };
-
-  const enablePathwayPopup = () => {
-    setPopupShown(true);
-  };
-
   const goToPathway = () => {
-    disablePathwayPopup();
     window.location.replace(
       "/pathways/" + pathwayPopup.title.replace("/", "+")
     );
@@ -164,12 +153,6 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
     return clusterList;
   };
 
-  /*
-    useEffect(() => {
-      if (!pathwayData) return;
-      setCurrentPathway(pathwayData.find((pathway) => pathway.title === pathwayName) ?? emptyPathway);
-    }, [catalog_year, pathwayPopup]);*/
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -177,7 +160,6 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
           Manage Course Selection
         </button>
       </DialogTrigger>
-
       <DialogContent className="flex flex-col items-center justify-start bg-bg-primary rounded-xl shadow-xl max-h-[918px] max-w-[771px] h-[calc(100%-40px)] mx-auto xl:mx-0">
         <DialogHeader className="bg-bg-primary p-6 rounded-t-xl flex flex-col items-start bg-opacity-100 w-full">
           <div className="text-display-xs flex-1 mt-8">

@@ -33,16 +33,6 @@ export const appReducer: (
         ...state,
         pathwayData: action.payload
       }
-    case SET_POPUP_SHOWN:
-      return {
-        ...state,
-        popupShown: action.payload
-      }
-    case SET_PATHWAY_POPUP:
-      return {
-        ...state,
-        pathwayPopup: action.payload
-      }
     default:
       return state;
   }
