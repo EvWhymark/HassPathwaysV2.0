@@ -204,7 +204,7 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
           className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold"
           onClick={goToPathway}
         >
-          View Pathway
+          View All Courses
         </button>
       </DialogContent>
     </Dialog>
