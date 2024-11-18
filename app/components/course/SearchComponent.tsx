@@ -203,7 +203,7 @@ const DesktopFilter = ({ filterState, filterDispatch }: FilterProps) => {
               const selected = filterState[section.apiName].includes(choice.value);
               const actionType = selected ? FilterAction.REM : FilterAction.ADD;
               return (
-                <div className="px-2 py-2 flex-grow basis-1/3" key={choice.value}>
+                <div className="px-2 py-2 flex-grow basis-0" key={choice.value}>
                   <div
                     className="cursor-pointer flex gap-2 items-start"
                     onClick={() => {
