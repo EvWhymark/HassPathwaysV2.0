@@ -82,6 +82,10 @@ export async function GET(request: NextRequest) {
         break;
       }
     }
+    let clusterOrder = ["Required", "One Of", "Remaining"];
+    schema.sort((a, b) => {
+      return clusterOrder.indexOf(a.name) - clusterOrder.indexOf(b.name);
+    });
     resultPathway = {
       description: description,
       title: pathwayName,
