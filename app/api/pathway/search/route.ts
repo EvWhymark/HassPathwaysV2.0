@@ -82,6 +82,13 @@ export async function GET(request: NextRequest) {
         break;
       }
     }
+    let totalCourses = 0;
+    for (let cluster of schema){
+      totalCourses += cluster.numCourses;
+      if (cluster.name == "Remaining"){
+        cluster.numCourses = allCourses.length - totalCourses
+      }
+    }   
     resultPathway = {
       description: description,
       title: pathwayName,

@@ -14,6 +14,8 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { isUndefined } from "lodash";
+import { on } from "events";
 
 const emptyPathway: IPathwaySchema = {
   description: "",
@@ -33,6 +35,7 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
     (course) => course.status !== "No Selection"
   );
   selected = selected.sort((a, b) => a.status.localeCompare(b.status));
+  
 
   const goToPathway = () => {
     window.location.replace(
@@ -44,6 +47,11 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
     const clusters = pathwayPopup?.clusters;
     if (!clusters || clusters.length == 0 || !clusters[index]) return null;
     let cluster = clusters[index];
+    if (cluster.name == "Required") {
+      let requiredCourses = inPathway.filter((course) => course.title == cluster.courses[0] && course.status == "No Selection")
+      selected.push(...requiredCourses);
+    }
+    console.log(selected);
     let clusterCourses = inPathway.filter((course) =>
       cluster.courses.includes(course.title)
     );
@@ -63,44 +71,26 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
     if (selectedInCluster.length == 0) {
       icon = <CheckBoxBaseEmpty />;
     }
-    if (selectedInCluster.length >= cluster.numCourses) {
+    let emptyTarget = cluster.numCourses;
+    let completedTarget = cluster.numCourses * 3;
+    let points = 0;
+    for (let i = 0; i < selectedInCluster.length; i++) {
+      if (selectedInCluster[i].status == "In Progress") {
+        points += 2;
+      } else if (selectedInCluster[i].status == "Completed") {
+        points += 3;
+      } else {
+        points += 1;
+      }
+    }
+    if (points == completedTarget) {
       icon = <CheckBoxBaseSuccess />;
-      let one_success = false;
-      for (let i = 0; i < cluster.numCourses; i++) {
-        if (selectedInCluster[i].status == "In Progress") {
-          icon = <CheckBoxBaseInProgress />;
-          break;
-        }
-        if (selectedInCluster[i].status == "Planned" && !one_success) {
-          icon = <CheckBoxBasePlanned />;
-        }
-        if (selectedInCluster[i].status == "Planned" && one_success) {
-          icon = <CheckBoxBaseInProgress />;
-        }
-        if (selectedInCluster[i].status == "Completed") {
-          one_success = true;
-        }
-      }
-    }
-    if (selectedInCluster.length < cluster.numCourses) {
+    } else if (points > emptyTarget) {
       icon = <CheckBoxBaseInProgress />;
-      let one_success = false;
-      for (let i = 0; i < selectedInCluster.length; i++) {
-        if (selectedInCluster[i].status == "In Progress") {
-          icon = <CheckBoxBaseInProgress />;
-          break;
-        }
-        if (selectedInCluster[i].status == "Planned" && !one_success) {
-          icon = <CheckBoxBasePlanned />;
-        }
-        if (selectedInCluster[i].status == "Planned" && one_success) {
-          icon = <CheckBoxBaseInProgress />;
-        }
-        if (selectedInCluster[i].status == "Completed") {
-          one_success = true;
-        }
-      }
+    } else {
+      icon = <CheckBoxBasePlanned />;
     }
+
     if (selectedInCluster.length == 0) {
       icon = <CheckBoxBaseEmpty />;
       clusterPrint =
