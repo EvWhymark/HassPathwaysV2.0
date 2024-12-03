@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Bookmark, BookmarkChecked, HelpIcon, CheckBoxBaseSuccess, CheckBoxBaseInProgress, CheckBoxBasePlanned } from "../utils/Icon";
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
@@ -6,6 +6,7 @@ import { HelpBox } from "./helpBox";
 import PathwayPopup from "@/app/components/pathway/PathwayPopup";
 import { courseState } from "@/public/data/staticData";
 import Link from "next/link";
+import { MousePointer } from "lucide-react";
 
 const PathwayCard = ({ title, department, coursesIn, description, clusters, compatibleMinor }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
@@ -140,9 +141,13 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
     setPathwayPopup({ title: title, department: department, coursesIn: coursesIn, description: description, clusters: clusters, compatibleMinor: compatibleMinor });
     setPopupShown(true);
   }
+
+  const redirectPathway = () => {
+    window.location.href = '/pathways/'+title.replace("/", "+");
+  }
   
   return (
-    <section className="pathway-card">
+    <section className="pathway-card w-full">
       <header className="flex justify-between w-full items-start flex-shrink">
         <div className="w-[367px] mb-2">
           <div className="flex flex-col md:flex-row gap-2 items-start py-1">
