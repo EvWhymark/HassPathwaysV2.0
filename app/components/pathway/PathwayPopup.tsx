@@ -94,11 +94,11 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
       <span key={course.subject + "-" + course.courseCode}>
         {course.status === "No Selection" ? (
           <span className="text-sm mr-1">
-            {course.subject}-{course.courseCode}
+            {course.subject}-{course.courseCode},
           </span>
         ) : (
           <span className="text-sm font-bold mr-1">
-            {course.subject}-{course.courseCode}
+            {course.subject}-{course.courseCode},
           </span>
         )}
       </span>
