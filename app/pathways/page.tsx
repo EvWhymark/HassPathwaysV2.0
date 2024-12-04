@@ -17,7 +17,7 @@ import PathwayPopup from "../components/pathway/PathwayPopup";
 const MyPathways = () => {
   const { pathwaysCategories, pathwayData, courses, catalog_year } = useAppContext();
   // Determine the mode of pathway card
-  const [bookmarkedState, setbookmarkedState] = useState(true);
+  const [bookmarkedState, setbookmarkedState] = useState(false);
   const [marked, setMarked] = useState<IPathwaySchema[]>([]);
 
   const MAX_FILTER = (1 << pathwaysCategories.length) - 1;
@@ -95,17 +95,17 @@ const MyPathways = () => {
         <section className="flex flex-col lg:flex-row gap-4">
           <div className="flex button-group">
             <ModeRadioButton
-              label="Bookmarked"
-              checked={bookmarkedState}
-              clickCallback={() => {
-                setbookmarkedState(true)
-              }}
-            />
-            <ModeRadioButton
               label="Matched"
               checked={!bookmarkedState}
               clickCallback={() => {
                 setbookmarkedState(false)
+              }}
+            />
+            <ModeRadioButton
+              label="Bookmarked"
+              checked={bookmarkedState}
+              clickCallback={() => {
+                setbookmarkedState(true)
               }}
             />
           </div>
