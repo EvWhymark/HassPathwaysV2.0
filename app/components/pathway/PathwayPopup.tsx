@@ -14,6 +14,8 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { isUndefined } from "lodash";
+import { on } from "events";
 
 const emptyPathway: IPathwaySchema = {
   description: "",
@@ -33,6 +35,7 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
     (course) => course.status !== "No Selection"
   );
   selected = selected.sort((a, b) => a.status.localeCompare(b.status));
+  
 
   const goToPathway = () => {
     window.location.replace(
@@ -44,104 +47,71 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
     const clusters = pathwayPopup?.clusters;
     if (!clusters || clusters.length == 0 || !clusters[index]) return null;
     let cluster = clusters[index];
+    if (cluster.name == "Required") {
+      let requiredCourses = inPathway.filter(
+        (course) =>
+          cluster.courses.includes(course.title) && course.status == "No Selection"
+      );
+      selected.push(...requiredCourses);
+    }
+    
     let clusterCourses = inPathway.filter((course) =>
       cluster.courses.includes(course.title)
     );
-
-    let clusterItems = clusterCourses.map(
-      (course) => `${course.subject}-${course.courseCode}`
-    );
-    let clusterPrint = clusterItems.join(", ");
-    if (clusterItems.length > 5) {
-      clusterItems = clusterItems.slice(0, 5);
-      clusterPrint = clusterItems.join(", ") + ", ...";
-    }
     let icon = <CheckBoxBaseEmpty />;
     let selectedInCluster = selected.filter((course) =>
       cluster.courses.includes(course.title)
     );
-    if (selectedInCluster.length == 0) {
-      icon = <CheckBoxBaseEmpty />;
+    let emptyTarget = cluster.numCourses;
+    let completedTarget = cluster.numCourses * 3;
+    let points = 0;
+    for (let i = 0; i < selectedInCluster.length; i++) {
+      if (selectedInCluster[i].status == "Completed") {
+        points += 3;
+      } else if (selectedInCluster[i].status == "In Progress") {
+        points += 2;
+      } else {
+        points += 1;
+      }
     }
-    if (selectedInCluster.length >= cluster.numCourses) {
+    points += (cluster.numCourses - selectedInCluster.length);
+    if (points >= completedTarget) {
       icon = <CheckBoxBaseSuccess />;
-      let one_success = false;
-      for (let i = 0; i < cluster.numCourses; i++) {
-        if (selectedInCluster[i].status == "In Progress") {
-          icon = <CheckBoxBaseInProgress />;
-          break;
-        }
-        if (selectedInCluster[i].status == "Planned" && !one_success) {
-          icon = <CheckBoxBasePlanned />;
-        }
-        if (selectedInCluster[i].status == "Planned" && one_success) {
-          icon = <CheckBoxBaseInProgress />;
-        }
-        if (selectedInCluster[i].status == "Completed") {
-          one_success = true;
-        }
-      }
-    }
-    if (selectedInCluster.length < cluster.numCourses) {
+    } else if (points > emptyTarget) {
       icon = <CheckBoxBaseInProgress />;
-      let one_success = false;
-      for (let i = 0; i < selectedInCluster.length; i++) {
-        if (selectedInCluster[i].status == "In Progress") {
-          icon = <CheckBoxBaseInProgress />;
-          break;
-        }
-        if (selectedInCluster[i].status == "Planned" && !one_success) {
-          icon = <CheckBoxBasePlanned />;
-        }
-        if (selectedInCluster[i].status == "Planned" && one_success) {
-          icon = <CheckBoxBaseInProgress />;
-        }
-        if (selectedInCluster[i].status == "Completed") {
-          one_success = true;
-        }
-      }
-    }
-    if (selectedInCluster.length == 0) {
-      icon = <CheckBoxBaseEmpty />;
-      clusterPrint =
-        4 * cluster.numCourses +
-        " Credits in " +
-        clusterItems.join(", ") +
-        ", ...";
     } else {
-      let selectedCaveat = "";
-      if (selectedInCluster.length > cluster.numCourses) {
-        selectedCaveat = ", ...";
-      }
-      let slicedInCluster = selectedInCluster.slice(0, cluster.numCourses);
-      clusterPrint =
-        slicedInCluster
-          .map(
-            (course) =>
-              `${course.subject}-${course.courseCode}: ${course.title}`
-          )
-          .join(", ") + selectedCaveat;
-      if (selectedInCluster.length < cluster.numCourses) {
-        let shortClusterCourses = clusterCourses.filter(
-          (course) => !selectedInCluster.includes(course)
-        );
-        selectedCaveat = "";
-        if (shortClusterCourses.length > 3) {
-          shortClusterCourses = shortClusterCourses.slice(0, 3);
-          selectedCaveat = ", ...";
-        }
-        clusterPrint +=
-          ", " +
-          4 * (cluster.numCourses - selectedInCluster.length) +
-          " Credits in " +
-          shortClusterCourses
-            .map((course) => `${course.subject}-${course.courseCode}`)
-            .join(", ") +
-          selectedCaveat;
-      }
+      icon = <CheckBoxBasePlanned />;
+    }
+    
+    let tooMany = "";
+    clusterCourses.sort((a, b) => selectedInCluster.includes(a) ? -1 : 1);
+    if (clusterCourses.length > 4){
+      tooMany = " (+" + (clusterCourses.length - 4) + " more)";
+      clusterCourses = clusterCourses.slice(0, 4);
     }
 
-    let clusterList = (
+    const clusterPrintIDS = clusterCourses.map((course) => (
+      <span key={course.subject + "-" + course.courseCode}>
+        {course.status === "No Selection" ? (
+          <span className="text-sm mr-1">
+            {course.subject}-{course.courseCode},
+          </span>
+        ) : (
+          <span className="text-sm font-bold mr-1">
+            {course.subject}-{course.courseCode},
+          </span>
+        )}
+      </span>
+    ));
+    
+    const clusterPrint = (
+      <div className="flex flex-wrap">
+        <span className="mr-1">{cluster.name}: {cluster.numCourses === 1 ? `(${cluster.numCourses} Course Needed)` : `(${cluster.numCourses} Courses Needed)`}</span>
+        {clusterPrintIDS}{tooMany}
+      </div>
+    );
+    
+    const clusterList = (
       <div className="mt-1">
         <p className="text-sm flex items-center">
           <span className="mr-2">{icon}</span>
@@ -166,7 +136,9 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
             {pathwayPopup.title}
           </div>
           <div className="mt-4 flex-auto">
-            <b className="text-sm text-text-tertiary">Requirements:</b>
+            {pathwayPopup.clusters.length != 0 && <b className="text-sm text-text-tertiary">Requirements:</b>}
+            {pathwayPopup.clusters.length == 0 && <b className="text-sm text-text-tertiary">Description: </b>}
+            {pathwayPopup.clusters.length == 0 && <span className="mt-1 text-sm">{pathwayPopup.description}</span>}
             {clusterCreate(0)}
             {clusterCreate(1)}
             {clusterCreate(2)}

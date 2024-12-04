@@ -178,10 +178,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
             {pathwayName}
           </h1>
           <button className="border-2 border-black rounded-full hover:bg-utility-gray-300 bg-utility-gray-200 flex items-center p-4" onClick={toggleBookmark}>
-            <h1 className="font-semibold">
-              {bookmark ? "Remove from My Pathways" : "Add to My Pathways"}
-            </h1>
-            <div onClick={toggleBookmark} className="pl-2">
+            <div onClick={toggleBookmark}>
               {bookmark ? <BookmarkChecked /> : <Bookmark />}
             </div>
           </button>
