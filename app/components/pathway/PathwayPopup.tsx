@@ -5,7 +5,7 @@ import {
   CheckBoxBasePlanned,
   CheckBoxBaseEmpty,
 } from "@/app/components/utils/Icon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CourseCard from "@/app/components/course/CourseCard";
 import { ICourseSchema, IPathwaySchema } from "@/public/data/dataInterface";
 import {
@@ -24,8 +24,16 @@ const emptyPathway: IPathwaySchema = {
   clusters: [],
 };
 
-const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
+interface IPathwayPopupProps {
+  pathwayPopup: IPathwaySchema;
+  isOpen: boolean;
+}
+
+const PathwayPopup = ({ pathwayPopup, open, onOpen}) => {
   const { courses } = useAppContext();
+  if (!pathwayPopup) {
+    pathwayPopup = emptyPathway;
+  }
   let inPathway: ICourseSchema[] = courses.filter((course) =>
     pathwayPopup.coursesIn.includes(course.title)
   );
@@ -154,12 +162,7 @@ const PathwayPopup = (pathwayPopup: IPathwaySchema) => {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold">
-          Manage Course Selection
-        </button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpen}>
       <DialogContent className="flex flex-col items-center justify-start bg-bg-primary rounded-xl shadow-xl max-h-[918px] max-w-[771px] h-[calc(100%-40px)] mx-auto xl:mx-0">
         <DialogHeader className="bg-bg-primary p-6 rounded-t-xl flex flex-col items-start bg-opacity-100 w-full">
           <div className="text-display-xs flex-1 mt-8">
