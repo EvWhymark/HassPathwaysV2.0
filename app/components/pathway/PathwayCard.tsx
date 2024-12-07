@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Bookmark, BookmarkChecked, HelpIcon, CheckBoxBaseSuccess, CheckBoxBaseInProgress, CheckBoxBasePlanned } from "../utils/Icon";
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
@@ -6,6 +6,12 @@ import { HelpBox } from "./helpBox";
 import PathwayPopup from "@/app/components/pathway/PathwayPopup";
 import { courseState } from "@/public/data/staticData";
 import Link from "next/link";
+import { MousePointer } from "lucide-react";
+
+interface IPathwayCardProps {
+  pathwayPopup: IPathwaySchema;
+  isOpen: boolean;
+}
 
 const PathwayCard = ({ title, department, coursesIn, description, clusters, compatibleMinor }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
@@ -14,7 +20,8 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
   
   const [bookmark, setBookmark] = useState(false);
   const [isShown, setIsShown] = useState(false);
-  const { courses, popupShown, setPopupShown, setPathwayPopup} = useAppContext();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const { courses } = useAppContext();
   const getBookmarks = () => {
     var bmks = localStorage.getItem("bookmarks")
     if (bmks == null) {
@@ -31,6 +38,7 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
   pathwayPopup.coursesIn = coursesIn;
   pathwayPopup.description = description;
   pathwayPopup.clusters = clusters;
+  let popupProp: IPathwayCardProps = { pathwayPopup: pathwayPopup, isOpen: popupOpen };
   
   const toggleBookmark = () => {
     let current: IPathwaySchema[] = JSON.parse(localStorage.getItem("bookmarks"));
@@ -134,19 +142,18 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
           {white}
         </div>
     );
-  }
+  };
 
-  const enablePathwayPopup = () => {
-    setPathwayPopup({ title: title, department: department, coursesIn: coursesIn, description: description, clusters: clusters, compatibleMinor: compatibleMinor });
-    setPopupShown(true);
+  const onCardClick = () => {
+    setPopupOpen(true);
   }
-  
   return (
-    <section className="pathway-card">
+    <section className="pathway-card relative">
+      <button className = "w-full h-full absolute top-0 left-0 z-10" onClick={onCardClick}/>
       <header className="flex justify-between w-full items-start flex-shrink">
         <div className="w-[367px] mb-2">
           <div className="flex flex-col md:flex-row gap-2 items-start py-1">
-            <Link className="pathway-title flex-1" href={'/pathways/'+title.replace("/", "+")}>{title}</Link>
+            <Link className="pathway-title flex-1 z-30" href={'/pathways/'+title.replace("/", "+")}>{title}</Link>
             <p className="tag">{department}</p>
           </div>
           <div className="progress-bar">
@@ -162,7 +169,7 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
             }
           </div>
         </div>
-        <div onClick={toggleBookmark} className="p-2">
+        <div onClick={toggleBookmark} className="p-2 z-20">
           {bookmark ? <BookmarkChecked /> : <Bookmark />}
         </div>
       </header>
@@ -171,7 +178,10 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
         {inProgressItems}
         {plannedItems}
       </div>
-      <PathwayPopup {...pathwayPopup}/>
+      <PathwayPopup pathwayPopup={pathwayPopup} open={popupOpen} onOpen={setPopupOpen}/>
+      <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold">
+        Manage Course Selection
+      </button>
     </section>
   );
 };
