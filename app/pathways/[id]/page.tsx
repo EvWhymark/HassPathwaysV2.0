@@ -14,6 +14,7 @@ import { set } from "lodash";
 import { Bookmark, BookmarkChecked } from "@/app/components/utils/Icon";
 import path from "path";
 import { pathwayDepartment } from "@/public/data/staticData";
+import ClusterComponent from "@/app/components/pathway/ClusterComponent";
 
 const pathwayTempData: IPathwayDescriptionSchema = {
   description: `This course embraces the science of psychology. The aim is for
@@ -203,9 +204,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
           </ul>
         </section>
       }
-      <section className="description-section">
-        <CourseSection clusters={currentPathway.clusters} />
-      </section>
+      {currentPathway.clusters.length != 0 && <ClusterComponent clusters={currentPathway.clusters} />}
     </>
   );
 };
