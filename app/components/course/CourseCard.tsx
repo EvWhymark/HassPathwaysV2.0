@@ -3,51 +3,8 @@ import { useAppContext } from "../../contexts/appContext/AppProvider";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
 import { ICourseSchema, IOfferedSchema } from "@/public/data/dataInterface";
-
-const offeredSemestersChecker = ( term: IOfferedSchema | undefined) => {
-  if (!term) return [];
-  const offeredSemesters = [];
-  if (term.years[term.years.length - 1].fall) offeredSemesters.push("Fall");
-  if (term.years[term.years.length - 1].spring) offeredSemesters.push("Spring");
-  if (term.years[term.years.length - 1].summer) offeredSemesters.push("Summer");
-  if (term.uia) offeredSemesters.push("Upon Instructor Availability");
-  return offeredSemesters;
-};
-
-const offeredSemestersTag = (offeredSemesters: string[]) => {
-  return (
-    <div className="flex">
-      <div className="badge-group text-xs">
-      {offeredSemesters.includes("Fall") ? 
-        <p className="badge badge-primary">
-          Fall
-        </p> : 
-        <p className="badge badge-disabled">
-          Fall
-        </p>
-      }
-      {offeredSemesters.includes("Spring") ?
-        <p className="badge badge-primary">
-          Spring
-        </p> :
-        <p className="badge badge-disabled">
-          Spring
-        </p>
-      }
-      {
-        offeredSemesters.includes("Summer") ?
-          <p className="badge badge-primary">
-            Summer
-          </p> :
-          <p className="badge badge-disabled">
-            Summer
-          </p>
-      }
-      </div>
-    </div>
-  );
-  
-}
+import CoursePopup from "./CoursePopup";
+import OfferedSemestersTag from "./OfferedSemestersTag";
 
 const CourseCard = ({
   title,
@@ -58,14 +15,15 @@ const CourseCard = ({
     HI: false,
     major_restricted: false
   },
+  description = "",
   term = undefined,
   prereqs = undefined,
   status = "No Selection"
 }: ICourseSchema) => {
   const [state, setState] = useState(status);
+  const courseFull = { title, courseCode, subject, attributes, description, term, prereqs, status };
   const {courses, updateCourseState} = useAppContext();
   status = courses.find(course => course.title === title)?.status || "No Selection";
-  const offeredSemesters = offeredSemestersChecker(term);
   return (
     <section className="course-card">
       <header className="course-title">
@@ -88,9 +46,9 @@ const CourseCard = ({
         <div className="flex flex-col">
           <div className="flex gap-x-1 flex-wrap items-center">
             {
-            offeredSemesters.length > 0 && (
+            term?.years.length && term.years.length > 0 && (
               <div className="">
-                {offeredSemestersTag(offeredSemesters)}
+                {OfferedSemestersTag(term)}
               </div>
             )
             }
@@ -115,6 +73,7 @@ const CourseCard = ({
               </div>
             )}
           </div>
+          <CoursePopup course={courseFull} />
         </div>
       </div>
     </section>
