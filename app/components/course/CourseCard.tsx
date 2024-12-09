@@ -5,6 +5,7 @@ import CourseCardDropDown from "./CourseDropDownButton";
 import { ICourseSchema, IOfferedSchema } from "@/public/data/dataInterface";
 import CoursePopup from "./CoursePopup";
 import OfferedSemestersTag from "./OfferedSemestersTag";
+import AttributeTag from "./AttributeTag";
 
 const CourseCard = ({
   title,
@@ -23,21 +24,25 @@ const CourseCard = ({
   const [state, setState] = useState(status);
   const courseFull = { title, courseCode, subject, attributes, description, term, prereqs, status };
   const {courses, updateCourseState} = useAppContext();
+  const [popupShown, setPopupShown] = useState(false);
   status = courses.find(course => course.title === title)?.status || "No Selection";
+
+  const popupOpen = () => {
+    setPopupShown(true);
+  };
+
   return (
-    <section className="course-card">
+    <section className="course-card relative">
+      <div className="w-full h-full absolute hover:cursor-pointer z-0" onClick={popupOpen}></div>
       <header className="course-title">
         <div className="flex flex-row items-start">
           <div className="flex-1">
-            <Link
-              href={`/courses/${subject + '-' + courseCode}`}
-              className="text-md font-semibold break-normal"
-            >
+            <div className="text-md font-semibold break-normal">
               {title}
-            </Link>
+            </div>
             <p className="text-sm text-utility-gray-600">{subject + '-' + courseCode}</p>
           </div>
-          <div>
+          <div className="z-10">
             <CourseCardDropDown title={title} courseCode={courseCode} status={status} />
           </div>
         </div>
@@ -52,16 +57,9 @@ const CourseCard = ({
               </div>
             )
             }
-            {attributes && attributes.CI && (
-              <p className="tag tag-primary">
-                CI
-              </p>
-            )}
-            {attributes && attributes.HI && (
-              <p className="tag tag-primary">
-                HI
-              </p>
-            )}
+            <div className="flex gap-1">
+              {AttributeTag(attributes)}
+            </div>
           </div>
           <div className="flex flex-wrap mt-1">
             {prereqs && prereqs.raw_precoreqs && (
@@ -73,7 +71,7 @@ const CourseCard = ({
               </div>
             )}
           </div>
-          <CoursePopup course={courseFull} />
+          <CoursePopup course={courseFull} open={popupShown} onOpen={setPopupShown}/>
         </div>
       </div>
     </section>
