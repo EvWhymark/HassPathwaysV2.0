@@ -1,6 +1,6 @@
 [
   {
-    "question": "Is HASS pathway a requirement?",
+    "question": "Am I required to complete a HASS pathway?",
     "answer": "Yes. All undergraduate students must have an area of focus in their HASS studies that is accomplished by completing an approved 12-credit depth concentration, known as an Integrative Pathway.  This is an element of the HASS Core.",
     "icon": "Certificate"
   },
@@ -10,17 +10,17 @@
     "icon": "SwitchHorizontal"
   },
   {
-    "question": "Is IHSS course a requirement?",
-    "answer": "No, but a HASS Inquiry course must be completed within your first two semesters, it could be an IHSS course.",
+    "question": "Are INQR courses required?",
+    "answer": "No, but a HASS Inquiry course must be completed within your first two semesters, which may be an INQR course.",
     "icon": "BookOpen"
   },
   {
-    "question": "Is 4000-level course a requirement?",
-    "answer": "No, a 4000-level is your HASS core requirement not your HASS pathway requirement.",
+    "question": "Is a 4000-level course required to complete my pathway?",
+    "answer": "No, a 4000-level is your HASS core requirement, not your HASS pathway requirement.",
     "icon": "GraduationHat"
   },
   {
-    "question": "Is CI course a requirement?",
+    "question": "Am I required to take a Communication Intensive HASS course?",
     "answer": "No, a HASS Communication Intensive course doesn't have to be in your HASS pathway.",
     "icon": "Announcement"
   },
@@ -30,12 +30,12 @@
     "icon": "Plus"
   },
   {
-    "question": "Can my pathway count toward minor?",
+    "question": "Can my pathway count towards a minor?",
     "answer": "Yes, if courses are chosen wisely, many Integrative Pathways can be transformed into minors with just one additional course.",
     "icon": "Share"
   },
   {
-    "question": "Can I use the pathway from other years?",
+    "question": "Can I use a pathway from another year?",
     "answer": "No, you can only use a pathway that is included in your Cohort's Catalog Year.",
     "icon": "User"
   },
@@ -45,7 +45,7 @@
     "icon": "Archive"
   },
   {
-    "question": "By when do I have to declare a pathway?",
+    "question": "When do I have to declare a pathway?",
     "answer": "There isn't a deadline for declaring a pathway, but the pathway requirement must be completed before graduation. ",
     "icon": "ClockFastForward"
   },
@@ -53,5 +53,15 @@
     "question": "How do I declare a pathway?",
     "answer": "You should login to your SIS. Under the 'Student Menu' - 'Curriculum Information', click on 'Select a Pathway Concentration' and select your pathway in the drop-down menu.",
     "icon": "Star"
+  },
+  {
+    "question": "How should I choose what pathway to take?",
+    "answer": "Start by selecting courses you are interested in or have taken in the Search Courses tab, and then go to My Pathways to see which pathways are compatible with the courses you have selected. You may then check their individual pages to see which remaining courses must be completed.",
+    "icon": "Plus"
+  },
+  {
+    "question": "What do the different pathway section names mean?",
+    "answer": "The different pathway clusters have been organized by the developers of this website into 3 categories: One Of: You must choose one course from this cluster. Required: You must take all courses in this cluster. Remaining: You must take enough courses from this cluster to reach 12 credits total, including the credits taken from the other clusters. All of the listed clusters must be completed to complete the pathway.",
+    "icon": "BookOpen"
   }
 ]
