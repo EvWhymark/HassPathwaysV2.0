@@ -177,9 +177,12 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
           <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold flex-1">
             {pathwayName}
           </h1>
-          <button className="border-2 border-black rounded-full hover:bg-utility-gray-300 bg-utility-gray-200 flex items-center p-4" onClick={toggleBookmark}>
+          <button className="flex p-4 gap-2 items-center" onClick={toggleBookmark}>
             <div onClick={toggleBookmark}>
               {bookmark ? <BookmarkChecked /> : <Bookmark />}
+            </div>
+            <div className="text-xl font-semibol text-utility-gray-900">
+              {bookmark ? "Bookmarked" : "Bookmark"}
             </div>
           </button>
         </div>
