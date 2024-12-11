@@ -173,15 +173,15 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
             },
           ]}
         />
-        <div className="flex items-center">
-          <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold flex-1">
+        <div className="flex items-center mt-5 gap-4">
+          <h1 className="text-display-xs md:text-display-sm font-semibold">
             {pathwayName}
           </h1>
-          <button className="flex p-4 gap-2 items-center" onClick={toggleBookmark}>
+          <button className="flex p-4 gap-2 items-center text-button-tertiary-fg hover:bg-primary_hover hover:text-button-tertiary-fg_hover" onClick={toggleBookmark}>
             <div onClick={toggleBookmark}>
               {bookmark ? <BookmarkChecked /> : <Bookmark />}
             </div>
-            <div className="text-xl font-semibol text-utility-gray-900">
+            <div className="text-xl font-semibold">
               {bookmark ? "Bookmarked" : "Bookmark"}
             </div>
           </button>
