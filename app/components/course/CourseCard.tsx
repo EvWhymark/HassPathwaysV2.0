@@ -33,7 +33,7 @@ const CourseCard = ({
 
   return (
     <section className="course-card relative">
-      <div className="w-full h-full absolute hover:cursor-pointer z-0" onClick={popupOpen}></div>
+      <div className="w-full h-full absolute top-0 right-0 left-0 bottom-0 hover:cursor-pointer z-0" onClick={popupOpen}></div>
       <header className="course-title">
         <div className="flex flex-row items-start">
           <div className="flex-1">
