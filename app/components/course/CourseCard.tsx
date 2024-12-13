@@ -3,51 +3,9 @@ import { useAppContext } from "../../contexts/appContext/AppProvider";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
 import { ICourseSchema, IOfferedSchema } from "@/public/data/dataInterface";
-
-const offeredSemestersChecker = ( term: IOfferedSchema | undefined) => {
-  if (!term) return [];
-  const offeredSemesters = [];
-  if (term.years[term.years.length - 1].fall) offeredSemesters.push("Fall");
-  if (term.years[term.years.length - 1].spring) offeredSemesters.push("Spring");
-  if (term.years[term.years.length - 1].summer) offeredSemesters.push("Summer");
-  if (term.uia) offeredSemesters.push("Upon Instructor Availability");
-  return offeredSemesters;
-};
-
-const offeredSemestersTag = (offeredSemesters: string[]) => {
-  return (
-    <div className="flex">
-      <div className="badge-group text-xs">
-      {offeredSemesters.includes("Fall") ? 
-        <p className="badge badge-primary">
-          Fall
-        </p> : 
-        <p className="badge badge-disabled">
-          Fall
-        </p>
-      }
-      {offeredSemesters.includes("Spring") ?
-        <p className="badge badge-primary">
-          Spring
-        </p> :
-        <p className="badge badge-disabled">
-          Spring
-        </p>
-      }
-      {
-        offeredSemesters.includes("Summer") ?
-          <p className="badge badge-primary">
-            Summer
-          </p> :
-          <p className="badge badge-disabled">
-            Summer
-          </p>
-      }
-      </div>
-    </div>
-  );
-  
-}
+import CoursePopup from "./CoursePopup";
+import OfferedSemestersTag from "./OfferedSemestersTag";
+import AttributeTag from "./AttributeTag";
 
 const CourseCard = ({
   title,
@@ -58,28 +16,33 @@ const CourseCard = ({
     HI: false,
     major_restricted: false
   },
+  description = "",
   term = undefined,
   prereqs = undefined,
   status = "No Selection"
 }: ICourseSchema) => {
   const [state, setState] = useState(status);
+  const courseFull = { title, courseCode, subject, attributes, description, term, prereqs, status };
   const {courses, updateCourseState} = useAppContext();
+  const [popupShown, setPopupShown] = useState(false);
   status = courses.find(course => course.title === title)?.status || "No Selection";
-  const offeredSemesters = offeredSemestersChecker(term);
+
+  const popupOpen = () => {
+    setPopupShown(true);
+  };
+
   return (
-    <section className="course-card">
+    <section className="course-card relative">
+      <div className="w-full h-full absolute top-0 right-0 left-0 bottom-0 hover:cursor-pointer z-0" onClick={popupOpen}></div>
       <header className="course-title">
         <div className="flex flex-row items-start">
           <div className="flex-1">
-            <Link
-              href={`/courses/${subject + '-' + courseCode}`}
-              className="text-md font-semibold break-normal"
-            >
+            <div className="text-md font-semibold break-normal">
               {title}
-            </Link>
+            </div>
             <p className="text-sm text-utility-gray-600">{subject + '-' + courseCode}</p>
           </div>
-          <div>
+          <div className="z-10">
             <CourseCardDropDown title={title} courseCode={courseCode} status={status} />
           </div>
         </div>
@@ -88,22 +51,15 @@ const CourseCard = ({
         <div className="flex flex-col">
           <div className="flex gap-x-1 flex-wrap items-center">
             {
-            offeredSemesters.length > 0 && (
+            term?.years.length && term.years.length > 0 && (
               <div className="">
-                {offeredSemestersTag(offeredSemesters)}
+                {OfferedSemestersTag(term)}
               </div>
             )
             }
-            {attributes && attributes.CI && (
-              <p className="tag tag-primary">
-                CI
-              </p>
-            )}
-            {attributes && attributes.HI && (
-              <p className="tag tag-primary">
-                HI
-              </p>
-            )}
+            <div className="flex gap-1">
+              {AttributeTag(attributes)}
+            </div>
           </div>
           <div className="flex flex-wrap mt-1">
             {prereqs && prereqs.raw_precoreqs && (
@@ -115,6 +71,7 @@ const CourseCard = ({
               </div>
             )}
           </div>
+          <CoursePopup course={courseFull} open={popupShown} onOpen={setPopupShown}/>
         </div>
       </div>
     </section>

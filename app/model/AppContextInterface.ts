@@ -9,8 +9,6 @@ export interface ApplicationContext {
   pathwayData: any;
   pathwaysCategories: any; 
   courses: ICourseSchema[];
-  popupShown: boolean;
-  pathwayPopup: IPathwaySchema;
   setCourses: (courses: ICourseSchema[]) => void;
   updateCourseState: (name: string, status: string) => void;
   setCatalog: (catalog_year: string) => void;

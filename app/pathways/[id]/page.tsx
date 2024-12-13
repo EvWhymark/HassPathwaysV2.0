@@ -14,6 +14,7 @@ import { set } from "lodash";
 import { Bookmark, BookmarkChecked } from "@/app/components/utils/Icon";
 import path from "path";
 import { pathwayDepartment } from "@/public/data/staticData";
+import ClusterComponent from "@/app/components/pathway/ClusterComponent";
 
 const pathwayTempData: IPathwayDescriptionSchema = {
   description: `This course embraces the science of psychology. The aim is for
@@ -173,13 +174,16 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
             },
           ]}
         />
-        <div className="flex items-center">
-          <h1 className="mt-5 text-display-xs md:text-display-sm font-semibold flex-1">
+        <div className="flex items-center mt-5 gap-4">
+          <h1 className="text-display-xs md:text-display-sm font-semibold">
             {pathwayName}
           </h1>
-          <button className="border-2 border-black rounded-full hover:bg-utility-gray-300 bg-utility-gray-200 flex items-center p-4" onClick={toggleBookmark}>
+          <button className="flex p-4 gap-2 items-center text-button-tertiary-fg hover:bg-primary_hover hover:text-button-tertiary-fg_hover" onClick={toggleBookmark}>
             <div onClick={toggleBookmark}>
               {bookmark ? <BookmarkChecked /> : <Bookmark />}
+            </div>
+            <div className="text-xl font-semibold">
+              {bookmark ? "Bookmarked" : "Bookmark"}
             </div>
           </button>
         </div>
@@ -203,9 +207,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
           </ul>
         </section>
       }
-      <section className="description-section">
-        <CourseSection clusters={currentPathway.clusters} />
-      </section>
+      {currentPathway.clusters.length != 0 && <ClusterComponent clusters={currentPathway.clusters} />}
     </>
   );
 };
