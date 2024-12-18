@@ -40,7 +40,8 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
   pathwayPopup.clusters = clusters;
   let popupProp: IPathwayCardProps = { pathwayPopup: pathwayPopup, isOpen: popupOpen };
   
-  const toggleBookmark = () => {
+  const toggleBookmark = (e) => {
+    e.stopPropagation();
     let current: IPathwaySchema[] = JSON.parse(localStorage.getItem("bookmarks"));
     if (bookmark)
       current = current.filter(i => i.title != title);
@@ -144,44 +145,47 @@ const PathwayCard = ({ title, department, coursesIn, description, clusters, comp
     );
   };
 
-  const onCardClick = () => {
+  const onCardClick = (e) => {
+    e.stopPropagation();
     setPopupOpen(true);
   }
   return (
-    <section className="pathway-card relative">
-      <button className = "w-full h-full absolute top-0 left-0 z-10" onClick={onCardClick}/>
-      <header className="flex justify-between w-full items-start flex-shrink">
-        <div className="w-[367px] mb-2">
-          <div className="flex flex-col md:flex-row gap-2 items-start py-1">
-            <Link className="pathway-title flex-1 z-30" href={'/pathways/'+title.replace("/", "+")}>{title}</Link>
-            <p className="tag">{department}</p>
+    <section className="">
+      <div className ="cursor-pointer pathway-card h-full" onClick={(e) => (onCardClick(e))}>
+        <header className="flex justify-between w-full items-start flex-shrink">
+          <div className="w-[367px] mb-2">
+            <div className="flex flex-col md:flex-row gap-2 items-start py-1">
+              <Link className="pathway-title flex-1" href={'/pathways/'+title.replace("/", "+")} onClick={(e) => e.stopPropagation()}>{title}</Link>
+              <p className="tag">{department}</p>
+            </div>
+            <div className="progress-bar">
+              {progressBar()}
+              <HelpIcon // TODO: Add tooltip
+              onMouseEnter={() => setIsShown(true)}
+              onMouseLeave={() => setIsShown(false)}
+              />
+              {isShown && (
+                //<HelpBox/>
+                true
+                )
+              }
+            </div>
           </div>
-          <div className="progress-bar">
-            {progressBar()}
-            <HelpIcon // TODO: Add tooltip
-            onMouseEnter={() => setIsShown(true)}
-            onMouseLeave={() => setIsShown(false)}
-            />
-            {isShown && (
-              //<HelpBox/>
-              true
-              )
-            }
+          <div onClick={(e) => toggleBookmark(e)} className="p-2">
+            {bookmark ? <BookmarkChecked /> : <Bookmark />}
           </div>
+        </header>
+        <div className="flex gap-3 flex-col flex-1">
+          {completedItems}
+          {inProgressItems}
+          {plannedItems}
         </div>
-        <div onClick={toggleBookmark} className="p-2 z-20">
-          {bookmark ? <BookmarkChecked /> : <Bookmark />}
-        </div>
-      </header>
-      <div className="flex gap-3 flex-col flex-1">
-        {completedItems}
-        {inProgressItems}
-        {plannedItems}
+        
+        <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold">
+          Manage Course Selection
+        </button>
       </div>
       <PathwayPopup pathwayPopup={pathwayPopup} open={popupOpen} onOpen={setPopupOpen}/>
-      <button className="text-sm text-button-primary-bg hover:text-button-primary-bg_hover font-bold">
-        Manage Course Selection
-      </button>
     </section>
   );
 };
