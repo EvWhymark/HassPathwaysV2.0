@@ -25,7 +25,8 @@ const CourseCardDropDown = ({
     setDropDownText(status);
   }, [status]);
 
-  const handleOption = (newStatus: string) => {
+  const handleOption = (newStatus: string, e) => {
+    e.stopPropagation();
     newStatus === "Remove" ? newStatus = "No Selection" : newStatus;
     updateCourseState(title, newStatus);
     setDropDownText(newStatus);
@@ -48,7 +49,7 @@ const CourseCardDropDown = ({
           .filter(option => option.label !== dropDownText)
           .map(option => (
               <li key={option.label} className={`py-2 px-4 ${option.style} cursor-pointer flex items-center`}
-                  onClick={() => handleOption(option.label)}>
+                  onClick={(e) => handleOption(option.label, e)}>
                 <img src={option.icon} alt="" className="w-4 h-4"/>
                 <div className="flex-1 text-center">{option.label}</div>
               </li>
