@@ -131,6 +131,7 @@ const MyPathways = () => {
           </div>
         </section>
       </header>
+      {marked.length === 0 && <NothingToShow bookmarkedState={bookmarkedState} />}
       <section className="py-8 flex flex-wrap gap-x-10 gap-y-4 justify-around md:justify-start">
         {marked.map((pathway, i) => {
           return <PathwayCard {...pathway} key={i} />;
@@ -154,14 +155,14 @@ const NothingToShow = ({ bookmarkedState }: { bookmarkedState: boolean }) => {
       <div className="flex flex-col-reverse fold:flex-row items-center gap-8 text-sm md:text-md font-semibold">
         <Link
           href="/faq"
-          className="rounded-lg px-[18px] py-2.5 text-primary-brand-700"
+          className="rounded-lg px-[18px] py-2.5 text-utility-brand-600"
         >
           Learn More
         </Link>
         {bookmarkedState && (
           <Link
             href="/pathways/search"
-            className="rounded-lg px-[18px] py-2.5 bg-utility-brand-600 text-white"
+            className="rounded-lg px-[18px] py-2.5 bg-utility-brand-600 text-text-white"
           >
             Explore Pathways
           </Link>
@@ -169,7 +170,7 @@ const NothingToShow = ({ bookmarkedState }: { bookmarkedState: boolean }) => {
         {!bookmarkedState && (
           <Link
             href="/courses/search"
-            className="rounded-lg px-[18px] py-2.5 bg-utility-brand-600 text-white"
+            className="rounded-lg px-[18px] py-2.5 bg-utility-brand-600 text-text-white"
           >
             Explore Courses
           </Link>

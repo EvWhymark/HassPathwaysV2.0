@@ -13,7 +13,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { courseFilters } from "@/public/data/staticData";
+import { courseFilters, noCourseText } from "@/public/data/staticData";
 import CourseCard from "./CourseCard";
 import {
   FilterProps,
@@ -27,6 +27,7 @@ import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
 import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvider';
 import { filter } from "lodash";
+import Link from "next/link";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
@@ -384,20 +385,52 @@ const CourseList = ({
   }, [deferredSearchString, deferredFilterState, courses]);
   // TODO: Make it so that this css can be changed depending on where the course list is being used (clsx)
   return (
-    <section className="grid xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-1 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-4">
-      {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
-        <CourseCard 
-          title={course.title}
-          courseCode={course.courseCode}
-          attributes={course.attributes}
-          prereqs={course.prereqs}
-          term={course.term}
-          status={course.status}
-          filter={course.filter}
-          description={course.description}
-          subject={course.subject}
-          key={i} />
-      ))}
+    <div>
+      <section className="grid xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-1 2xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-4">
+        {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
+          <CourseCard 
+            title={course.title}
+            courseCode={course.courseCode}
+            attributes={course.attributes}
+            prereqs={course.prereqs}
+            term={course.term}
+            status={course.status}
+            filter={course.filter}
+            description={course.description}
+            subject={course.subject}
+            key={i} />
+        ))}
+      </section>
+    </div>
+    
+  );
+};
+
+const NothingToShow = () => {
+  return (
+    <section className="flex flex-col justify-center items-center grow gap-8 my-4">
+      <header className="text-center">
+        <h3 className="text-xl md:text-display-sm font-bold md:font-semibold mb-2">
+          No Courses Found
+        </h3>
+        <p className="text-sm md:text-xl font-medium  text-utility-gray-500">
+          {noCourseText}
+        </p>
+      </header>
+      <div className="flex flex-col-reverse fold:flex-row items-center gap-8 text-sm md:text-md font-semibold">
+        <Link
+          href="/faq"
+          className="rounded-lg px-[18px] py-2.5 text-utility-brand-600"
+        >
+          Learn More
+        </Link>
+        <Link
+            href="/courses/search"
+            className="rounded-lg px-[18px] py-2.5 bg-utility-brand-600 text-text-white"
+          >
+            Explore Courses
+        </Link>
+      </div>
     </section>
   );
 };

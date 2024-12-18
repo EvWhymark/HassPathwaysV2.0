@@ -174,9 +174,9 @@ export const courseFilters: Array<IcourseFilter> = [
   },
 ];
 
-export const noBookmarkedText: string = "Explore our pathways in the catalog";
-export const noMatchedText: string =
-  "Explore our courses and select your course to see compatible pathways!";
+export const noBookmarkedText: string = "Use the Explore Pathways page to find pathways that interest you.";
+export const noMatchedText: string = "Select more courses from the Search Courses page to find matching pathways.";
+export const noCourseText: string = "Use the Search Courses page to find courses that interest you.";
 
 export const catalogList: ICatalogList = [
   {
